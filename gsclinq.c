@@ -32,20 +32,37 @@ char *var_typename[23] =
   "removed thread"
 };
 
-typedef struct val_t
+struct VariableStackBuffer
+{
+	const char *pos;
+	uint16_t size;
+	uint16_t bufLen;
+	uint16_t localId;
+	char time;
+	char buf[1];
+};
+
+union VariableUnion
 {
 	int intValue;
-} val;
+	float floatValue;
+	unsigned int stringValue;
+	const float *vectorValue;
+	const char *codePosValue;
+	unsigned int pointerValue;
+	struct VariableStackBuffer *stackValue;
+	unsigned int entityOffset;
+};
 
-typedef struct VariableValue_t
+typedef struct
 {
-	val u;
+	union VariableUnion u;
 	int type;
 } VariableValue;
 
-__cdecl int Plugin_Scr_GetFunc(unsigned int paramnum)
+__cdecl int Scr_getFuncPtr(unsigned int paramnum)
 {
-	int result; // eax
+	int result;
 	VariableValue *var; // [esp+41Ch] [ebp-Ch]
 
 	int *dword_8C06320 = (int*)0x8C06320;
