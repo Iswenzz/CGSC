@@ -115,6 +115,28 @@ int Scr_GetFunc(unsigned int paramnum)
     return -1;
 }
 
+VariableValue* Scr_SelectParam(unsigned int paramnum)
+{
+    mvabuf;
+    VariableValue *var;
+
+    if (paramnum >= scrVmPub.outparamcount)
+    {
+        Plugin_Scr_Error(va("parameter %d does not exist", paramnum + 1));
+        return NULL;
+    }
+
+    var = &scrVmPub.top[-paramnum];
+	return var;
+}
+
+void Scr_SetParamFloat(unsigned int paramnum, float value)
+{
+	VariableValue* funcParam = Scr_SelectParam(paramnum);
+	funcParam->type = GSC_FLOAT;
+	funcParam->u.floatValue = value;
+}
+
 void testPtr()
 {
 	mvabuf;
@@ -124,6 +146,12 @@ void testPtr()
         return;
     }
 	uint32_t funcAddress = Scr_GetFunc(0);
+
+	// call stock GSC function address, change value of GSC params before
+	Scr_SetParamFloat(0, 0.05f);
+	void (*ambientStop)(void) = (void(*)(void))0x80c146c;
+	ambientStop();
+
 	Plugin_Printf(va("$%x\n", (int)funcAddress));
 	
 	// funcAddress doesnt seem to point an address in memory 
