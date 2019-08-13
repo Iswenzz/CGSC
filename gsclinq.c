@@ -1,96 +1,159 @@
-#include "../pinc.h"
+#include "../../src/q_shared.h"
+#include "../../src/cvar.h"
+#include "../../src/entity.h"
+#include "../../src/player.h"
+#include "../../src/g_sv_shared.h"
+#include "../../src/g_shared.h"
+#include "../../src/cmd.h"
+#include "../../src/qcommon_io.h"
+#include "../../src/server.h"
+#include "../../src/scr_vm.h"
+#include "../../src/scr_vm_functions.h"
+#include "pinc.h"
 
-#include <ctype.h>
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-
-char *var_typename[23] =
+const char *var_typename[23] =
 {
-  "undefined",
-  "object",
-  "string",
-  "localized string",
-  "vector",
-  "float",
-  "int",
-  "codepos",
-  "precodepos",
-  "function",
-  "stack",
-  "animation",
-  "developer codepos",
-  "include codepos",
-  "thread",
-  "thread",
-  "thread",
-  "thread",
-  "struct",
-  "removed entity",
-  "entity",
-  "array",
-  "removed thread"
+	"undefined",
+	"object",
+	"string",
+	"localized string",
+	"vector",
+	"float",
+	"int",
+	"codepos",
+	"precodepos",
+	"function",
+	"stack",
+	"animation",
+	"developer codepos",
+	"include codepos",
+	"thread",
+	"thread",
+	"thread",
+	"thread",
+	"struct",
+	"removed entity",
+	"entity",
+	"array",
+	"removed thread"
 };
 
-struct VariableStackBuffer
+typedef enum
 {
-	const char *pos;
-	uint16_t size;
-	uint16_t bufLen;
-	uint16_t localId;
-	char time;
-	char buf[1];
-};
+	GSC_UNDEFINED,
+	GSC_OBJECT,
+	GSC_STRING,
+	GSC_LOCALIZEDSTRING,
+	GSC_VECTOR,
+	GSC_FLOAT,
+	GSC_INT,
+	GSC_CODEPOS,
+	GSC_PRECODEPOS,
+	GSC_FUNCTION,
+	GSC_STACK,
+	GSC_ANIMATION,
+	GSC_DEVCODEPOS,
+	GSC_INCLUDECODEPOS,
+	GSC_THREAD,
+	GSC_THREAD2,
+	GSC_THREAD3,
+	GSC_THREAD4,
+	GSC_STRUCT,
+	GSC_REMOVEDENTITY,
+	GSC_ENTITY,
+	GSC_ARRAY,
+	GSC_REMOVEDTHREAD	
+} gsctype_t;
 
-union VariableUnion
+int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 {
-	int intValue;
-	float floatValue;
-	unsigned int stringValue;
-	const float *vectorValue;
-	const char *codePosValue;
-	unsigned int pointerValue;
-	struct VariableStackBuffer *stackValue;
-	unsigned int entityOffset;
-};
+	int retval;
+	retval = _vsnprintf(str, size, format, ap);
 
-typedef struct
-{
-	union VariableUnion u;
-	int type;
-} VariableValue;
-
-__cdecl int Scr_getFuncPtr(unsigned int paramnum)
-{
-	int result;
-	VariableValue *var; // [esp+41Ch] [ebp-Ch]
-
-	int *dword_8C06320 = (int*)0x8C06320;
-	int *dword_8BE4E80 = (int*)0x8BE4E80;
-
-	if (dword_8C06320[7] > paramnum)
+	if(retval < 0 || retval == size)
 	{
-		var = (VariableValue *)(dword_8C06320[4] - 8 * paramnum);
-		if (var->type == 9)
-			result = var->u.intValue - dword_8BE4E80[18];
-		else
-		{
-			dword_8BE4E80[4] = paramnum + 1;
-			char str[1024];
-			sprintf(str, "type %s is not a function", var_typename[var->type]);
-			Plugin_Scr_Error(str);
-			result = -1;
-		}
+		str[size - 1] = '\0';
+		return size;
 	}
-	else
-	{
-		char str[1024];
-		sprintf(str, "parameter %d does not exist", paramnum + 1);
-		Plugin_Scr_Error(str);
-		result = -1;
-	}
-	return result;
+	return retval;
 }
+
+__cdecl char* va_replacement(char *dest, int size, const char *fmt, ...)
+{
+	int	len;
+	va_list	argptr;
+
+	va_start (argptr,fmt);
+	len = Q_vsnprintf(dest, size, fmt, argptr);
+	va_end (argptr);
+
+	if(len >= size)
+		Plugin_Printf("Com_sprintf: Output length %d too short, require %d bytes.\n", size, len + 1);
+
+	return dest;
+}
+
+int Scr_GetFunc(unsigned int paramnum)
+{
+    mvabuf;
+    VariableValue *var;
+
+    if (paramnum >= scrVmPub.outparamcount)
+    {
+        Plugin_Scr_Error(va("parameter %d does not exist", paramnum + 1));
+        return -1;
+    }
+
+    var = &scrVmPub.top[-paramnum];
+    if (var->type == GSC_FUNCTION)
+    {
+        int vmRomAddress = var->u.codePosValue - scrVarPub.programBuffer;
+        return vmRomAddress;
+    }
+    scrVarPub.error_index = paramnum + 1;
+    Plugin_Scr_Error(va("type %s is not an function", var_typename[var->type]));
+    return -1;
+}
+
+void testPtr()
+{
+	mvabuf;
+	if (Plugin_Scr_GetNumParam() != 1)
+    {
+        Plugin_Scr_Error("Usage: testPtr(<::function>)");
+        return;
+    }
+	uint32_t funcAddress = Scr_GetFunc(0);
+	Plugin_Printf(va("$%x\n", (int)funcAddress));
+	
+	// funcAddress doesnt seem to point an address in memory 
+	// but it can be started with ExecThread
+	// int tid = Plugin_Scr_ExecThread(funcAddress, 0);
+	// Plugin_Scr_FreeThread(tid);
+}
+
+__cdecl void* Scr_GetFunction(const char** v_functionName, qboolean* v_developer)
+{
+	// TODO
+	/*scr_function_t *cmd;
+
+	for(cmd = scr_functions; cmd != NULL; cmd = cmd->next)
+	{
+		if(!Q_stricmp(*v_functionName, cmd->name))
+		{
+			*v_developer = cmd->developer;
+			*v_functionName = cmd->name;
+			return cmd->function;
+		}
+	}*/
+	return NULL;
+}
+
+// Q_isLower
+// Q_isUpper
+// Q_isInteral
+// Q_isNumber
+// Q_isAlpha
 
 void comPrintf()
 {
@@ -105,6 +168,7 @@ void comPrintf()
 PCL int OnInit()
 {
 	Plugin_ScrAddFunction("comPrintf", &comPrintf);
+	Plugin_ScrAddFunction("testPtr", &testPtr);
 
 	return 0;
 }

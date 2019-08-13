@@ -1,5 +1,12 @@
-testPredicate(str)
+testPredicate()
 {
+    iprintlnbold("testPredicate");
+	//return int(str) == 10;
+}
+
+testPredicate2(str)
+{
+    iprintlnbold("testPredicate2");
 	return int(str) == 10;
 }
 
@@ -10,9 +17,16 @@ test()
     for (i = 0; i < 10; i++)
         arr[i] = i;
 
-    result = all(arr, ::testPredicate);
+    //result = all(arr, ::testPredicate);
 
-    comPrintf(result + "\n");
+    //comPrintf(result + "\n");
+
+    while (true)
+    {
+        testPtr(::testPredicate);
+        //testPtr(::testPredicate2);
+        wait 5;
+    }
 }
 
 reverse(array)
@@ -72,7 +86,7 @@ where(array, predicate)
             index++;
         }
     }
-    return ret;
+    return arr;
 }
 
 select(array, func)
@@ -81,7 +95,7 @@ select(array, func)
 
     for (i = 0; i < array.size; i++)
         array[i] = [[func]](array[i]);
-    return ret;
+    return arr;
 }
 
 sum(array)
@@ -110,9 +124,9 @@ average(array)
     for (i = 0; i < array.size; i++)
     {
         sum += array[i];
-        ++count;
+        count++;
     }
-    return (float)sum / count;
+    return int(sum / count); // todo float
 }
 
 getType(var)
