@@ -11,58 +11,24 @@
 #include "../../src/scr_vm_functions.h"
 #include "pinc.h"
 
+int __callArgNumber = 0;
+
 const char *var_typename[23] =
 {
-	"undefined",
-	"object",
-	"string",
-	"localized string",
-	"vector",
-	"float",
-	"int",
-	"codepos",
-	"precodepos",
-	"function",
-	"stack",
-	"animation",
-	"developer codepos",
-	"include codepos",
-	"thread",
-	"thread",
-	"thread",
-	"thread",
-	"struct",
-	"removed entity",
-	"entity",
-	"array",
-	"removed thread"
+	"undefined", "object", "string", "localized string",
+	"vector", "float", "int", "codepos", "precodepos",
+	"function", "stack", "animation", "developer codepos",
+	"include codepos", "thread", "thread", "thread", "thread",
+	"struct", "removed entity", "entity", "array", "removed thread"
 };
 
 typedef enum
 {
-	GSC_UNDEFINED,
-	GSC_OBJECT,
-	GSC_STRING,
-	GSC_LOCALIZEDSTRING,
-	GSC_VECTOR,
-	GSC_FLOAT,
-	GSC_INT,
-	GSC_CODEPOS,
-	GSC_PRECODEPOS,
-	GSC_FUNCTION,
-	GSC_STACK,
-	GSC_ANIMATION,
-	GSC_DEVCODEPOS,
-	GSC_INCLUDECODEPOS,
-	GSC_THREAD,
-	GSC_THREAD2,
-	GSC_THREAD3,
-	GSC_THREAD4,
-	GSC_STRUCT,
-	GSC_REMOVEDENTITY,
-	GSC_ENTITY,
-	GSC_ARRAY,
-	GSC_REMOVEDTHREAD	
+	GSC_UNDEFINED, GSC_OBJECT, GSC_STRING, GSC_LOCALIZEDSTRING,
+	GSC_VECTOR, GSC_FLOAT, GSC_INT, GSC_CODEPOS, GSC_PRECODEPOS,
+	GSC_FUNCTION, GSC_STACK, GSC_ANIMATION, GSC_DEVCODEPOS, GSC_INCLUDECODEPOS,
+	GSC_THREAD, GSC_THREAD2, GSC_THREAD3, GSC_THREAD4, GSC_STRUCT,
+	GSC_REMOVEDENTITY, GSC_ENTITY, GSC_ARRAY, GSC_REMOVEDTHREAD	
 } gsctype_t;
 
 int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap)
@@ -130,12 +96,27 @@ VariableValue* Scr_SelectParam(unsigned int paramnum)
 	return var;
 }
 
-void Scr_SetParamFloat(unsigned int paramnum, float value)
+void Scr_CallFunction(void (*function)(void), ...)
+{
+	function();
+	__callArgNumber = 0;
+}
+
+qboolean Scr_SetParamFloat(unsigned int paramnum, float value)
 {
 	VariableValue* funcParam = Scr_SelectParam(paramnum);
-	funcParam->type = GSC_FLOAT;
-	funcParam->u.floatValue = value;
+	if (funcParam == NULL)
+		return qfalse;
+	else
+	{
+		funcParam->type = GSC_FLOAT;
+		funcParam->u.floatValue = value;
+		return qtrue;
+	}
+	__callArgNumber++;
 }
+
+#define FLOAT(val) Scr_SetParamFloat(__callArgNumber, val)
 
 void testPtr()
 {
@@ -145,15 +126,14 @@ void testPtr()
         Plugin_Scr_Error("Usage: testPtr(<::function>)");
         return;
     }
-	uint32_t funcAddress = Scr_GetFunc(0);
+	const uint32_t funcAddress = Scr_GetFunc(0);
 
 	// call stock GSC function address, change value of GSC params before
-	Scr_SetParamFloat(0, 0.05f);
 	void (*ambientStop)(void) = (void(*)(void))0x80c146c;
-	ambientStop();
+	Scr_CallFunction(ambientStop, FLOAT(2.0f));
 
 	Plugin_Printf(va("$%x\n", (int)funcAddress));
-	
+
 	// funcAddress doesnt seem to point an address in memory 
 	// but it can be started with ExecThread
 	// int tid = Plugin_Scr_ExecThread(funcAddress, 0);

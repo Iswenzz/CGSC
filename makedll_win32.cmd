@@ -7,8 +7,8 @@ gcc -m32 -s -shared -static-libgcc -static-libstdc++ -o gsclinq.dll *.o -L..\ -l
 echo Cleaning up
 del *.o
 
-copy "gsclinq.dll" "C:\Program Files\Activision\CoD4\plugins\gsclinq.dll"
-copy "_gsclinq.gsc" "C:\Program Files\Activision\CoD4\mods\aspeed_run\lib\_gsclinq.gsc"
+copy "gsclinq.dll" "D:\Program Files (x86)\Activision\Cod4Mod\plugins\gsclinq.dll"
+copy "_gsclinq.gsc" "D:\Program Files (x86)\Activision\Cod4Mod\Mods\aspeed_run\lib\_gsclinq.gsc"
 goto :EOF
 
 :error
