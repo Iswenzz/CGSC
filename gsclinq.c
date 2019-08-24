@@ -11,6 +11,8 @@
 #include "../../src/scr_vm_functions.h"
 #include "pinc.h"
 
+#include "_cgsc.h"
+
 int __callArgNumber = 0;
 
 const char *var_typename[23] =
@@ -44,7 +46,7 @@ int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 	return retval;
 }
 
-__cdecl char* va_replacement(char *dest, int size, const char *fmt, ...)
+char* va_replacement(char *dest, int size, const char *fmt, ...)
 {
 	int	len;
 	va_list	argptr;
@@ -111,12 +113,117 @@ qboolean Scr_SetParamFloat(unsigned int paramnum, float value)
 	{
 		funcParam->type = GSC_FLOAT;
 		funcParam->u.floatValue = value;
+		__callArgNumber++;
 		return qtrue;
 	}
-	__callArgNumber++;
+}
+
+qboolean Scr_SetParamInt(unsigned int paramnum, int value)
+{
+	VariableValue *funcParam = Scr_SelectParam(paramnum);
+	if (funcParam == NULL)
+		return qfalse;
+	else
+	{
+		funcParam->type = GSC_INT;
+		funcParam->u.intValue = value;
+		__callArgNumber++;
+		return qtrue;
+	}
+}
+
+qboolean Scr_SetParamObject(unsigned int paramnum, int structPointer)
+{
+	VariableValue *funcParam = Scr_SelectParam(paramnum);
+	if (funcParam == NULL)
+		return qfalse;
+	else
+	{
+		funcParam->type = GSC_OBJECT;
+		funcParam->u.pointerValue = structPointer;
+		__callArgNumber++;
+		return qtrue;
+	}
+}
+
+qboolean Scr_SetParamEntity(unsigned int paramnum, int entID)
+{
+	VariableValue *funcParam = Scr_SelectParam(paramnum);
+	if (funcParam == NULL)
+		return qfalse;
+	else
+	{
+		funcParam->type = GSC_ENTITY;
+		funcParam->u.entityOffset = entID;
+		__callArgNumber++;
+		return qtrue;
+	}
+}
+
+qboolean Scr_SetParamString(unsigned int paramnum, int stringPtr)
+{
+	VariableValue *funcParam = Scr_SelectParam(paramnum);
+	if (funcParam == NULL)
+		return qfalse;
+	else
+	{
+		funcParam->type = GSC_STRING;
+		funcParam->u.stringValue = stringPtr;
+		__callArgNumber++;
+		return qtrue;
+	}
+}
+
+qboolean Scr_SetParamFunc(unsigned int paramnum, const char *codePos)
+{
+	VariableValue *funcParam = Scr_SelectParam(paramnum);
+	if (funcParam == NULL)
+		return qfalse;
+	else
+	{
+		funcParam->type = GSC_FUNCTION;
+		funcParam->u.codePosValue = codePos;
+		__callArgNumber++;
+		return qtrue;
+	}
+}
+
+qboolean Scr_SetParamStack(unsigned int paramnum, struct VariableStackBuffer *stack)
+{
+	VariableValue *funcParam = Scr_SelectParam(paramnum);
+	if (funcParam == NULL)
+		return qfalse;
+	else
+	{
+		funcParam->type = GSC_STACK;
+		funcParam->u.stackValue = stack;
+		__callArgNumber++;
+		return qtrue;
+	}
+}
+
+qboolean Scr_SetParamVector(unsigned int paramnum, const float *value)
+{
+	VariableValue *funcParam = Scr_SelectParam(paramnum);
+	if (funcParam == NULL)
+		return qfalse;
+	else
+	{
+		funcParam->type = GSC_VECTOR;
+		funcParam->u.vectorValue = value;
+		__callArgNumber++;
+		return qtrue;
+	}
 }
 
 #define FLOAT(val) Scr_SetParamFloat(__callArgNumber, val)
+#define INT(val) Scr_SetParamInt(__callArgNumber, val)
+#define VECTOR(val) Scr_SetParamVector(__callArgNumber, val)
+#define OBJECT(val) Scr_SetParamObject(__callArgNumber, val)
+#define ENTITY(val) Scr_SetParamEntity(__callArgNumber, val)
+#define STRING(val) Scr_SetParamString(__callArgNumber, val)
+#define FUNC(val) Scr_SetParamFunc(__callArgNumber, val)
+#define STACK(val) Scr_SetParamStack(__callArgNumber, val)
 
 void testPtr()
 {
@@ -128,33 +235,11 @@ void testPtr()
     }
 	const uint32_t funcAddress = Scr_GetFunc(0);
 
-	// call stock GSC function address, change value of GSC params before
-	void (*ambientStop)(void) = (void(*)(void))0x80c146c;
-	Scr_CallFunction(ambientStop, FLOAT(2.0f));
-
 	Plugin_Printf(va("$%x\n", (int)funcAddress));
-
 	// funcAddress doesnt seem to point an address in memory 
 	// but it can be started with ExecThread
 	// int tid = Plugin_Scr_ExecThread(funcAddress, 0);
 	// Plugin_Scr_FreeThread(tid);
-}
-
-__cdecl void* Scr_GetFunction(const char** v_functionName, qboolean* v_developer)
-{
-	// TODO
-	/*scr_function_t *cmd;
-
-	for(cmd = scr_functions; cmd != NULL; cmd = cmd->next)
-	{
-		if(!Q_stricmp(*v_functionName, cmd->name))
-		{
-			*v_developer = cmd->developer;
-			*v_functionName = cmd->name;
-			return cmd->function;
-		}
-	}*/
-	return NULL;
 }
 
 // Q_isLower
