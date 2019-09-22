@@ -270,11 +270,21 @@ qboolean Scr_SetParamVector(unsigned int paramnum, const float *value)
 	}
 }
 
-void Scr_FreeArray(VariableValue **array)
+void Scr_FreeArray(VariableValue **array, uint32_t size)
 {
-	for (int i = 0; i < sizeof(array) / sizeof(VariableValue *); i++)
+	for (int i = 0; i < size; i++)
 		free(array[i]);
 	free(array);
+}
+
+void Scr_AddVariable(VariableValue *var)
+{
+	switch (var->type)
+	{
+		case GSC_FLOAT: Plugin_Scr_AddFloat(var->u.floatValue);			break;
+		case GSC_INT: Plugin_Scr_AddInt(var->u.intValue); 				break;
+		case GSC_STRING: Plugin_Scr_AddString(var->u.codePosValue);		break;
+	}
 }
 
 #define FLOAT(val) Scr_SetParamFloat(__callArgNumber, val)
@@ -302,7 +312,7 @@ void LINQ_All()
 	for (int i = 0; i < length; i++)
 	{
 		// Call predicate(item)
-		Plugin_Scr_AddInt(array[i]->u.intValue);
+		Scr_AddVariable(array[i]);
 		const short tid = Plugin_Scr_ExecThread(threadId, 1);
 		const register int gscPredicate asm("edx");
 
@@ -315,8 +325,8 @@ void LINQ_All()
 
 		Plugin_Scr_FreeThread(tid);
 	}
-	Scr_FreeArray(array);
-	Plugin_Scr_AddInt(result);
+	Scr_FreeArray(array, length);
+	Plugin_Scr_AddBool(result);
 }
 
 void LINQ_Where()
@@ -334,26 +344,20 @@ void LINQ_Where()
 	for (int i = 0; i < length; i++)
 	{
 		// Call predicate(item)
-		Plugin_Scr_AddInt(array[i]->u.intValue);
+		Scr_AddVariable(array[i]);
 		const short tid = Plugin_Scr_ExecThread(threadId, 1);
 		const register int gscPredicate asm("edx");
 
 		if (gscPredicate)
 		{
-			Plugin_Scr_AddInt(array[i]->u.intValue);
+			Scr_AddVariable(array[i]);
 			Plugin_Scr_AddArray();
 		}
 
 		Plugin_Scr_FreeThread(tid);
 	}
-	Scr_FreeArray(array);
+	Scr_FreeArray(array, length);
 }
-
-// Q_isLower
-// Q_isUpper
-// Q_isInteral
-// Q_isNumber
-// Q_isAlpha
 
 void comPrintf()
 {

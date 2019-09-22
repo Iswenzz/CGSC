@@ -3,13 +3,17 @@ printNewArray(arr)
     if (isDefined(arr.size))
     {
         for (i = 0; i < arr.size; i++)
+        {
+            iprintlnbold("" + arr[i]);
             comPrintf("" + arr[i] + "\n");
+        }
         comPrintf("\n");
     }
 }
 
 printResultArray(result)
 {
+    iprintlnbold("" + result);
     comPrintf("" + result + "\n");
 }
 
@@ -24,7 +28,7 @@ test()
 
     arr = [];
     for (i = 0; i < 10; i++)
-        arr[i] = i;
+        arr[i] = 1.01 * i;
 
     while (true)
     {
