@@ -3,14 +3,14 @@ printNewArray(arr)
     if (isDefined(arr.size))
     {
         for (i = 0; i < arr.size; i++)
-            comPrintf(arr[i] + "\n");
+            comPrintf("" + arr[i] + "\n");
         comPrintf("\n");
     }
 }
 
 printResultArray(result)
 {
-    comPrintf(result);
+    comPrintf("" + result + "\n");
 }
 
 testPredicate(item)

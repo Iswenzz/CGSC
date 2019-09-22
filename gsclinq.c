@@ -297,6 +297,8 @@ void LINQ_All()
 	VariableValue **array = Scr_GetArray(0, length);
 	const uint32_t threadId = Scr_GetFunc(2);
 
+	qboolean result = qtrue;
+
 	for (int i = 0; i < length; i++)
 	{
 		// Call predicate(item)
@@ -306,7 +308,7 @@ void LINQ_All()
 
 		if (!gscPredicate)
 		{
-			Plugin_Scr_AddBool(qfalse);
+			result = qfalse;
 			Plugin_Scr_FreeThread(tid);
 			break;
 		}
@@ -314,6 +316,7 @@ void LINQ_All()
 		Plugin_Scr_FreeThread(tid);
 	}
 	Scr_FreeArray(array);
+	Plugin_Scr_AddInt(result);
 }
 
 void LINQ_Where()
