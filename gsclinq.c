@@ -277,39 +277,6 @@ void Scr_FreeArray(VariableValue **array)
 	free(array);
 }
 
-// void __cdecl Scr_MakeArray()
-// {
-// 	IncInParam();
-// 	gScrVmPub.top->type = GSC_OBJECT;
-// 	gScrVmPub.top->u.intValue = Scr_AllocArray();
-// }
-
-// void __cdecl Scr_ClearOutParams()
-// {
-// 	while (gScrVmPub.outparamcount)
-// 	{
-// 		RemoveRefToValue(gScrVmPub.top->type, gScrVmPub.top->u);
-// 		--gScrVmPub.top;
-// 		--gScrVmPub.outparamcount;
-// 	}
-// }
-
-// void __cdecl IncInParam()
-// {
-// 	assert(((gScrVmPub.top >= gScrVmGlob.eval_stack - 1) && (gScrVmPub.top <= gScrVmGlob.eval_stack)) 
-// 		|| ((gScrVmPub.top >= gScrVmPub.stack) && (gScrVmPub.top <= gScrVmPub.maxstack)));
-
-// 	Scr_ClearOutParams();
-
-// 	if (gScrVmPub.top == gScrVmPub.maxstack)
-// 		Plugin_Scr_Error("Internal script stack overflow");
-
-// 	++gScrVmPub.top;
-// 	++gScrVmPub.inparamcount;
-// 	assert(((gScrVmPub.top >= gScrVmGlob.eval_stack) && (gScrVmPub.top <= gScrVmGlob.eval_stack + 1)) 
-// 		|| ((gScrVmPub.top >= gScrVmPub.stack) && (gScrVmPub.top <= gScrVmPub.maxstack)));
-// }
-
 #define FLOAT(val) Scr_SetParamFloat(__callArgNumber, val)
 #define INT(val) Scr_SetParamInt(__callArgNumber, val)
 #define VECTOR(val) Scr_SetParamVector(__callArgNumber, val)
@@ -319,14 +286,43 @@ void Scr_FreeArray(VariableValue **array)
 #define FUNC(val) Scr_SetParamFunc(__callArgNumber, val)
 #define STACK(val) Scr_SetParamStack(__callArgNumber, val)
 
-void testPtr()
+void LINQ_All()
 {
-	// mvabuf;
-	if (Plugin_Scr_GetNumParam() != 2)
+	if (Plugin_Scr_GetNumParam() != 3)
     {
-        Plugin_Scr_Error("Usage: testPtr(<array>, <array size>, <::function>)");
-        return;
+		Plugin_Scr_Error("Usage: all(<array>, <array size>, <::function>)");
+		return;
     }
+	const uint32_t length = Plugin_Scr_GetInt(1);
+	VariableValue **array = Scr_GetArray(0, length);
+	const uint32_t threadId = Scr_GetFunc(2);
+
+	for (int i = 0; i < length; i++)
+	{
+		// Call predicate(item)
+		Plugin_Scr_AddInt(array[i]->u.intValue);
+		const short tid = Plugin_Scr_ExecThread(threadId, 1);
+		const register int gscPredicate asm("edx");
+
+		if (!gscPredicate)
+		{
+			Plugin_Scr_AddBool(qfalse);
+			Plugin_Scr_FreeThread(tid);
+			break;
+		}
+
+		Plugin_Scr_FreeThread(tid);
+	}
+	Scr_FreeArray(array);
+}
+
+void LINQ_Where()
+{
+	if (Plugin_Scr_GetNumParam() != 3)
+	{
+		Plugin_Scr_Error("Usage: where(<array>, <array size>, <::function>)");
+		return;
+	}
 	const uint32_t length = Plugin_Scr_GetInt(1);
 	VariableValue **array = Scr_GetArray(0, length);
 	const uint32_t threadId = Scr_GetFunc(2);
@@ -334,16 +330,20 @@ void testPtr()
 	Plugin_Scr_MakeArray();
 	for (int i = 0; i < length; i++)
 	{
-		const short tid = Plugin_Scr_ExecThread(threadId, 0);
+		// Call predicate(item)
+		Plugin_Scr_AddInt(array[i]->u.intValue);
+		const short tid = Plugin_Scr_ExecThread(threadId, 1);
 		const register int gscPredicate asm("edx");
 
 		if (gscPredicate)
+		{
 			Plugin_Scr_AddInt(array[i]->u.intValue);
-			
+			Plugin_Scr_AddArray();
+		}
+
 		Plugin_Scr_FreeThread(tid);
 	}
 	Scr_FreeArray(array);
-	Plugin_Scr_AddArray();
 }
 
 // Q_isLower
@@ -365,7 +365,8 @@ void comPrintf()
 PCL int OnInit()
 {
 	Plugin_ScrAddFunction("comPrintf", &comPrintf);
-	Plugin_ScrAddFunction("testPtr", &testPtr);
+	Plugin_ScrAddFunction("all", &LINQ_All);
+	Plugin_ScrAddFunction("where", &LINQ_Where);
 
 	return 0;
 }

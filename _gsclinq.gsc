@@ -1,22 +1,38 @@
-testPredicate()
+printNewArray(arr)
 {
-    return true;
+    if (isDefined(arr.size))
+    {
+        for (i = 0; i < arr.size; i++)
+            comPrintf(arr[i] + "\n");
+        comPrintf("\n");
+    }
+}
+
+printResultArray(result)
+{
+    comPrintf(result);
+}
+
+testPredicate(item)
+{
+    return item != 5;
 }
 
 test()
 {
     wait 10;
+
     arr = [];
     for (i = 0; i < 10; i++)
         arr[i] = i;
 
-    //result = all(arr, ::testPredicate);
-
-    //comPrintf(result + "\n");
-
     while (true)
     {
-        testPtr(arr, arr.size, ::testPredicate);
+        array = where(arr, arr.size, ::testPredicate);
+        printNewArray(array);
+
+        // isAll = all(arr, arr.size, ::testPredicate);
+        // printResultArray(isAll);
         wait 5;
     }
 }
@@ -61,22 +77,6 @@ range(array, min, max)
     {
         arr[index] = array[i];
         index++;
-    }
-    return arr;
-}
-
-where(array, predicate)
-{
-    arr = [];
-    index = 0;
-
-    for (i = 0; i < array.size; i++)
-    {
-        if ([[predicate]](array[i]))
-        {
-            arr[index] = array[i];
-            index++;
-        }
     }
     return arr;
 }
@@ -198,14 +198,4 @@ any(array, predicate)
             return true;
     }
     return false;
-}
-
-all(array, predicate)
-{
-    for (i = 0; i < array.size; i++)
-    {
-        if (![[predicate]](array[i]))
-            return false;
-    }
-    return true;
 }
