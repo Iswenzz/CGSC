@@ -46,7 +46,7 @@ int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 	return retval;
 }
 
-char* va_replacement(char *dest, int size, const char *fmt, ...)
+char *va_replacement(char *dest, int size, const char *fmt, ...)
 {
 	int	len;
 	va_list	argptr;
@@ -59,6 +59,60 @@ char* va_replacement(char *dest, int size, const char *fmt, ...)
 		Plugin_Printf("Com_sprintf: Output length %d too short, require %d bytes.\n", size, len + 1);
 
 	return dest;
+}
+
+unsigned int Scr_GetObject(unsigned int paramnum)
+{
+	mvabuf;
+	VariableValue *var;
+
+	if (paramnum >= scrVmPub.outparamcount)
+	{
+		Plugin_Scr_Error(va("parameter %d does not exist", paramnum + 1));
+		return 0;
+	}
+
+	var = &scrVmPub.top[-paramnum];
+	if (var->type == GSC_OBJECT)
+		return var->u.pointerValue;
+
+	scrVarPub.error_index = paramnum + 1;
+	Plugin_Scr_Error(va("type %s is not an object", var_typename[var->type]));
+	return 0;
+}
+
+VariableValue** Scr_GetArray(unsigned int paramnum, unsigned int arrLength)
+{
+	unsigned int ptr = Scr_GetObject(paramnum);
+	VariableValueInternal *var;
+	VariableValue **array = malloc(arrLength * sizeof(VariableValue *));
+
+	unsigned int hash_id = 0;
+	int i = 0;
+
+	do
+	{
+		array[i] = (VariableValue *)malloc(sizeof(VariableValue));
+
+		if (hash_id == 0)
+		{
+			hash_id = scrVarGlob[ptr + 1].hash.u.prevSibling;
+			if (hash_id == 0)
+				return NULL;
+		}
+		else
+			hash_id = scrVarGlob_high[var->hash.u.prevSibling].hash.id;
+
+		var = &scrVarGlob_high[hash_id];
+		int type = var->w.type & 0x1f;
+
+		array[i]->type = type;
+		array[i]->u = var->u.u;
+
+		++i;
+	} while (var->hash.u.prevSibling && scrVarGlob_high[var->hash.u.prevSibling].hash.id && i < arrLength);
+
+	return array;
 }
 
 int Scr_GetFunc(unsigned int paramnum)
@@ -216,6 +270,46 @@ qboolean Scr_SetParamVector(unsigned int paramnum, const float *value)
 	}
 }
 
+void Scr_FreeArray(VariableValue **array)
+{
+	for (int i = 0; i < sizeof(array) / sizeof(VariableValue *); i++)
+		free(array[i]);
+	free(array);
+}
+
+// void __cdecl Scr_MakeArray()
+// {
+// 	IncInParam();
+// 	gScrVmPub.top->type = GSC_OBJECT;
+// 	gScrVmPub.top->u.intValue = Scr_AllocArray();
+// }
+
+// void __cdecl Scr_ClearOutParams()
+// {
+// 	while (gScrVmPub.outparamcount)
+// 	{
+// 		RemoveRefToValue(gScrVmPub.top->type, gScrVmPub.top->u);
+// 		--gScrVmPub.top;
+// 		--gScrVmPub.outparamcount;
+// 	}
+// }
+
+// void __cdecl IncInParam()
+// {
+// 	assert(((gScrVmPub.top >= gScrVmGlob.eval_stack - 1) && (gScrVmPub.top <= gScrVmGlob.eval_stack)) 
+// 		|| ((gScrVmPub.top >= gScrVmPub.stack) && (gScrVmPub.top <= gScrVmPub.maxstack)));
+
+// 	Scr_ClearOutParams();
+
+// 	if (gScrVmPub.top == gScrVmPub.maxstack)
+// 		Plugin_Scr_Error("Internal script stack overflow");
+
+// 	++gScrVmPub.top;
+// 	++gScrVmPub.inparamcount;
+// 	assert(((gScrVmPub.top >= gScrVmGlob.eval_stack) && (gScrVmPub.top <= gScrVmGlob.eval_stack + 1)) 
+// 		|| ((gScrVmPub.top >= gScrVmPub.stack) && (gScrVmPub.top <= gScrVmPub.maxstack)));
+// }
+
 #define FLOAT(val) Scr_SetParamFloat(__callArgNumber, val)
 #define INT(val) Scr_SetParamInt(__callArgNumber, val)
 #define VECTOR(val) Scr_SetParamVector(__callArgNumber, val)
@@ -227,19 +321,29 @@ qboolean Scr_SetParamVector(unsigned int paramnum, const float *value)
 
 void testPtr()
 {
-	mvabuf;
-	if (Plugin_Scr_GetNumParam() != 1)
+	// mvabuf;
+	if (Plugin_Scr_GetNumParam() != 2)
     {
-        Plugin_Scr_Error("Usage: testPtr(<::function>)");
+        Plugin_Scr_Error("Usage: testPtr(<array>, <array size>, <::function>)");
         return;
     }
-	const uint32_t funcAddress = Scr_GetFunc(0);
+	const uint32_t length = Plugin_Scr_GetInt(1);
+	VariableValue **array = Scr_GetArray(0, length);
+	const uint32_t threadId = Scr_GetFunc(2);
 
-	Plugin_Printf(va("$%x\n", (int)funcAddress));
-	// funcAddress doesnt seem to point an address in memory 
-	// but it can be started with ExecThread
-	// int tid = Plugin_Scr_ExecThread(funcAddress, 0);
-	// Plugin_Scr_FreeThread(tid);
+	Plugin_Scr_MakeArray();
+	for (int i = 0; i < length; i++)
+	{
+		const short tid = Plugin_Scr_ExecThread(threadId, 0);
+		const register int gscPredicate asm("edx");
+
+		if (gscPredicate)
+			Plugin_Scr_AddInt(array[i]->u.intValue);
+			
+		Plugin_Scr_FreeThread(tid);
+	}
+	Scr_FreeArray(array);
+	Plugin_Scr_AddArray();
 }
 
 // Q_isLower

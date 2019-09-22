@@ -1,13 +1,6 @@
 testPredicate()
 {
-    iprintlnbold("testPredicate");
-	//return int(str) == 10;
-}
-
-testPredicate2(str)
-{
-    iprintlnbold("testPredicate2");
-	return int(str) == 10;
+    return true;
 }
 
 test()
@@ -23,8 +16,7 @@ test()
 
     while (true)
     {
-        testPtr(::testPredicate);
-        //testPtr(::testPredicate2);
+        testPtr(arr, arr.size, ::testPredicate);
         wait 5;
     }
 }
