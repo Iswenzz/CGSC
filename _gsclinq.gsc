@@ -19,26 +19,49 @@ printResultArray(result)
 
 testPredicate(item)
 {
-    return item != 5;
+    return true;
 }
 
 test()
 {
     wait 10;
 
+    obj = spawnStruct();
+    obj.name = "idktbh";
+
     arr = [];
     for (i = 0; i < 10; i++)
-        arr[i] = 1.01 * i;
+        arr[i] = obj;
 
     while (true)
     {
         array = where(arr, arr.size, ::testPredicate);
-        printNewArray(array);
-
+        // printNewArray(array);
+        
         // isAll = all(arr, arr.size, ::testPredicate);
         // printResultArray(isAll);
         wait 5;
     }
+}
+
+testPlayer()
+{
+    wait 5;
+
+    // obj = spawnStruct();
+    // obj.name = "idktbh";
+
+    // arr = [];
+    // for (i = 0; i < 10; i++)
+    //     arr[i] = obj;
+
+    // while (true)
+    // {
+    //     array = where(arr, arr.size, ::testPredicate);
+    //     // printNewArray(array);
+
+    //     wait 5;
+    // }
 }
 
 reverse(array)

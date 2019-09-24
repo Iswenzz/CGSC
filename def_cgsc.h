@@ -1,3 +1,4 @@
+#pragma once
 void (*createprintchannel)(void) = (void (*)(void))0x80bf832;
 void (*setprintchannel)(void) = (void (*)(void))0x80bf75c;
 void (*print)(void) = (void (*)(void))0x80bf706;
