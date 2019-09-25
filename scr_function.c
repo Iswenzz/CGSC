@@ -1,118 +1,69 @@
 #include "scr_function.h"
-
-static const char *var_typename[23] = {
-    "undefined",
-    "object",
-    "string",
-    "localized string",
-    "vector",
-    "float",
-    "int",
-    "codepos",
-    "precodepos",
-    "function",
-    "stack",
-    "animation",
-    "developer codepos",
-    "include codepos",
-    "thread",
-    "thread",
-    "thread",
-    "thread",
-    "struct",
-    "removed entity",
-    "entity",
-    "array",
-    "removed thread"
-};
+#include <assert.h>
+#include "../qcommon.h"
+#include "../scr_vm.h"
+#include "../cscr_variable.h"
 
 static int __callArgNumber = 0;
 
-unsigned int Scr_GetObject(unsigned int paramnum)
+struct __attribute__((aligned(64))) scrVarGlob_t
 {
-    VariableValue *var;
+    VariableValueInternal *variableList;
+};
 
-    if (paramnum >= scrVmPub.outparamcount)
-    {
-        Plugin_PrintError("parameter %d does not exist", paramnum + 1);
-        return 0;
-    }
+extern struct scrVarGlob_t gScrVarGlob;
+extern VariableValue Scr_GetArrayIndexValue(unsigned int name);
 
-    var = &scrVmPub.top[-paramnum];
-    if (var->type == GSC_OBJECT)
-        return var->u.pointerValue;
-
-    scrVarPub.error_index = paramnum + 1;
-    Plugin_PrintError("type %s is not an object", var_typename[var->type]);
-    return 0;
+void Scr_FreeArray(VariableValue **array, int length)
+{
+    for (int i = 0; i < length; i++)
+        free(array[i]);
+    free(array);
 }
 
-VariableValue **Scr_GetArray(unsigned int paramnum, unsigned int arrLength)
+VariableValue **Scr_GetArray(unsigned int paramnum)
 {
-    unsigned int ptr = Scr_GetObject(paramnum);
-    VariableValueInternal *var;
-    VariableValue **array = (VariableValue **)Plugin_Malloc(arrLength * sizeof(VariableValue *));
+    VariableValue *var;
+    VariableValueInternal *entryValue;
+    int parentId = Scr_GetObject(paramnum);
 
-    unsigned int hash_id = 0;
-    int i = 0;
+    assert(parentId != 0);
+    assert(Scr_GetObjectType(parentId) == VAR_ARRAY);
 
-    do
+    int length = GetArraySize(parentId);
+    assert(length > 0);
+
+    VariableValue **array = (VariableValue **)malloc(length * sizeof(VariableValue *));
+    VariableValue value;
+
+    int id;
+    for (int i = 0, id = FindLastSibling(parentId); id; id = FindPrevSibling(id), i++)
     {
-        array[i] = (VariableValue *)Plugin_Malloc(sizeof(VariableValue));
+        entryValue = &gScrVarGlob.variableList[id + VARIABLELIST_CHILD_BEGIN];
 
-        if (hash_id == 0)
-        {
-            hash_id = scrVarGlob[ptr + 1].hash.u.prevSibling;
-            if (hash_id == 0)
-                return NULL;
-        }
-        else
-            hash_id = scrVarGlob_high[var->hash.u.prevSibling].hash.id;
+        assert((entryValue->w.status & VAR_STAT_MASK) != VAR_STAT_FREE 
+            && (entryValue->w.status & VAR_STAT_MASK) != VAR_STAT_EXTERNAL);
+        assert(!IsObject(entryValue));
 
-        var = &scrVarGlob_high[hash_id];
-        int type = var->w.type & 0x1f;
-
-        array[i]->type = type;
-        array[i]->u = var->u.u;
-
-        ++i;
-    } while (var->hash.u.prevSibling && scrVarGlob_high[var->hash.u.prevSibling].hash.id && i < arrLength);
-
+        value = Scr_GetArrayIndexValue(entryValue->w.name >> VAR_NAME_BITS);
+        array[i] = (VariableValue *)malloc(sizeof(VariableValue));
+        array[i]->type = value.type;
+        array[i]->u = value.u;
+    }
     return array;
-}
-
-int Scr_GetFunc(unsigned int paramnum)
-{
-    VariableValue *var;
-
-    if (paramnum >= scrVmPub.outparamcount)
-    {
-        Plugin_PrintError("parameter %d does not exist", paramnum + 1);
-        return -1;
-    }
-
-    var = &scrVmPub.top[-paramnum];
-    if (var->type == GSC_FUNCTION)
-    {
-        int vmRomAddress = var->u.codePosValue - scrVarPub.programBuffer;
-        return vmRomAddress;
-    }
-    scrVarPub.error_index = paramnum + 1;
-    Plugin_PrintError("type %s is not an function", var_typename[var->type]);
-    return -1;
 }
 
 VariableValue *Scr_SelectParam(unsigned int paramnum)
 {
     VariableValue *var;
 
-    if (paramnum >= scrVmPub.outparamcount)
+    if (paramnum >= gScrVmPub.outparamcount)
     {
-        Plugin_PrintError("parameter %d does not exist", paramnum + 1);
+        Scr_Error(va("parameter %d does not exist", paramnum + 1));
         return NULL;
     }
 
-    var = &scrVmPub.top[-paramnum];
+    var = &gScrVmPub.top[-paramnum];
     return var;
 }
 
@@ -123,7 +74,7 @@ qboolean Scr_SetParamFloat(unsigned int paramnum, float value)
         return qfalse;
     else
     {
-        funcParam->type = GSC_FLOAT;
+        funcParam->type = VAR_FLOAT;
         funcParam->u.floatValue = value;
         __callArgNumber++;
         return qtrue;
@@ -137,7 +88,7 @@ qboolean Scr_SetParamInt(unsigned int paramnum, int value)
         return qfalse;
     else
     {
-        funcParam->type = GSC_INT;
+        funcParam->type = VAR_INTEGER;
         funcParam->u.intValue = value;
         __callArgNumber++;
         return qtrue;
@@ -151,7 +102,7 @@ qboolean Scr_SetParamObject(unsigned int paramnum, int structPointer)
         return qfalse;
     else
     {
-        funcParam->type = GSC_OBJECT;
+        funcParam->type = VAR_OBJECT;
         funcParam->u.pointerValue = structPointer;
         __callArgNumber++;
         return qtrue;
@@ -165,7 +116,7 @@ qboolean Scr_SetParamEntity(unsigned int paramnum, int entID)
         return qfalse;
     else
     {
-        funcParam->type = GSC_ENTITY;
+        funcParam->type = VAR_ENTITY;
         funcParam->u.entityOffset = entID;
         __callArgNumber++;
         return qtrue;
@@ -179,8 +130,8 @@ qboolean Scr_SetParamString(unsigned int paramnum, const char *string)
         return qfalse;
     else
     {
-        funcParam->type = GSC_STRING;
-        funcParam->u.stringValue = Plugin_Scr_AllocString(string);
+        funcParam->type = VAR_STRING;
+        funcParam->u.stringValue = Scr_AllocString(string);
         __callArgNumber++;
         return qtrue;
     }
@@ -193,7 +144,7 @@ qboolean Scr_SetParamFunc(unsigned int paramnum, const char *codePos)
         return qfalse;
     else
     {
-        funcParam->type = GSC_FUNCTION;
+        funcParam->type = VAR_FUNCTION;
         funcParam->u.codePosValue = codePos;
         __callArgNumber++;
         return qtrue;
@@ -207,7 +158,7 @@ qboolean Scr_SetParamStack(unsigned int paramnum, struct VariableStackBuffer *st
         return qfalse;
     else
     {
-        funcParam->type = GSC_STACK;
+        funcParam->type = VAR_STACK;
         funcParam->u.stackValue = stack;
         __callArgNumber++;
         return qtrue;
@@ -221,34 +172,28 @@ qboolean Scr_SetParamVector(unsigned int paramnum, const float *value)
         return qfalse;
     else
     {
-        funcParam->type = GSC_VECTOR;
+        funcParam->type = VAR_VECTOR;
         funcParam->u.vectorValue = value;
         __callArgNumber++;
         return qtrue;
     }
 }
 
-void Scr_FreeArray(VariableValue **array, uint32_t size)
-{
-    for (int i = 0; i < size; i++)
-        Plugin_Free(array[i]);
-    Plugin_Free(array);
-}
-
 void Scr_AddVariable(VariableValue *var)
 {
-    Plugin_Printf("entity type: %s\n", var_typename[var->type]);
+    // Com_Printf(0, "entity type: %s\n", var_typename[var.type]);
+    Com_Printf(0, "entity value: %d\n", var->u.intValue);
 
     switch (var->type)
     {
-        case GSC_FLOAT:
-            Plugin_Scr_AddFloat(var->u.floatValue);
+        case VAR_FLOAT:
+            Scr_AddFloat(var->u.floatValue);
             break;
-        case GSC_INT:
-            Plugin_Scr_AddInt(var->u.intValue);
+        case VAR_INTEGER:
+            Scr_AddInt(var->u.intValue);
             break;
-        case GSC_STRING:
-            Plugin_Scr_AddString(Plugin_SL_ConvertToString(var->u.stringValue));
+        case VAR_STRING:
+            Scr_AddString("mdr");
             break;
     }
 }

@@ -1,5 +1,6 @@
 #pragma once
-#include "../pinc.h"
+
+void Scr_AddGscLinq();
 
 void LINQ_Where();
 void LINQ_All();
