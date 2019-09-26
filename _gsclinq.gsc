@@ -28,7 +28,7 @@ test()
 
     arr = [];
     for (i = 0; i < 10; i++)
-        arr[i] = "mdr " + i;
+        arr[i] = (i, i, i);
 
     while (true)
     {

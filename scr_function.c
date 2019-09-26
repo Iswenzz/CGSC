@@ -14,6 +14,7 @@ struct __attribute__((aligned(64))) scrVarGlob_t
 
 extern struct scrVarGlob_t gScrVarGlob;
 extern VariableValue Scr_GetArrayIndexValue(unsigned int name);
+extern void Scr_AddIString(const char *value);
 
 void Scr_FreeArray(VariableValue **array, int length)
 {
@@ -196,6 +197,12 @@ void Scr_AddVariable(VariableValue *var)
             break;
         case VAR_STRING:
             Scr_AddString(SL_ConvertToString(var->u.stringValue));
+            break;
+        case VAR_ISTRING:
+            Scr_AddIString(SL_ConvertToString(var->u.stringValue));
+            break;
+        case VAR_VECTOR:
+            Scr_AddVector(var->u.vectorValue);
             break;
     }
 }
