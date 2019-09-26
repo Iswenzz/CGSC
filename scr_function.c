@@ -185,6 +185,9 @@ void Scr_AddVariable(VariableValue *var)
 
     switch (var->type)
     {
+        case VAR_POINTER:
+            Scr_AddObject(var->u.pointerValue);
+            break;
         case VAR_FLOAT:
             Scr_AddFloat(var->u.floatValue);
             break;

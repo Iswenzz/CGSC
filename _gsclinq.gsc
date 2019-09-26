@@ -1,6 +1,6 @@
 printNewArray(arr)
 {
-    if (isDefined(arr.size))
+    if (isDefined(arr) && isDefined(arr.size))
     {
         for (i = 0; i < arr.size; i++)
         {
@@ -25,9 +25,6 @@ testPredicate(item)
 test()
 {
     wait 10;
-
-    // obj = spawnStruct();
-    // obj.name = "idktbh";
 
     arr = [];
     for (i = 0; i < 10; i++)
