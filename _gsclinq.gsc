@@ -19,19 +19,19 @@ printResultArray(result)
 
 testPredicate(item)
 {
-    return item != 5;
+    return true;
 }
 
 test()
 {
     wait 10;
 
-    obj = spawnStruct();
-    obj.name = "idktbh";
+    // obj = spawnStruct();
+    // obj.name = "idktbh";
 
     arr = [];
     for (i = 0; i < 10; i++)
-        arr[i] = i;
+        arr[i] = "mdr " + i;
 
     while (true)
     {

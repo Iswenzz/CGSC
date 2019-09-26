@@ -8,32 +8,28 @@ void LINQ_All()
 		Scr_Error("Usage: all(<array>, <array size>, <::function>)");
 		return;
     }
-	// const uint32_t length = Scr_GetInt(1);
-	// VariableValue **array = Scr_GetArray(0, length);
-	// const uint32_t threadId = Scr_GetFunc(2);
+	VariableValue **array = Scr_GetArray(0);
+	const uint32_t length = Scr_GetInt(1);
+	const uint32_t threadId = Scr_GetFunc(2);
+	qboolean result = qtrue;
 
-	// qboolean result = qtrue;
+	for (int i = 0; i < length; i++)
+	{
+		// Call predicate(item)
+		Scr_AddVariable(array[i]);
+		const short tid = Scr_ExecThread(threadId, 1);
+		const register int *gscPredicate asm("edx");
 
-	// test ambientstop
-	// Scr_CallFunction(ambientstop, FLOAT(0.5f));
-
-	// for (int i = 0; i < length; i++)
-	// {
-	// 	// Call predicate(item)
-	// 	Scr_AddVariable(array[i]);
-	// 	const short tid = Scr_ExecThread(threadId, 1);
-	// 	const register int gscPredicate asm("edx");
-
-	// 	if (!gscPredicate)
-	// 	{
-	// 		result = qfalse;
-	// 		Scr_FreeThread(tid);
-	// 		break;
-	// 	}
-
-	// 	Scr_FreeThread(tid);
-	// }
-	// Scr_AddBool(result);
+		if (!*gscPredicate)
+		{
+			result = qfalse;
+			Scr_FreeThread(tid);
+			break;
+		}
+		Scr_FreeThread(tid);
+	}
+	Scr_FreeArray(array, length);
+	Scr_AddBool(result);
 }
 
 void LINQ_Where()

@@ -3,6 +3,7 @@
 #include "../qcommon.h"
 #include "../scr_vm.h"
 #include "../cscr_variable.h"
+#include "../cscr_stringlist.h"
 
 static int __callArgNumber = 0;
 
@@ -23,8 +24,6 @@ void Scr_FreeArray(VariableValue **array, int length)
 
 VariableValue **Scr_GetArray(unsigned int paramnum)
 {
-    VariableValue *var;
-    VariableValueInternal *entryValue;
     int parentId = Scr_GetObject(paramnum);
 
     assert(parentId != 0);
@@ -33,22 +32,22 @@ VariableValue **Scr_GetArray(unsigned int paramnum)
     int length = GetArraySize(parentId);
     assert(length > 0);
 
+    VariableValueInternal *entryValue;
     VariableValue **array = (VariableValue **)malloc(length * sizeof(VariableValue *));
-    VariableValue value;
 
-    int id;
-    for (int i = 0, id = FindLastSibling(parentId); id; id = FindPrevSibling(id), i++)
+    for (struct { int i; int id; } loop = {0, FindLastSibling(parentId)};
+        loop.id;
+        loop.id = FindPrevSibling(loop.id), loop.i++)
     {
-        entryValue = &gScrVarGlob.variableList[id + VARIABLELIST_CHILD_BEGIN];
+        entryValue = &gScrVarGlob.variableList[loop.id + VARIABLELIST_CHILD_BEGIN];
 
         assert((entryValue->w.status & VAR_STAT_MASK) != VAR_STAT_FREE 
             && (entryValue->w.status & VAR_STAT_MASK) != VAR_STAT_EXTERNAL);
         assert(!IsObject(entryValue));
 
-        value = Scr_GetArrayIndexValue(entryValue->w.name >> VAR_NAME_BITS);
-        array[i] = (VariableValue *)malloc(sizeof(VariableValue));
-        array[i]->type = value.type;
-        array[i]->u = value.u;
+        array[loop.i] = (VariableValue *)malloc(sizeof(VariableValue));
+        array[loop.i]->type = entryValue->w.type & VAR_MASK;
+        array[loop.i]->u = entryValue->u.u;
     }
     return array;
 }
@@ -181,8 +180,8 @@ qboolean Scr_SetParamVector(unsigned int paramnum, const float *value)
 
 void Scr_AddVariable(VariableValue *var)
 {
-    // Com_Printf(0, "entity type: %s\n", var_typename[var.type]);
-    Com_Printf(0, "entity value: %d\n", var->u.intValue);
+    Com_Printf(0, "entity type: %s\n", var_typename[var->type]);
+    // Com_Printf(0, "entity value: %d\n", var->u.stringValue);
 
     switch (var->type)
     {
@@ -193,7 +192,7 @@ void Scr_AddVariable(VariableValue *var)
             Scr_AddInt(var->u.intValue);
             break;
         case VAR_STRING:
-            Scr_AddString("mdr");
+            Scr_AddString(SL_ConvertToString(var->u.stringValue));
             break;
     }
 }
