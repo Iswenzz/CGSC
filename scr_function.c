@@ -14,6 +14,7 @@ struct __attribute__((aligned(64))) scrVarGlob_t
 
 extern struct scrVarGlob_t gScrVarGlob;
 extern VariableValue Scr_GetArrayIndexValue(unsigned int name);
+extern void IncInParam();
 extern void Scr_AddIString(const char *value);
 
 void Scr_FreeArray(VariableValue **array, int length)
@@ -179,6 +180,13 @@ qboolean Scr_SetParamVector(unsigned int paramnum, const float *value)
     }
 }
 
+void Scr_AddFunc(const char *codePosValue)
+{
+    IncInParam();
+    gScrVmPub.top->type = VAR_FUNCTION;
+    gScrVmPub.top->u.codePosValue = codePosValue;
+}
+
 void Scr_AddVariable(VariableValue *var)
 {
     Com_Printf(0, "entity type: %s\n", var_typename[var->type]);
@@ -209,6 +217,9 @@ void Scr_AddVariable(VariableValue *var)
             break;
         case VAR_UNDEFINED:
             Scr_AddUndefined();
+            break;
+        case VAR_FUNCTION:
+            Scr_AddFunc(var->u.codePosValue);
             break;
         default:
             Scr_AddUndefined();

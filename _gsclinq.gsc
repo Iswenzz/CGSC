@@ -19,6 +19,7 @@ printResultArray(result)
 
 testPredicate(item)
 {
+    [[item]]();
     return true;
 }
 
@@ -28,12 +29,12 @@ test()
 
     arr = [];
     for (i = 0; i < 10; i++)
-        arr[i] = (i, i, i);
+        arr[i] = ::lol;
 
     while (true)
     {
         array = where(arr, arr.size, ::testPredicate);
-        printNewArray(array);
+        // printNewArray(array);
         
         // isAll = all(arr, arr.size, ::testPredicate);
         // printResultArray(isAll);
@@ -41,16 +42,18 @@ test()
     }
 }
 
+lol()
+{
+    comprintf("lol\n");
+}
+
 testPlayer()
 {
     wait 5;
 
-    // obj = spawnStruct();
-    // obj.name = "idktbh";
-
     // arr = [];
     // for (i = 0; i < 10; i++)
-    //     arr[i] = obj;
+    //     arr[i] = self;
 
     // while (true)
     // {
