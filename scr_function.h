@@ -57,3 +57,4 @@ qboolean Scr_SetParamVector(unsigned int paramnum, const float *value);
 void Scr_AddFunc(const char *codePosValue);
 void Scr_AddVariable(VariableValue *var);
 void Scr_CallFunction(void (*function)(void), ...);
+void Scr_CallMethod(void (*function)(scr_entref_t), scr_entref_t ent, ...);

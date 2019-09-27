@@ -78,10 +78,22 @@ void xtest()
 	// 	Scr_Error("Usage: xtest(<type>)");
 	// 	return;
 	// }
+
+	Scr_CallFunction(Scr_AmbientStop, FLOAT(5.0f));
+}
+
+void extest(scr_entref_t ent)
+{
+	// if (Scr_GetNumParam() != 1)
+	// {
+	// 	Scr_Error("Usage: xtest(<type>)");
+	// 	return;
+	// }
 	// VariableValue *val = Scr_SelectParam(0);
 	// Scr_AddVariable(val);
 
-	Scr_CallFunction(Scr_AmbientStop, FLOAT(5.0f));
+	// Scr_CallFunction(Scr_AmbientStop, FLOAT(5.0f));
+	Scr_CallMethod(iclientprintlnbold, ent, STRING(":3"));
 }
 
 void Scr_AddGscLinq()
@@ -90,4 +102,6 @@ void Scr_AddGscLinq()
 	Scr_AddFunction("all", 			LINQ_All, 		qfalse);
 	Scr_AddFunction("where", 		LINQ_Where, 	qfalse);
 	Scr_AddFunction("xtest", 		xtest, 			qfalse);
+
+	Scr_AddMethod("extest", 		extest, 		qfalse);
 }

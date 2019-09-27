@@ -66,7 +66,7 @@ VariableValue *Scr_SelectParamOrDefault(unsigned int paramnum)
 {
     VariableValue *var;
 
-    if (paramnum >= gScrVmPub.outparamcount) // alloc new param
+    if (paramnum >= gScrVmPub.outparamcount) // alloc param if undefined
     {
         gScrVmPub.top++;
         gScrVmPub.outparamcount++;
@@ -118,15 +118,15 @@ qboolean Scr_SetParamObject(unsigned int paramnum, int structPointer)
     }
 }
 
-qboolean Scr_SetParamEntity(unsigned int paramnum, int entID)
+qboolean Scr_SetParamEntity(unsigned int paramnum, int entPointer)
 {
     VariableValue *funcParam = Scr_SelectParamOrDefault(paramnum);
     if (funcParam == NULL)
         return qfalse;
     else
     {
-        funcParam->type = VAR_ENTITY;
-        funcParam->u.entityOffset = entID;
+        funcParam->type = VAR_POINTER;
+        funcParam->u.pointerValue = entPointer;
         __callArgNumber++;
         return qtrue;
     }
@@ -235,7 +235,7 @@ void Scr_AddVariable(VariableValue *var)
             Scr_AddVector(var->u.vectorValue);
             break;
         case VAR_ENTITY:
-            Scr_AddEntity(&g_entities[/*] 157 * [*/ var->u.entityOffset]);
+            Scr_AddEntity(&g_entities[157 * var->u.entityOffset]);
             break;
         case VAR_UNDEFINED:
             Scr_AddUndefined();
@@ -251,5 +251,11 @@ void Scr_AddVariable(VariableValue *var)
 void Scr_CallFunction(void (*function)(void), ...)
 {
     function();
+    __callArgNumber = 0;
+}
+
+void Scr_CallMethod(void (*function)(scr_entref_t), scr_entref_t ent, ...)
+{
+    function(ent);
     __callArgNumber = 0;
 }

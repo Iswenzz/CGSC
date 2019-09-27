@@ -32,7 +32,7 @@ test()
 
     while (true)
     {
-        xtest();
+        // xtest();
         // array = where(arr, arr.size, ::testPredicate);
         // printNewArray(array);
         
@@ -46,20 +46,18 @@ testPlayer()
 {
     wait 5;
 
-    // arr = [];
-    // for (i = 0; i < 10; i++)
-    //     arr[i] = self;
+    arr = [];
+    for (i = 0; i < 10; i++)
+        arr[i] = self;
 
-    // while (true)
-    // {
-    //     array = where(arr, arr.size, ::testPredicate);
-    //     // printNewArray(array);
+    while (true)
+    {
+        self extest();
+        // array = where(arr, arr.size, ::testPredicate);
+        // printNewArray(array);
 
-    //     wait 5;
-    // }
-
-    // retEnt = xtest(self);
-    // retEnt iprintlnbold("mdr");
+        wait 5;
+    }
 }
 
 reverse(array)
