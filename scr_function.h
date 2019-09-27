@@ -1,12 +1,4 @@
 #pragma once
-// #include "../q_shared.h"
-// #include "../cvar.h"
-// #include "../entity.h"
-// #include "../player.h"
-// #include "../g_sv_shared.h"
-// #include "../g_shared.h"
-// #include "../cmd.h"
-// #include "../server.h"
 #include "../scr_vm_functions.h"
 
 #define VAR_STAT_MASK 0x60
@@ -33,22 +25,31 @@
 #define MAX_LOCAL_CENTITIES 1536
 #define OBJECT_STACK 0x18001u
 
+__attribute__((unused)) static int __callArgNumber = 0;
+
 #define FLOAT(val) Scr_SetParamFloat(__callArgNumber, val)
 #define INT(val) Scr_SetParamInt(__callArgNumber, val)
 #define VECTOR(val) Scr_SetParamVector(__callArgNumber, val)
 #define OBJECT(val) Scr_SetParamObject(__callArgNumber, val)
 #define ENTITY(val) Scr_SetParamEntity(__callArgNumber, val)
 #define STRING(val) Scr_SetParamString(__callArgNumber, val)
+#define ISTRING(val) Scr_SetParamIString(__callArgNumber, val)
 #define FUNC(val) Scr_SetParamFunc(__callArgNumber, val)
-#define STACK(val) Scr_SetParamStack(__callArgNumber, val)
+
+struct __attribute__((aligned(64))) scrVarGlob_t
+{
+    VariableValueInternal *variableList;
+};
 
 void Scr_FreeArray(VariableValue **array, int length);
 VariableValue **Scr_GetArray(unsigned int paramnum);
+VariableValue *Scr_SelectParamOrDefault(unsigned int paramnum);
 VariableValue *Scr_SelectParam(unsigned int paramnum);
 qboolean Scr_SetParamFloat(unsigned int paramnum, float value);
 qboolean Scr_SetParamInt(unsigned int paramnum, int value);
 qboolean Scr_SetParamObject(unsigned int paramnum, int structPointer);
 qboolean Scr_SetParamEntity(unsigned int paramnum, int entID);
+qboolean Scr_SetParamIString(unsigned int paramnum, const char *string);
 qboolean Scr_SetParamString(unsigned int paramnum, const char *string);
 qboolean Scr_SetParamFunc(unsigned int paramnum, const char *codePos);
 qboolean Scr_SetParamStack(unsigned int paramnum, struct VariableStackBuffer *stack);

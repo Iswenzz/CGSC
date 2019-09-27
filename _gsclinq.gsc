@@ -19,7 +19,6 @@ printResultArray(result)
 
 testPredicate(item)
 {
-    [[item]]();
     return true;
 }
 
@@ -29,22 +28,18 @@ test()
 
     arr = [];
     for (i = 0; i < 10; i++)
-        arr[i] = ::lol;
+        arr[i] = i;
 
     while (true)
     {
-        array = where(arr, arr.size, ::testPredicate);
+        xtest();
+        // array = where(arr, arr.size, ::testPredicate);
         // printNewArray(array);
         
         // isAll = all(arr, arr.size, ::testPredicate);
         // printResultArray(isAll);
         wait 5;
     }
-}
-
-lol()
-{
-    comprintf("lol\n");
 }
 
 testPlayer()
@@ -62,6 +57,9 @@ testPlayer()
 
     //     wait 5;
     // }
+
+    // retEnt = xtest(self);
+    // retEnt iprintlnbold("mdr");
 }
 
 reverse(array)

@@ -71,9 +71,23 @@ void comPrintf()
 	Com_Printf(0, Scr_GetString(0));
 }
 
+void xtest()
+{
+	// if (Scr_GetNumParam() != 1)
+	// {
+	// 	Scr_Error("Usage: xtest(<type>)");
+	// 	return;
+	// }
+	// VariableValue *val = Scr_SelectParam(0);
+	// Scr_AddVariable(val);
+
+	Scr_CallFunction(Scr_AmbientStop, FLOAT(5.0f));
+}
+
 void Scr_AddGscLinq()
 {
 	Scr_AddFunction("comPrintf", 	comPrintf, 		qfalse);
 	Scr_AddFunction("all", 			LINQ_All, 		qfalse);
 	Scr_AddFunction("where", 		LINQ_Where, 	qfalse);
+	Scr_AddFunction("xtest", 		xtest, 			qfalse);
 }

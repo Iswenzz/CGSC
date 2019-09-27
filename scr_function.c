@@ -5,16 +5,10 @@
 #include "../cscr_variable.h"
 #include "../cscr_stringlist.h"
 
-static int __callArgNumber = 0;
-
-struct __attribute__((aligned(64))) scrVarGlob_t
-{
-    VariableValueInternal *variableList;
-};
-
 extern struct scrVarGlob_t gScrVarGlob;
 extern VariableValue Scr_GetArrayIndexValue(unsigned int name);
 extern void IncInParam();
+extern unsigned int Scr_AllocString(const char *s);
 extern void Scr_AddIString(const char *value);
 
 void Scr_FreeArray(VariableValue **array, int length)
@@ -68,9 +62,23 @@ VariableValue *Scr_SelectParam(unsigned int paramnum)
     return var;
 }
 
+VariableValue *Scr_SelectParamOrDefault(unsigned int paramnum)
+{
+    VariableValue *var;
+
+    if (paramnum >= gScrVmPub.outparamcount) // alloc new param
+    {
+        gScrVmPub.top++;
+        gScrVmPub.outparamcount++;
+    }
+
+    var = &gScrVmPub.top[-paramnum];
+    return var;
+}
+
 qboolean Scr_SetParamFloat(unsigned int paramnum, float value)
 {
-    VariableValue *funcParam = Scr_SelectParam(paramnum);
+    VariableValue *funcParam = Scr_SelectParamOrDefault(paramnum);
     if (funcParam == NULL)
         return qfalse;
     else
@@ -84,7 +92,7 @@ qboolean Scr_SetParamFloat(unsigned int paramnum, float value)
 
 qboolean Scr_SetParamInt(unsigned int paramnum, int value)
 {
-    VariableValue *funcParam = Scr_SelectParam(paramnum);
+    VariableValue *funcParam = Scr_SelectParamOrDefault(paramnum);
     if (funcParam == NULL)
         return qfalse;
     else
@@ -98,7 +106,7 @@ qboolean Scr_SetParamInt(unsigned int paramnum, int value)
 
 qboolean Scr_SetParamObject(unsigned int paramnum, int structPointer)
 {
-    VariableValue *funcParam = Scr_SelectParam(paramnum);
+    VariableValue *funcParam = Scr_SelectParamOrDefault(paramnum);
     if (funcParam == NULL)
         return qfalse;
     else
@@ -112,7 +120,7 @@ qboolean Scr_SetParamObject(unsigned int paramnum, int structPointer)
 
 qboolean Scr_SetParamEntity(unsigned int paramnum, int entID)
 {
-    VariableValue *funcParam = Scr_SelectParam(paramnum);
+    VariableValue *funcParam = Scr_SelectParamOrDefault(paramnum);
     if (funcParam == NULL)
         return qfalse;
     else
@@ -126,7 +134,7 @@ qboolean Scr_SetParamEntity(unsigned int paramnum, int entID)
 
 qboolean Scr_SetParamString(unsigned int paramnum, const char *string)
 {
-    VariableValue *funcParam = Scr_SelectParam(paramnum);
+    VariableValue *funcParam = Scr_SelectParamOrDefault(paramnum);
     if (funcParam == NULL)
         return qfalse;
     else
@@ -138,9 +146,23 @@ qboolean Scr_SetParamString(unsigned int paramnum, const char *string)
     }
 }
 
+qboolean Scr_SetParamIString(unsigned int paramnum, const char *string)
+{
+    VariableValue *funcParam = Scr_SelectParamOrDefault(paramnum);
+    if (funcParam == NULL)
+        return qfalse;
+    else
+    {
+        funcParam->type = VAR_ISTRING;
+        funcParam->u.stringValue = Scr_AllocString(string);
+        __callArgNumber++;
+        return qtrue;
+    }
+}
+
 qboolean Scr_SetParamFunc(unsigned int paramnum, const char *codePos)
 {
-    VariableValue *funcParam = Scr_SelectParam(paramnum);
+    VariableValue *funcParam = Scr_SelectParamOrDefault(paramnum);
     if (funcParam == NULL)
         return qfalse;
     else
@@ -154,7 +176,7 @@ qboolean Scr_SetParamFunc(unsigned int paramnum, const char *codePos)
 
 qboolean Scr_SetParamStack(unsigned int paramnum, struct VariableStackBuffer *stack)
 {
-    VariableValue *funcParam = Scr_SelectParam(paramnum);
+    VariableValue *funcParam = Scr_SelectParamOrDefault(paramnum);
     if (funcParam == NULL)
         return qfalse;
     else
@@ -168,7 +190,7 @@ qboolean Scr_SetParamStack(unsigned int paramnum, struct VariableStackBuffer *st
 
 qboolean Scr_SetParamVector(unsigned int paramnum, const float *value)
 {
-    VariableValue *funcParam = Scr_SelectParam(paramnum);
+    VariableValue *funcParam = Scr_SelectParamOrDefault(paramnum);
     if (funcParam == NULL)
         return qfalse;
     else
@@ -212,7 +234,7 @@ void Scr_AddVariable(VariableValue *var)
         case VAR_VECTOR:
             Scr_AddVector(var->u.vectorValue);
             break;
-        case VAR_ENTITY: // TODO Test
+        case VAR_ENTITY:
             Scr_AddEntity(&g_entities[/*] 157 * [*/ var->u.entityOffset]);
             break;
         case VAR_UNDEFINED:
