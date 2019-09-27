@@ -204,6 +204,14 @@ void Scr_AddVariable(VariableValue *var)
         case VAR_VECTOR:
             Scr_AddVector(var->u.vectorValue);
             break;
+        case VAR_ENTITY: // TODO Test
+            Scr_AddEntity(&g_entities[/*] 157 * [*/ var->u.entityOffset]);
+            break;
+        case VAR_UNDEFINED:
+            Scr_AddUndefined();
+            break;
+        default:
+            Scr_AddUndefined();
     }
 }
 
