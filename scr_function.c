@@ -4,6 +4,7 @@
 #include "../scr_vm.h"
 #include "../cscr_variable.h"
 #include "../cscr_stringlist.h"
+#include "../sys_thread.h"
 
 extern struct scrVarGlob_t gScrVarGlob;
 extern VariableValue Scr_GetArrayIndexValue(unsigned int name);
@@ -54,7 +55,7 @@ VariableValue *Scr_SelectParam(unsigned int paramnum)
 
     if (paramnum >= gScrVmPub.outparamcount)
     {
-        Scr_Error(va("parameter %d does not exist", paramnum + 1));
+        Scr_Error(va("parameter %d does not exist\n", paramnum + 1));
         return NULL;
     }
 
@@ -202,6 +203,19 @@ qboolean Scr_SetParamVector(unsigned int paramnum, const float *value)
     }
 }
 
+qboolean Scr_SetParamUndefined(unsigned int paramnum)
+{
+    VariableValue *funcParam = Scr_SelectParamOrDefault(paramnum);
+    if (funcParam == NULL)
+        return qfalse;
+    else
+    {
+        funcParam->type = VAR_UNDEFINED;
+        __callArgNumber++;
+        return qtrue;
+    }
+}
+
 void Scr_AddFunc(const char *codePosValue)
 {
     IncInParam();
@@ -211,9 +225,7 @@ void Scr_AddFunc(const char *codePosValue)
 
 void Scr_AddVariable(VariableValue *var)
 {
-    Com_Printf(0, "entity type: %s\n", var_typename[var->type]);
-    // Com_Printf(0, "entity value: %d\n", var->u.stringValue);
-
+    // Com_Printf(0, "entity type: %s\n", var_typename[var->type]);
     switch (var->type)
     {
         case VAR_POINTER:

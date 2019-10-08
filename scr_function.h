@@ -35,10 +35,19 @@ __attribute__((unused)) static int __callArgNumber = 0;
 #define STRING(val) Scr_SetParamString(__callArgNumber, val)
 #define ISTRING(val) Scr_SetParamIString(__callArgNumber, val)
 #define FUNC(val) Scr_SetParamFunc(__callArgNumber, val)
+#define UNDEFINED() Scr_SetParamUndefined(__callArgNumber)
 
 struct __attribute__((aligned(64))) scrVarGlob_t
 {
     VariableValueInternal *variableList;
+};
+
+#define DEBUG_REFCOUNT_SIZE 65536
+struct scrStringDebugGlob_t
+{
+    volatile int refCount[DEBUG_REFCOUNT_SIZE];
+    volatile int totalRefCount;
+    int ignoreLeaks;
 };
 
 void Scr_FreeArray(VariableValue **array, int length);
@@ -54,6 +63,7 @@ qboolean Scr_SetParamString(unsigned int paramnum, const char *string);
 qboolean Scr_SetParamFunc(unsigned int paramnum, const char *codePos);
 qboolean Scr_SetParamStack(unsigned int paramnum, struct VariableStackBuffer *stack);
 qboolean Scr_SetParamVector(unsigned int paramnum, const float *value);
+qboolean Scr_SetParamUndefined(unsigned int paramnum);
 void Scr_AddFunc(const char *codePosValue);
 void Scr_AddVariable(VariableValue *var);
 void Scr_CallFunction(void (*function)(void), ...);
