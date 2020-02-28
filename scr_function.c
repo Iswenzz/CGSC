@@ -49,6 +49,14 @@ VariableValue **Scr_GetArray(unsigned int paramnum)
     return array;
 }
 
+VariableValue *Scr_AllocVariable(VariableValue *varRef)
+{
+    VariableValue *var = (VariableValue *)malloc(sizeof(VariableValue));
+    var->type = varRef->type;
+    var->u = varRef->u;
+    return var;
+}
+
 VariableValue *Scr_SelectParam(unsigned int paramnum)
 {
     VariableValue *var;

@@ -52,6 +52,7 @@ struct scrStringDebugGlob_t
 
 void Scr_FreeArray(VariableValue **array, int length);
 VariableValue **Scr_GetArray(unsigned int paramnum);
+VariableValue *Scr_AllocVariable(VariableValue *varRef);
 VariableValue *Scr_SelectParamOrDefault(unsigned int paramnum);
 VariableValue *Scr_SelectParam(unsigned int paramnum);
 qboolean Scr_SetParamFloat(unsigned int paramnum, float value);

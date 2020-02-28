@@ -32,6 +32,7 @@
 pexport Scr_GetFunc
 pexport Scr_FreeArray
 pexport Scr_GetArray
+pexport Scr_AllocVariable
 pexport Scr_SelectParamOrDefault
 pexport Scr_SelectParam
 pexport Scr_SetParamFloat
