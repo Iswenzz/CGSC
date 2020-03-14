@@ -231,11 +231,27 @@ void Scr_AddFunc(const char *codePosValue)
     gScrVmPub.top->u.codePosValue = codePosValue;
 }
 
+void Scr_AddObjectStruct(VariableValue *var)
+{
+    IncInParam();
+    gScrVmPub.top->type = VAR_OBJECT;
+    gScrVmPub.top->u.codePosValue = var->u.codePosValue;
+}
+
+void Scr_DebugVariable(VariableValue *var)
+{
+    Com_Printf(0, "type: %s\nintValue: %d\nfloatValue:%f\ncodePosValue:%d\npointerValue:%d\nentityOffset:%d\n", 
+        var_typename[var->type], var->u.intValue, var->u.floatValue, 
+        (int)var->u.codePosValue, var->u.pointerValue, var->u.entityOffset);
+}
+
 void Scr_AddVariable(VariableValue *var)
 {
-    // Com_Printf(0, "entity type: %s\n", var_typename[var->type]);
     switch (var->type)
     {
+        case VAR_OBJECT:
+            Scr_AddObjectStruct(var);
+            break;
         case VAR_POINTER:
             Scr_AddObject(var->u.pointerValue);
             break;
@@ -257,14 +273,13 @@ void Scr_AddVariable(VariableValue *var)
         case VAR_ENTITY:
             Scr_AddEntity(&g_entities[157 * var->u.entityOffset]);
             break;
-        case VAR_UNDEFINED:
-            Scr_AddUndefined();
-            break;
         case VAR_FUNCTION:
             Scr_AddFunc(var->u.codePosValue);
             break;
+        case VAR_UNDEFINED:
         default:
             Scr_AddUndefined();
+            break;
     }
 }
 

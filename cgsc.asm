@@ -46,6 +46,8 @@ pexport Scr_SetParamStack
 pexport Scr_SetParamVector
 pexport Scr_SetParamUndefined
 pexport Scr_AddFunc
+pexport Scr_AddObjectStruct
 pexport Scr_AddVariable
+pexport Scr_DebugVariable
 pexport Scr_CallFunction
 pexport Scr_CallMethod
