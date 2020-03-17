@@ -11,6 +11,7 @@ extern VariableValue Scr_GetArrayIndexValue(unsigned int name);
 extern void IncInParam();
 extern unsigned int Scr_AllocString(const char *s);
 extern void Scr_AddIString(const char *value);
+extern unsigned int GetNewArrayVariableIndex(unsigned int parentId, unsigned int unsignedValue);
 
 void Scr_FreeArray(VariableValue **array, int length)
 {
@@ -22,7 +23,6 @@ void Scr_FreeArray(VariableValue **array, int length)
 VariableValue **Scr_GetArray(unsigned int paramnum)
 {
     int parentId = Scr_GetObject(paramnum);
-
     assert(parentId != 0);
     assert(Scr_GetObjectType(parentId) == VAR_ARRAY);
 
@@ -30,21 +30,32 @@ VariableValue **Scr_GetArray(unsigned int paramnum)
     assert(length > 0);
 
     VariableValueInternal *entryValue;
+    unsigned int id;
+    int index = length - 1;
+    unsigned int nextSibling;
+    
     VariableValue **array = (VariableValue **)malloc(length * sizeof(VariableValue *));
-
-    for (struct { int i; int id; } loop = {0, FindLastSibling(parentId)};
-        loop.id;
-        loop.id = FindPrevSibling(loop.id), loop.i++)
+    id = gScrVarGlob.variableList[parentId + VARIABLELIST_PARENT_BEGIN].nextSibling;
+    if (id)
     {
-        entryValue = &gScrVarGlob.variableList[loop.id + VARIABLELIST_CHILD_BEGIN];
+        while (true)
+        {
+            entryValue = &gScrVarGlob.variableList[id + VARIABLELIST_CHILD_BEGIN];
+            assert((entryValue->w.status & VAR_STAT_MASK) != VAR_STAT_FREE);
+            assert(!IsObject( entryValue ));
 
-        assert((entryValue->w.status & VAR_STAT_MASK) != VAR_STAT_FREE 
-            && (entryValue->w.status & VAR_STAT_MASK) != VAR_STAT_EXTERNAL);
-        assert(!IsObject(entryValue));
+            array[index] = (VariableValue *)malloc(sizeof(VariableValue));
+            array[index]->type = entryValue->w.type & VAR_MASK;
+            array[index]->u = entryValue->u.u;
 
-        array[loop.i] = (VariableValue *)malloc(sizeof(VariableValue));
-        array[loop.i]->type = entryValue->w.type & VAR_MASK;
-        array[loop.i]->u = entryValue->u.u;
+            nextSibling = gScrVarGlob.variableList[id + VARIABLELIST_CHILD_BEGIN].nextSibling;
+            if (!nextSibling)
+                break;
+
+            id = gScrVarGlob.variableList[nextSibling + VARIABLELIST_CHILD_BEGIN].hash.id;
+            assert(id != 0);
+            index--;
+        }
     }
     return array;
 }
