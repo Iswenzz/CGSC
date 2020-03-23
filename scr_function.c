@@ -242,13 +242,6 @@ void Scr_AddFunc(const char *codePosValue)
     gScrVmPub.top->u.codePosValue = codePosValue;
 }
 
-void Scr_AddObjectStruct(VariableValue *var)
-{
-    IncInParam();
-    gScrVmPub.top->type = VAR_OBJECT;
-    gScrVmPub.top->u.codePosValue = var->u.codePosValue;
-}
-
 void Scr_DebugVariable(VariableValue *var)
 {
     Com_Printf(0, "type: %s\nintValue: %d\nfloatValue:%f\ncodePosValue:%d\npointerValue:%d\nentityOffset:%d\n", 
@@ -260,9 +253,6 @@ void Scr_AddVariable(VariableValue *var)
 {
     switch (var->type)
     {
-        case VAR_OBJECT:
-            Scr_AddObjectStruct(var);
-            break;
         case VAR_POINTER:
             Scr_AddObject(var->u.pointerValue);
             break;
