@@ -51,3 +51,5 @@ pexport Scr_DebugVariable
 pexport Scr_CallFunction
 pexport Scr_CallMethod
 pexport Scr_GetObjectType
+pexport Scr_GetTop
+pexport Scr_ExecThreadResult
