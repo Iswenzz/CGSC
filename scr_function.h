@@ -114,3 +114,5 @@ void Scr_AddVariable(VariableValue *var);
 void Scr_DebugVariable(VariableValue *var);
 void Scr_CallFunction(void (*function)(void), ...);
 void Scr_CallMethod(void (*function)(scr_entref_t), scr_entref_t ent, ...);
+
+void GScr_DTest(scr_entref_t entref);

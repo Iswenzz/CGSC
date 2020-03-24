@@ -5,6 +5,7 @@
 #include "../cscr_variable.h"
 #include "../cscr_stringlist.h"
 #include "../sys_thread.h"
+#include "../scr_vm_functions.h"
 
 extern struct scrVarGlob_t gScrVarGlob;
 extern VariableValue Scr_GetArrayIndexValue(unsigned int name);
@@ -349,6 +350,15 @@ uint32_t GetFlagsFromGSCArray(VariableValueArray *array)
 		}
 	}
 	return flags;
+}
+
+void GScr_DTest(scr_entref_t entref)
+{
+	float vec[3];
+	vec[0] = 0;
+	vec[1] = 180;
+	vec[2] = 0;
+	Scr_CallMethod(PlayerCmd_setAngles, entref, VECTOR(vec));
 }
 
 void Scr_CallFunction(void (*function)(void), ...)
