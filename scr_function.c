@@ -13,14 +13,15 @@ extern unsigned int Scr_AllocString(const char *s);
 extern void Scr_AddIString(const char *value);
 extern unsigned int GetNewArrayVariableIndex(unsigned int parentId, unsigned int unsignedValue);
 
-void Scr_FreeArray(VariableValue **array, int length)
+void Scr_FreeArray(VariableValueArray *array)
 {
-	for (int i = 0; i < length; i++)
-		free(array[i]);
+	for (int i = 0; i < array->length; i++)
+		free(array->items[i]);
+	free(array->items);
 	free(array);
 }
 
-VariableValue **Scr_GetArray(unsigned int paramnum)
+VariableValueArray *Scr_GetArray(unsigned int paramnum)
 {
 	int parentId = Scr_GetObject(paramnum);
 	assert(parentId != 0);
@@ -34,7 +35,9 @@ VariableValue **Scr_GetArray(unsigned int paramnum)
 	int index = length - 1;
 	unsigned int nextSibling;
 	
-	VariableValue **array = (VariableValue **)malloc(length * sizeof(VariableValue *));
+	VariableValueArray *array = (VariableValueArray *)malloc(sizeof(VariableValueArray));
+	array->length = length;
+	array->items = (VariableValue **)malloc(length * sizeof(VariableValue *));
 	id = gScrVarGlob.variableList[parentId + VARIABLELIST_PARENT_BEGIN].nextSibling;
 	if (id)
 	{
@@ -44,9 +47,9 @@ VariableValue **Scr_GetArray(unsigned int paramnum)
 			assert((entryValue->w.status & VAR_STAT_MASK) != VAR_STAT_FREE);
 			assert(!IsObject( entryValue ));
 
-			array[index] = (VariableValue *)malloc(sizeof(VariableValue));
-			array[index]->type = entryValue->w.type & VAR_MASK;
-			array[index]->u = entryValue->u.u;
+			array->items[index] = (VariableValue *)malloc(sizeof(VariableValue));
+			array->items[index]->type = entryValue->w.type & VAR_MASK;
+			array->items[index]->u = entryValue->u.u;
 
 			nextSibling = gScrVarGlob.variableList[id + VARIABLELIST_CHILD_BEGIN].nextSibling;
 			if (!nextSibling)
@@ -300,12 +303,12 @@ void Scr_AddVariable(VariableValue *var)
 	}
 }
 
-uint32_t GetFlagsFromGSCArray(VariableValue **array, int array_size)
+uint32_t GetFlagsFromGSCArray(VariableValueArray *array)
 {
 	uint32_t flags = 0;
-	for (int i = 0; i < array_size; i++)
+	for (int i = 0; i < array->length; i++)
 	{
-		switch (array[i]->type)
+		switch (array->items[i]->type)
 		{
 			case VAR_UNDEFINED: 		flags |= FLAG_UNDEFINED; 		 break;
 			case VAR_POINTER: 			flags |= FLAG_POINTER; 			 break;

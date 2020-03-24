@@ -57,6 +57,12 @@ enum GSCTypeFlag
 	FLAG_ENDON_LIST = 134217728
 };
 
+typedef struct
+{
+    uint32_t length;
+    VariableValue **items;
+} VariableValueArray;
+
 __attribute__((unused)) static int __callArgNumber = 0;
 
 #define FLOAT(val) Scr_SetParamFloat(__callArgNumber, val)
@@ -82,8 +88,9 @@ struct scrStringDebugGlob_t
     int ignoreLeaks;
 };
 
-void Scr_FreeArray(VariableValue **array, int length);
-VariableValue **Scr_GetArray(unsigned int paramnum);
+uint32_t GetFlagsFromGSCArray(VariableValueArray *array);
+void Scr_FreeArray(VariableValueArray *array);
+VariableValueArray *Scr_GetArray(unsigned int paramnum);
 VariableValue *Scr_AllocVariable(VariableValue *varRef);
 VariableValue *Scr_SelectParamOrDefault(unsigned int paramnum);
 VariableValue *Scr_SelectParam(unsigned int paramnum);
