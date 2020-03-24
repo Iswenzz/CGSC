@@ -88,6 +88,8 @@ struct scrStringDebugGlob_t
     int ignoreLeaks;
 };
 
+qboolean HasFlag(int var, int flag);
+qboolean IsFlag(int var, int flag);
 uint32_t GetFlagsFromGSCArray(VariableValueArray *array);
 void Scr_FreeArray(VariableValueArray *array);
 VariableValueArray *Scr_GetArray(unsigned int paramnum);

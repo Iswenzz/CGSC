@@ -303,6 +303,16 @@ void Scr_AddVariable(VariableValue *var)
 	}
 }
 
+qboolean HasFlag(int var, int flag)
+{
+	return (var & flag) == flag;
+}
+
+qboolean IsFlag(int var, int flag)
+{
+	return var == flag;
+}
+
 uint32_t GetFlagsFromGSCArray(VariableValueArray *array)
 {
 	uint32_t flags = 0;
