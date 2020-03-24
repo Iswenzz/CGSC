@@ -53,3 +53,4 @@ pexport Scr_CallMethod
 pexport Scr_GetObjectType
 pexport Scr_GetTop
 pexport Scr_ExecThreadResult
+pexport Scr_AllocReturnResult

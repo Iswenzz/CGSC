@@ -60,6 +60,15 @@ VariableValue **Scr_GetArray(unsigned int paramnum)
 	return array;
 }
 
+VariableValue *Scr_AllocReturnResult()
+{
+	VariableValue *returnRef = Scr_GetTop(-1);
+	VariableValue *var = Scr_AllocVariable(returnRef);
+	// clean unused returnRef
+	returnRef->type = 0;
+	return var;
+}
+
 VariableValue *Scr_AllocVariable(VariableValue *varRef)
 {
 	VariableValue *var = (VariableValue *)malloc(sizeof(VariableValue));

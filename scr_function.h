@@ -66,6 +66,7 @@ qboolean Scr_SetParamStack(unsigned int paramnum, struct VariableStackBuffer *st
 qboolean Scr_SetParamVector(unsigned int paramnum, const float *value);
 qboolean Scr_SetParamUndefined(unsigned int paramnum);
 VariableValue *Scr_GetTop(unsigned int paramnum);
+VariableValue *Scr_AllocReturnResult();
 short Scr_ExecThreadResult(int callbackHook, unsigned int numArgs);
 void Scr_AddFunc(const char *codePosValue);
 void Scr_AddVariable(VariableValue *var);
