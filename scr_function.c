@@ -236,7 +236,7 @@ qboolean Scr_SetParamVector(unsigned int paramnum, const float *value)
 	else
 	{
 		funcParam->type = VAR_VECTOR;
-		funcParam->u.vectorValue = value;
+		funcParam->u.vectorValue = Scr_AllocVector(value);
 		__callArgNumber++;
 		return qtrue;
 	}
