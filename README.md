@@ -96,7 +96,7 @@ Scr_FreeArray(array);
 In order to use this extension, just download the archived file down below, and extract it to the cod4x server's ``/src`` directory, then copy the makefile snippet below and paste it before the default rule.
 Then simply build the cod4x source with ``make``.
 
-### **[Download](https://github.com/Iswenzz/SR-App/releases)**
+### **[Download](https://github.com/Iswenzz/CGSC/releases)**
 
 ### **Snippet to add to the cod4x source's makefile:**
 ```makefile
