@@ -1,4 +1,4 @@
-;Imports of scr_function
+;Imports
     extern Sys_Milliseconds
     extern Scr_IsInOpcodeMemory
     extern AddRefToObject
@@ -9,7 +9,7 @@
     extern gScrVmGlob
     extern gScrVmPub
 
-;Exports of scr_function
+;Exports
     global Scr_ExecThreadResult
 
 SECTION .text
@@ -49,7 +49,6 @@ Scr_ExecThreadResult_10:
 	mov [esp], eax
 	call RemoveRefToValue
 	mov eax, [gScrVmPub+0x10]
-	; mov dword [eax+0x4], 0x0
 	sub dword [gScrVmPub+0x10], 0x8
 	sub dword [gScrVmPub+0x18], 0x1
 	movzx ebx, bx
