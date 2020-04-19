@@ -7,7 +7,6 @@
 
 #ifdef PLUGIN_HANDLER_VERSION_MAJOR
     #if PLUGIN_HANDLER_VERSION_MAJOR >= 4
-		// Tested with 17.7.1
 		#define _CGSC_4
         #include "../cscr_variable.h"
         #include "../cscr_stringlist.h"
@@ -22,7 +21,6 @@
         #define IGScrVarGlob gScrVarGlob.variableList
 
     #elif PLUGIN_HANDLER_VERSION_MAJOR >= 2
-		// Tested with 17.6.0
 		#define _CGSC_2
         #define IGScrVmPub scrVmPub
         #define IGScrVarGlob scrVarGlob
