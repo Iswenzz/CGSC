@@ -4,18 +4,18 @@
 
 void GScr_DTest(scr_entref_t entref)
 {
-	#ifdef _CGSC_2
+	#ifdef _CGSC_3
 	void (*setplayerangles)(void) = (void (*)(void))0x80ab7b0;
 	void (*iprintlnbold)(void) = (void (*)(void))0x80c2c14;
 	Scr_CallFunction(iprintlnbold, STRING("TEST"));
 	#endif
 
 	#ifdef _CGSC_4
-    float vec[3];
-    vec[0] = 0;
-    vec[1] = 180;
-    vec[2] = 0;
-    Scr_CallMethod(PlayerCmd_setAngles, entref, VECTOR(vec));
+	float vec[3];
+	vec[0] = 0;
+	vec[1] = 180;
+	vec[2] = 0;
+	Scr_CallMethod(PlayerCmd_setAngles, entref, VECTOR(vec));
 	// Scr_CallFunction(iprintlnbold, INT(1));
 	#endif
 }
@@ -159,7 +159,7 @@ qboolean Scr_SetParamUndefined(unsigned int paramnum)
 
 qboolean Scr_SetParamVector(unsigned int paramnum, const float *value)
 {
-	#ifdef _CGSC_2
+	#ifdef _CGSC_3
 	return qfalse;
 	#endif
 

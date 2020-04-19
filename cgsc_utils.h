@@ -8,7 +8,7 @@
     Com_Printf(0, fmt, __VA_ARGS__);
 #endif
 
-#ifdef _CGSC_2
+#ifdef _CGSC_3
     #define CGSC_Print(fmt) \
     Com_Printf(fmt);
     #define CGSC_Printf(fmt,...) \

@@ -10,7 +10,7 @@ void Scr_FreeArray(VariableValueArray *array)
 	free(array);
 }
 
-#ifdef _CGSC_2
+#ifdef _CGSC_3
 unsigned int Scr_GetObjectType(unsigned int id)
 {
 	assert((IGScrVarGlob[VARIABLELIST_PARENT_BEGIN + id].w.status & VAR_STAT_MASK) != VAR_STAT_FREE);
@@ -152,7 +152,7 @@ void Scr_AddVariable(VariableValue *var)
 			break;
 		#endif
 
-		#ifdef _CGSC_2
+		#ifdef _CGSC_3
 		case VAR_POINTER:
 		case VAR_FUNCTION:
 		case VAR_ISTRING:
@@ -171,7 +171,7 @@ void Scr_AddVariable(VariableValue *var)
 			Scr_AddString(SL_ConvertToString(var->u.stringValue));
 			break;
 		case VAR_VECTOR:
-			#ifdef _CGSC_2
+			#ifdef _CGSC_3
 			Scr_AddVector((vec_t *)var->u.vectorValue);
 			#endif
 			#ifdef _CGSC_4

@@ -1,7 +1,7 @@
 #include "cgsc.h"
 // fix undefined references for missing features
 
-#ifdef _CGSC_2
+#ifdef _CGSC_3
 struct scrVmGlob_t
 {
 	VariableValue eval_stack[2];

@@ -20,8 +20,8 @@
 		#define IGScrVmGlob gScrVmGlob
         #define IGScrVarGlob gScrVarGlob.variableList
 
-    #elif PLUGIN_HANDLER_VERSION_MAJOR >= 2
-		#define _CGSC_2
+    #elif PLUGIN_HANDLER_VERSION_MAJOR >= 3
+		#define _CGSC_3
         #define IGScrVmPub scrVmPub
         #define IGScrVarGlob scrVarGlob
 
