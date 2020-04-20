@@ -1,29 +1,77 @@
 #pragma once
 #include "cgsc.h"
 
-__attribute__((unused)) static int __callArgNumber = 0;
-#define FLOAT(val) Scr_SetParamFloat(__callArgNumber, val)
-#define INT(val) Scr_SetParamInt(__callArgNumber, val)
-#define VECTOR(val) Scr_SetParamVector(__callArgNumber, val)
-#define OBJECT(val) Scr_SetParamObject(__callArgNumber, val)
-#define ENTITY(val) Scr_SetParamEntity(__callArgNumber, val)
-#define STRING(val) Scr_SetParamString(__callArgNumber, val)
-#define ISTRING(val) Scr_SetParamIString(__callArgNumber, val)
-#define FUNC(val) Scr_SetParamFunc(__callArgNumber, val)
-#define UNDEFINED() Scr_SetParamUndefined(__callArgNumber)
+/**
+ * @brief 
+ * This variable is used to keep track of param count for a single call, 
+ * and can only be used in non-thread safe environment.
+ * @todo 
+ */
+__attribute__((used)) static int __callArgNumber = 0;
 
-qboolean Scr_SetParamFloat(unsigned int paramnum, float value);
-qboolean Scr_SetParamInt(unsigned int paramnum, int value);
-qboolean Scr_SetParamObject(unsigned int paramnum, int structPointer);
-qboolean Scr_SetParamEntity(unsigned int paramnum, int entID);
-qboolean Scr_SetParamIString(unsigned int paramnum, const char *string);
-qboolean Scr_SetParamString(unsigned int paramnum, const char *string);
-qboolean Scr_SetParamFunc(unsigned int paramnum, const char *codePos);
-qboolean Scr_SetParamStack(unsigned int paramnum, struct VariableStackBuffer *stack);
-qboolean Scr_SetParamVector(unsigned int paramnum, const float *value);
-qboolean Scr_SetParamUndefined(unsigned int paramnum);
+/**
+ * @brief Alloc a new GSC float param before calling the function with Scr_CallFunction/Scr_CallMethod.
+ */
+#define FLOAT(val) Scr_SetParamGeneric(__callArgNumber, val, VAR_FLOAT)
+/**
+ * @brief Alloc a new GSC int param before calling the function with Scr_CallFunction/Scr_CallMethod.
+ */
+#define INT(val) Scr_SetParamGeneric(__callArgNumber, val, VAR_INTEGER)
+/**
+ * @brief Alloc a new GSC vector param before calling the function with Scr_CallFunction/Scr_CallMethod.
+ */
+#define VECTOR(val) Scr_SetParamGeneric(__callArgNumber, val, VAR_VECTOR)
+/**
+ * @brief Alloc a new GSC pointer param before calling the function with Scr_CallFunction/Scr_CallMethod.
+ */
+#define POINTER(val) Scr_SetParamGeneric(__callArgNumber, val, VAR_POINTER)
+/**
+ * @brief Alloc a new GSC string param before calling the function with Scr_CallFunction/Scr_CallMethod.
+ */
+#define STRING(val) Scr_SetParamGeneric(__callArgNumber, val, VAR_STRING)
+/**
+ * @brief Alloc a new GSC localized string param before calling the function with Scr_CallFunction/Scr_CallMethod.
+ */
+#define ISTRING(val) Scr_SetParamGeneric(__callArgNumber, val, VAR_ISTRING)
+/**
+ * @brief Alloc a new GSC function param before calling the function with Scr_CallFunction/Scr_CallMethod.
+ */
+#define FUNC(val) Scr_SetParamGeneric(__callArgNumber, val, VAR_FUNCTION)
+/**
+ * @brief Alloc a new GSC undefined param before calling the function with Scr_CallFunction/Scr_CallMethod.
+ */
+#define UNDEFINED() Scr_SetParamGeneric(__callArgNumber, NULL, VAR_UNDEFINED)
 
+/**
+ * @brief Alloc a new GSC generic param before calling the function with Scr_CallFunction/Scr_CallMethod.
+ * 
+ * @param paramnum - The param index to alloc.
+ * @param var - The value of the generic variable.
+ * @param type - The type of the generic variable.
+ * @return qboolean - Boolean result.
+ */
+qboolean Scr_SetParamGeneric(unsigned int paramnum, void *var, int type);
+
+/**
+ * @brief Call the specified GSC function pointer
+ * This function is experimental. @todo
+ * @param function - The GSC function pointer.
+ * @param ... - GSC alloc macros can be written here only for convenience.
+ */
 void Scr_CallFunction(void (*function)(void), ...);
+
+/**
+ * @brief Call the specified GSC method pointer
+ * This function is experimental. @todo
+ * @param function - The GSC function pointer.
+ * @param ent - The GSC entref.
+ * @param ... - GSC alloc macros can be written here only for convenience.
+ */
 void Scr_CallMethod(void (*function)(scr_entref_t), scr_entref_t ent, ...);
 
+/**
+ * @brief GScr test function @todo
+ * 
+ * @param entref - GSC entref.
+ */
 void GScr_DTest(scr_entref_t entref);

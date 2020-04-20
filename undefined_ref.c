@@ -1,5 +1,5 @@
 #include "cgsc.h"
-// fix undefined references for missing features
+// This file fix undefined references for missing features.
 
 #ifdef _CGSC_3
 struct scrVmGlob_t

@@ -35,16 +35,7 @@ pexport Scr_GetArray
 pexport Scr_AllocVariable
 pexport Scr_SelectParamOrDefault
 pexport Scr_SelectParam
-pexport Scr_SetParamFloat
-pexport Scr_SetParamInt
-pexport Scr_SetParamObject
-pexport Scr_SetParamEntity
-pexport Scr_SetParamIString
-pexport Scr_SetParamString
-pexport Scr_SetParamFunc
-pexport Scr_SetParamStack
-pexport Scr_SetParamVector
-pexport Scr_SetParamUndefined
+pexport Scr_SetParamGeneric
 pexport Scr_AddFunc
 pexport Scr_AddVariable
 pexport Scr_DebugVariable
