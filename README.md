@@ -2,7 +2,7 @@
 # CGSC
 <!-- Badges -->
 
-This Call of Duty 4X source extension adds new utilities for use in the creation of new plugins. Such things include new functions to get data types that the original source doesn't offer and adds the ability to call functions defined in GSC from the C files. To use this extension you must add the CGSC files included in the release section to the `/src` folder, and then compile the CoD4X server source. More detailed instructions can be found towards the bottom of this document.
+This Call of Duty 4X source extension adds new utilities for use in the creation of new plugins. Such things include new functions to get data types that the original source doesn't offer and adds the ability to call functions defined in GSC from the C files. To use this extension you must add the CGSC files included in the release section to the `/src/CGSC` folder, and then compile the CoD4X server source. More detailed instructions can be found towards the bottom of this document.
 
 ``Note: Depending on the version of Call of Duty 4X that you're running, some features of CGSC may not be available.``
 
@@ -95,7 +95,7 @@ Scr_FreeArray(array);
 ```
 
 ## Instructions
-In order to use this extension, just download the archived file down below, and extract it to the cod4x server's ``/src`` directory, then copy the makefile snippet below and paste it before the default rule.
+In order to use this extension, just download the archived file down below, and extract it to the cod4x server's ``/src/CGSC`` directory, then copy the makefile snippet below and paste it before the default rule.
 Then simply build the cod4x source with ``make``.
 
 ### **[Download](https://github.com/Iswenzz/CGSC/releases)**
