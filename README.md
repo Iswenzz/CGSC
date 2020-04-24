@@ -65,7 +65,8 @@ Call a function with the specified function pointer. The arguments of the GSC fu
 
 Usage Example:
 ```c
-Scr_CallFunction(iprintlnbold, STRING("Test string"));
+const char *str = "Test string";
+Scr_CallFunction(iprintlnbold, STRING(&str));
 ```
 <hr>
 
@@ -78,7 +79,7 @@ float vec[3];
 vec[0] = 0;
 vec[1] = 180;
 vec[2] = 0;
-Scr_CallMethod(setPlayerAngles, VECTOR(vec));
+Scr_CallMethod(setPlayerAngles, VECTOR(&vec));
 ```
 <hr>
 
