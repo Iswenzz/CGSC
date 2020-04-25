@@ -5,7 +5,7 @@
 void GScr_DTest(scr_entref_t entref)
 {
 	#ifdef _CGSC_3
-	// void (*iprintlnbold)(void) = (void (*)(void))0x80c2c14;
+	void (*iprintlnbold)(void) = (void (*)(void))0x80c2c14;
 	const char *str = "TEST";
 	Scr_CallFunction(iprintlnbold, STRING(&str));
 	#endif
