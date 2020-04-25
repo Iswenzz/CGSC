@@ -33,7 +33,7 @@ before_build:
     7z x nasm-2.14rc15-win32.zip -o"nasm" | Out-Null
 
     Write-Host "`tSetting up environment variables"
-    
+
     [Environment]::SetEnvironmentVariable("PATH",  "C:\mingw-w64\i686-5.3.0-posix-dwarf-rt_v4-rev0\mingw32\bin;$pwd\CoD4x_Server-17.7.2\bin;$pwd\nasm\nasm-2.14rc15;$($env:path)")
 
     Write-Host "`tMoving CGSC to cod4x source directory"

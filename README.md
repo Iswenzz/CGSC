@@ -1,6 +1,8 @@
 
 # CGSC
-<!-- Badges -->
+[![Build status](https://ci.appveyor.com/api/projects/status/qftk32n2u3e2wamt?svg=true)](https://ci.appveyor.com/project/Iswenzz/cgsc)
+[![CodeFactor](https://www.codefactor.io/repository/github/iswenzz/cgsc/badge)](https://www.codefactor.io/repository/github/iswenzz/cgsc)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 This Call of Duty 4X source extension adds new utilities for use in the creation of new plugins. Such things include new functions to get data types that the original source doesn't offer and adds the ability to call functions defined in GSC from the C files. To use this extension you must add the CGSC files included in the release section to the `/src/CGSC` folder, and then compile the CoD4X server source. More detailed instructions can be found towards the bottom of this document.
 
