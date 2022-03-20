@@ -1,0 +1,78 @@
+name: Application
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Dependencies
+      run: |
+        sudo apt-get install g++-multilib gcc-multilib
+        sudo dpkg --add-architecture i386
+        sudo apt-get install nasm:i386 paxctl:i386 libtommath-dev:i386
+
+    - name: CoD4x
+      run: |
+        cd ../
+        curl -o CoD4x_Server-17.7.2.tar.gz https://codeload.github.com/callofduty4x/CoD4x_Server/tar.gz/v17.7.2
+        7z x CoD4x_Server-17.7.2.tar.gz
+        7z x CoD4x_Server-17.7.2.tar
+        curl -o ./CoD4x_Server-17.7.2/makefile https://iswenzz.com:1337/github/CGSC/makefile
+        mv cgsc ./CoD4x_Server-17.7.2/src/cgsc
+
+    - name: Build
+      run: |
+        cd ../CoD4x_Server-17.7.2
+        make
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - name: MinGW 8.1.0
+      run: |
+        $Uri = "https://downloads.sourceforge.net/mingw-w64/i686-8.1.0-release-posix-dwarf-rt_v6-rev0.7z"
+        $filename = "mingw32.7z"
+        cd C:/
+        Start-BitsTransfer -Source $Uri -Destination $filename
+        7z x $filename
+
+    - name: NASM
+      uses: ilammy/setup-nasm@v1
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Pexports
+      run: |
+        Invoke-WebRequest "https://github.com/callofduty4x/CoD4x_Server/raw/master/tools/pexports-0.47-mingw32-bin.tar.xz" -OutFile "pexports.tar.xz"
+        7z x pexports.tar.xz
+        7z x pexports.tar
+
+    - name: CoD4x
+      run: |
+        cd ../
+        curl -o CoD4x_Server-17.7.2.tar.gz https://codeload.github.com/callofduty4x/CoD4x_Server/tar.gz/v17.7.2
+        7z x CoD4x_Server-17.7.2.tar.gz
+        7z x CoD4x_Server-17.7.2.tar
+        curl -o ./CoD4x_Server-17.7.2/makefile https://iswenzz.com:1337/github/CGSC/makefile
+        move cgsc ./CoD4x_Server-17.7.2/src/cgsc
+
+    - name: Build
+      run: |
+        cd ../CoD4x_Server-17.7.2
+        $path = $env:Path
+        $env:Path = "C:\mingw32\bin;"
+        $env:Path += $path
+        mingw32-make
