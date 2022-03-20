@@ -1,4 +1,5 @@
 #include "cgsc_utils.h"
+
 #include "../q_shared.h"
 
 qboolean HasFlag(int var, int flag)

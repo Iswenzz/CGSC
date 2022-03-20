@@ -1,20 +1,7 @@
 #include "cgsc_param.h"
 #include "cgsc_variable.h"
+
 #include "../scr_vm_functions.h"
-
-void GScr_DTest(scr_entref_t entref)
-{
-	#ifdef _CGSC_3
-	void (*iprintlnbold)(void) = (void (*)(void))0x80c2c14;
-	const char *str = "TEST";
-	Scr_CallFunction(iprintlnbold, STRING(&str));
-	#endif
-
-	#ifdef _CGSC_4
-	const char *str = "TEST";
-	Scr_CallFunction(iprintlnbold, STRING(&str));
-	#endif
-}
 
 void Scr_CallFunction(void (*function)(void), ...)
 {
@@ -76,4 +63,18 @@ qboolean Scr_SetParamGeneric(unsigned int paramnum, void *var, int type)
 		__callArgNumber++;
 		return qtrue;
 	}
+}
+
+void GScr_Test(scr_entref_t entref)
+{
+	#ifdef _CGSC_3
+	void (*iprintlnbold)(void) = (void (*)(void))0x80c2c14;
+	const char *str = "TEST";
+	Scr_CallFunction(iprintlnbold, STRING(&str));
+	#endif
+
+	#ifdef _CGSC_4
+	const char *str = "TEST";
+	Scr_CallFunction(iprintlnbold, STRING(&str));
+	#endif
 }

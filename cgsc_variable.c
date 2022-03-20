@@ -1,5 +1,6 @@
 #include "cgsc_variable.h"
 #include "cgsc_utils.h"
+
 #include <assert.h>
 
 void Scr_FreeArray(VariableValueArray *array)
@@ -9,6 +10,15 @@ void Scr_FreeArray(VariableValueArray *array)
 	free(array->items);
 	free(array);
 }
+
+#ifdef _CGSC_4
+void Scr_AddFunc(const char *codePosValue)
+{
+	IncInParam();
+	IGScrVmPub.top->type = VAR_FUNCTION;
+	IGScrVmPub.top->u.codePosValue = codePosValue;
+}
+#endif
 
 #ifdef _CGSC_3
 unsigned int Scr_GetObjectType(unsigned int id)
@@ -41,7 +51,7 @@ VariableValueArray *Scr_GetArray(unsigned int paramnum)
 	unsigned int id;
 	int index = length - 1;
 	unsigned int nextSibling;
-	
+
 	VariableValueArray *array = (VariableValueArray *)malloc(sizeof(VariableValueArray));
 	array->length = length;
 	array->items = (VariableValue **)malloc(length * sizeof(VariableValue *));
@@ -120,19 +130,10 @@ VariableValue *Scr_SelectParamOrDefault(unsigned int paramnum)
 	return var;
 }
 
-#ifdef _CGSC_4
-void Scr_AddFunc(const char *codePosValue)
-{
-	IncInParam();
-	IGScrVmPub.top->type = VAR_FUNCTION;
-	IGScrVmPub.top->u.codePosValue = codePosValue;
-}
-#endif
-
 void Scr_DebugVariable(VariableValue *var)
 {
-	CGSC_Printf("type: %s\nintValue: %d\nfloatValue:%f\ncodePosValue:%d\npointerValue:%d\nentityOffset:%d\n", 
-		var_typename[var->type], var->u.intValue, var->u.floatValue, 
+	CGSC_Printf("type: %s\nintValue: %d\nfloatValue:%f\ncodePosValue:%d\npointerValue:%d\nentityOffset:%d\n",
+		var_typename[var->type], var->u.intValue, var->u.floatValue,
 		(int)var->u.codePosValue, var->u.pointerValue, var->u.entityOffset);
 }
 
