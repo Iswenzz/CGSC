@@ -25,7 +25,7 @@ Com_Printf(fmt);
 /**
  * @brief Print a formated string to the console.
  */
-#define CGSC_Printf(fmt,...) \
+#define CGSC_Printf(fmt, ...) \
 Com_Printf(fmt, __VA_ARGS__);
 #endif
 
@@ -33,7 +33,7 @@ Com_Printf(fmt, __VA_ARGS__);
  * @brief Create a formated string,
  * The buffer variable is named "cgsc_va".
  */
-#define CGSC_va(fmt,...) 							    \
+#define CGSC_va(fmt, ...) 							    \
 char cgsc_va[1024];									    \
 snprintf(cgsc_va, sizeof(cgsc_va), fmt, __VA_ARGS__);   \
 

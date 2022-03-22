@@ -1,6 +1,4 @@
 #include "cgsc_variable.h"
-#include "cgsc_utils.h"
-
 #include <assert.h>
 
 void Scr_FreeArray(VariableValueArray *array)

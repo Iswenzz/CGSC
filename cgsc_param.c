@@ -1,6 +1,4 @@
 #include "cgsc_param.h"
-#include "cgsc_variable.h"
-
 #include "../scr_vm_functions.h"
 
 void Scr_CallFunction(void (*function)(void), ...)
