@@ -1,4 +1,5 @@
 #pragma once
+#define PLUGIN
 
 #ifndef PLUGIN_INCLUDES
 	#include "pinc.h"

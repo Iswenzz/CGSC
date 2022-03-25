@@ -1,6 +1,6 @@
 #pragma once
-
 #define CGSC_3
+
 #define IGScrVmPub scrVmPub
 #define IGScrVarGlob scrVarGlob
 

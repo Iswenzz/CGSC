@@ -1,8 +1,5 @@
 #pragma once
-
 #define CGSC_4
-#include "../../cscr_variable.h"
-#include "../../cscr_stringlist.h"
 
 extern struct scrVarGlob_t gScrVarGlob;
 extern unsigned int Scr_AllocString(const char *s);

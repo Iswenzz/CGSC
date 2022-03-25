@@ -1,29 +1,22 @@
 #pragma once
 
 #ifdef COD4X18UPDATE
-	// Definitions for compiling CGSC with CoD4x
-	#include "../scr_vm.h"
-	#ifndef PLUGIN_HANDLER_VERSION_MAJOR
-		#include "../../plugins/plugin_declarations.h"
-	#endif
+	#include "api/cgsc_cod4x.h"
 #else
-	// Definitions for compiling a plugin with CGSC
 	#include "api/cgsc_plugin.h"
 #endif
 
 #ifdef PLUGIN_HANDLER_VERSION_MAJOR
 	#if PLUGIN_HANDLER_VERSION_MAJOR >= 4
-		#define CGSC_4
+		#include "api/cgsc4.h"
 	#elif PLUGIN_HANDLER_VERSION_MAJOR >= 3
-		#define CGSC_3
+		#include "api/cgsc3.h"
 	#endif
 #endif
 
-#ifdef CGSC_4
-	#include "api/cgsc4.h"
-#elif CGSC_3
-	#include "api/cgsc3.h"
-#endif
+#define Plugin(type, definition) \
+type definition;				 \
+type Plugin_##definition
 
 #define VAR_STAT_MASK 0x60
 #define VAR_MASK 0x1F
@@ -80,11 +73,6 @@ enum GSCTypeFlag
 	FLAG_COUNT = 33554432,
 	FLAG_THREAD_LIST = 67108864,
 	FLAG_ENDON_LIST = 134217728
-};
-
-struct __attribute__((aligned(64))) scrVarGlob_t
-{
-	VariableValueInternal *variableList;
 };
 
 struct scrStringDebugGlob_t

@@ -65,4 +65,4 @@ qboolean IsFlag(int var, int flag);
  * @param array - The GSC array.
  * @return uint32_t - Flags value.
  */
-uint32_t GetFlagsFromGSCArray(VariableValueArray *array);
+Plugin(uint32_t, GetFlagsFromGSCArray(VariableValueArray *array));

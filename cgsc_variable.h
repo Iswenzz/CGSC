@@ -6,7 +6,7 @@
  *
  * @param array - The VariableValueArray to free.
  */
-void Scr_FreeArray(VariableValueArray *array);
+Plugin(void, Scr_FreeArray(VariableValueArray *array));
 
 /**
  * @brief Get a GSC array from specified param number.
@@ -14,7 +14,7 @@ void Scr_FreeArray(VariableValueArray *array);
  * @param paramnum - GSC param number.
  * @return VariableValueArray* - The GSC array.
  */
-VariableValueArray *Scr_GetArray(unsigned int paramnum);
+Plugin(VariableValueArray*, Scr_GetArray(unsigned int paramnum));
 
 /**
  * @brief Alloc a VariableValue* and copy the variable info from specified parameter.
@@ -23,7 +23,7 @@ VariableValueArray *Scr_GetArray(unsigned int paramnum);
  * @param varRef - The variable to copy.
  * @return VariableValue* - A copy of the variable.
  */
-VariableValue *Scr_AllocVariable(VariableValue *varRef);
+Plugin(VariableValue*, Scr_AllocVariable(VariableValue *varRef));
 
 /**
  * @brief Get a GSC variable reference from the specified param number.
@@ -32,7 +32,7 @@ VariableValue *Scr_AllocVariable(VariableValue *varRef);
  * @param paramnum - GSC param number.
  * @return VariableValue* - GSC variable reference.
  */
-VariableValue *Scr_SelectParamOrDefault(unsigned int paramnum);
+Plugin(VariableValue*, Scr_SelectParamOrDefault(unsigned int paramnum));
 
 /**
  * @brief Get a GSC variable reference from the specified param number.
@@ -40,7 +40,7 @@ VariableValue *Scr_SelectParamOrDefault(unsigned int paramnum);
  * @param paramnum - GSC param number.
  * @return VariableValue* - GSC variable reference.
  */
-VariableValue *Scr_SelectParam(unsigned int paramnum);
+Plugin(VariableValue*, Scr_SelectParam(unsigned int paramnum));
 
 /**
  * @brief Get a GSC variable reference from the GSC stack with the specified index.
@@ -48,7 +48,7 @@ VariableValue *Scr_SelectParam(unsigned int paramnum);
  * @param paramnum - Index to get from the GSC stack.
  * @return VariableValue* - GSC variable reference.
  */
-VariableValue *Scr_GetTop(unsigned int paramnum);
+Plugin(VariableValue*, Scr_GetTop(unsigned int paramnum));
 
 /**
  * @brief Alloc a copy of the last GSC return variable.
@@ -56,7 +56,7 @@ VariableValue *Scr_GetTop(unsigned int paramnum);
  *
  * @return VariableValue* - The allocated variable.
  */
-VariableValue *Scr_AllocReturnResult();
+Plugin(VariableValue*, Scr_AllocReturnResult());
 
 /**
  * @brief Call a GSC function and keep the GSC return value uncleared.
@@ -65,7 +65,7 @@ VariableValue *Scr_AllocReturnResult();
  * @param numArgs - GSC function args count.
  * @return short - The GSC thread id to be freed with Scr_FreeThread(<short>).
  */
-short Scr_ExecThreadResult(int callbackHook, unsigned int numArgs);
+Plugin(short, Scr_ExecThreadResult(int callbackHook, unsigned int numArgs));
 
 /**
  * @brief Return a GSC Function from specified codeposvalue.
@@ -73,18 +73,18 @@ short Scr_ExecThreadResult(int callbackHook, unsigned int numArgs);
  *
  * @param codePosValue
  */
-void Scr_AddFunc(const char *codePosValue);
+Plugin(void, Scr_AddFunc(const char *codePosValue));
 
 /**
  * @brief Return a GSC variable.
  *
  * @param var - The GSC variable to return.
  */
-void Scr_AddVariable(VariableValue *var);
+Plugin(void, Scr_AddVariable(VariableValue *var));
 
 /**
  * @brief Print GSC variable informations.
  *
  * @param var - The GSC variable to debug.
  */
-void Scr_DebugVariable(VariableValue *var);
+Plugin(void, Scr_DebugVariable(VariableValue *var));
