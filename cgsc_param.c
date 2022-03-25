@@ -39,7 +39,7 @@ qboolean Scr_SetParamGeneric(unsigned int paramnum, void *var, int type)
 				funcParam->u.stringValue = Scr_AllocString(*(const char **)var);
 				break;
 			case VAR_VECTOR:
-				#ifdef _CGSC_4
+				#ifdef CGSC_4
 				funcParam->type = VAR_VECTOR;
 				funcParam->u.vectorValue = Scr_AllocVector(*(const float **)var);
 				#endif
@@ -65,13 +65,13 @@ qboolean Scr_SetParamGeneric(unsigned int paramnum, void *var, int type)
 
 void GScr_Test(scr_entref_t entref)
 {
-	#ifdef _CGSC_3
+	#ifdef CGSC_3
 	void (*iprintlnbold)(void) = (void (*)(void))0x80c2c14;
 	const char *str = "TEST";
 	Scr_CallFunction(iprintlnbold, STRING(&str));
 	#endif
 
-	#ifdef _CGSC_4
+	#ifdef CGSC_4
 	const char *str = "TEST";
 	Scr_CallFunction(iprintlnbold, STRING(&str));
 	#endif

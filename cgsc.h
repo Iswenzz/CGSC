@@ -1,7 +1,4 @@
 #pragma once
-#include "cgsc_param.h"
-#include "cgsc_utils.h"
-#include "cgsc_variable.h"
 
 #ifdef COD4X18UPDATE
 	// Definitions for compiling CGSC with CoD4x
@@ -9,151 +6,23 @@
 	#ifndef PLUGIN_HANDLER_VERSION_MAJOR
 		#include "../../plugins/plugin_declarations.h"
 	#endif
-
-	#ifdef PLUGIN_HANDLER_VERSION_MAJOR
-		#if PLUGIN_HANDLER_VERSION_MAJOR >= 4
-			#define _CGSC_4
-			#include "../cscr_variable.h"
-			#include "../cscr_stringlist.h"
-
-			extern struct scrVarGlob_t gScrVarGlob;
-			extern unsigned int Scr_AllocString(const char *s);
-			extern void Scr_AddIString(const char *value);
-			extern void IncInParam();
-
-			#define IGScrVmPub gScrVmPub
-			#define IGScrVmGlob gScrVmGlob
-			#define IGScrVarGlob gScrVarGlob.variableList
-
-		#elif PLUGIN_HANDLER_VERSION_MAJOR >= 3
-			#define _CGSC_3
-			#define IGScrVmPub scrVmPub
-			#define IGScrVarGlob scrVarGlob
-
-			extern char* SL_ConvertToString(unsigned int index);
-			extern char* var_typename[];
-
-			enum $0E0E04F36A22A28F2C0A7A22DC12DAE9
-			{
-				VAR_UNDEFINED = 0x0,
-				VAR_BEGIN_REF = 0x1,
-				VAR_POINTER = 0x1,
-				VAR_STRING = 0x2,
-				VAR_ISTRING = 0x3,
-				VAR_VECTOR = 0x4,
-				VAR_END_REF = 0x5,
-				VAR_FLOAT = 0x5,
-				VAR_INTEGER = 0x6,
-				VAR_CODEPOS = 0x7,
-				VAR_PRECODEPOS = 0x8,
-				VAR_FUNCTION = 0x9,
-				VAR_STACK = 0xA,
-				VAR_ANIMATION = 0xB,
-				VAR_DEVELOPER_CODEPOS = 0xC,
-				VAR_INCLUDE_CODEPOS = 0xD,
-				VAR_THREAD = 0xE,
-				VAR_NOTIFY_THREAD = 0xF,
-				VAR_TIME_THREAD = 0x10,
-				VAR_CHILD_THREAD = 0x11,
-				VAR_OBJECT = 0x12,
-				VAR_DEAD_ENTITY = 0x13,
-				VAR_ENTITY = 0x14,
-				VAR_ARRAY = 0x15,
-				VAR_DEAD_THREAD = 0x16,
-				VAR_COUNT = 0x17,
-				VAR_THREAD_LIST = 0x18,
-				VAR_ENDON_LIST = 0x19
-			};
-		#endif
-
-		struct __attribute__((aligned(64))) scrVarGlob_t
-		{
-			VariableValueInternal *variableList;
-		};
-	#endif
 #else
 	// Definitions for compiling a plugin with CGSC
-	#ifndef PLUGIN_INCLUDES
-		#include "pinc.h"
+	#include "api/cgsc_plugin.h"
+#endif
+
+#ifdef PLUGIN_HANDLER_VERSION_MAJOR
+	#if PLUGIN_HANDLER_VERSION_MAJOR >= 4
+		#define CGSC_4
+	#elif PLUGIN_HANDLER_VERSION_MAJOR >= 3
+		#define CGSC_3
 	#endif
+#endif
 
-	#ifdef PLUGIN_HANDLER_VERSION_MAJOR
-		#if PLUGIN_HANDLER_VERSION_MAJOR >= 4
-			#define _CGSC_4
-		#elif PLUGIN_HANDLER_VERSION_MAJOR >= 3
-			#define _CGSC_3
-		#endif
-	#endif
-
-	#ifndef SCR_ENTREF_DEFINED
-		#define SCR_ENTREF_DEFINED
-	#endif
-
-	typedef struct
-	{
-		uint16_t entnum;
-		uint16_t classnum;
-	} Plugin_Scr_entref_t;
-
-	struct VariableStackBuffer
-	{
-		const char *pos;
-		uint16_t size;
-		uint16_t bufLen;
-		uint16_t localId;
-		char time;
-		char buf[1];
-	};
-
-	union VariableUnion
-	{
-		int intValue;
-		float floatValue;
-		unsigned int stringValue;
-		const float *vectorValue;
-		const char *codePosValue;
-		unsigned int pointerValue;
-		struct VariableStackBuffer *stackValue;
-		unsigned int entityOffset;
-	};
-
-	typedef struct
-	{
-		union VariableUnion u;
-		int type;
-	} VariableValue;
-
-	enum $0E0E04F36A22A28F2C0A7A22DC12DAE9
-	{
-		VAR_UNDEFINED = 0x0,
-		VAR_BEGIN_REF = 0x1,
-		VAR_POINTER = 0x1,
-		VAR_STRING = 0x2,
-		VAR_ISTRING = 0x3,
-		VAR_VECTOR = 0x4,
-		VAR_END_REF = 0x5,
-		VAR_FLOAT = 0x5,
-		VAR_INTEGER = 0x6,
-		VAR_CODEPOS = 0x7,
-		VAR_PRECODEPOS = 0x8,
-		VAR_FUNCTION = 0x9,
-		VAR_STACK = 0xA,
-		VAR_ANIMATION = 0xB,
-		VAR_DEVELOPER_CODEPOS = 0xC,
-		VAR_INCLUDE_CODEPOS = 0xD,
-		VAR_THREAD = 0xE,
-		VAR_NOTIFY_THREAD = 0xF,
-		VAR_TIME_THREAD = 0x10,
-		VAR_CHILD_THREAD = 0x11,
-		VAR_OBJECT = 0x12,
-		VAR_DEAD_ENTITY = 0x13,
-		VAR_ENTITY = 0x14,
-		VAR_ARRAY = 0x15,
-		VAR_DEAD_THREAD = 0x16,
-		VAR_COUNT = 0x17,
-		VAR_THREAD_LIST = 0x18,
-		VAR_ENDON_LIST = 0x19
-	};
+#ifdef CGSC_4
+	#include "api/cgsc4.h"
+#elif CGSC_3
+	#include "api/cgsc3.h"
 #endif
 
 #define VAR_STAT_MASK 0x60
@@ -213,6 +82,11 @@ enum GSCTypeFlag
 	FLAG_ENDON_LIST = 134217728
 };
 
+struct __attribute__((aligned(64))) scrVarGlob_t
+{
+	VariableValueInternal *variableList;
+};
+
 struct scrStringDebugGlob_t
 {
     volatile int refCount[DEBUG_REFCOUNT_SIZE];
@@ -225,3 +99,7 @@ typedef struct
 	uint32_t length;
 	VariableValue **items;
 } VariableValueArray;
+
+#include "cgsc_param.h"
+#include "cgsc_utils.h"
+#include "cgsc_variable.h"

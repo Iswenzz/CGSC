@@ -1,7 +1,8 @@
 #pragma once
 #include "cgsc.h"
 
-#ifdef _CGSC_4
+#ifdef CGSC_4
+
 /**
  * @brief Print a string to the console.
  */
@@ -13,9 +14,11 @@ Com_Printf(0, fmt);
  */
 #define CGSC_Printf(fmt, ...) \
 Com_Printf(0, fmt, __VA_ARGS__);
+
 #endif
 
-#ifdef _CGSC_3
+#ifdef CGSC_3
+
 /**
  * @brief Print a string to the console.
  */
@@ -27,6 +30,7 @@ Com_Printf(fmt);
  */
 #define CGSC_Printf(fmt, ...) \
 Com_Printf(fmt, __VA_ARGS__);
+
 #endif
 
 /**
