@@ -9,33 +9,6 @@ void Scr_FreeArray(VariableValueArray *array)
 	free(array);
 }
 
-#ifdef CGSC_4
-void Scr_AddFunc(const char *codePosValue)
-{
-	IncInParam();
-	IGScrVmPub.top->type = VAR_FUNCTION;
-	IGScrVmPub.top->u.codePosValue = codePosValue;
-}
-#endif
-
-#ifdef CGSC_3
-unsigned int Scr_GetObjectType(unsigned int id)
-{
-	assert((IGScrVarGlob[VARIABLELIST_PARENT_BEGIN + id].w.status & VAR_STAT_MASK) != VAR_STAT_FREE);
-	return VAR_TYPE((&IGScrVarGlob[id + VARIABLELIST_PARENT_BEGIN]));
-}
-
-int GetArraySize(int id)
-{
-	VariableValueInternal *entryValue;
-	assert(id != 0);
-
-	entryValue = &IGScrVarGlob[id + VARIABLELIST_PARENT_BEGIN];
-	assert(VAR_TYPE(entryValue) == VAR_ARRAY);
-	return entryValue->u.o.u.size;
-}
-#endif
-
 VariableValueArray *Scr_GetArray(unsigned int paramnum)
 {
 	int parentId = Scr_GetObject(paramnum);
@@ -170,12 +143,12 @@ void Scr_AddVariable(VariableValue *var)
 			Scr_AddString(SL_ConvertToString(var->u.stringValue));
 			break;
 		case VAR_VECTOR:
-			#ifdef CGSC_3
+		#ifdef CGSC_3
 			Scr_AddVector((vec_t *)var->u.vectorValue);
-			#endif
-			#ifdef CGSC_4
+		#endif
+		#ifdef CGSC_4
 			Scr_AddVector(var->u.vectorValue);
-			#endif
+		#endif
 			break;
 		case VAR_ENTITY:
 			Scr_AddEntity(&g_entities[157 * var->u.entityOffset]);

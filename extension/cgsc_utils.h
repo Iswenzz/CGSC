@@ -1,41 +1,28 @@
 #pragma once
 #include "cgsc.h"
 
-#ifdef CGSC_4
-
 /**
  * @brief Print a string to the console.
  */
-#define CGSC_Print(fmt) \
-Com_Printf(0, fmt);
-
-/**
- * @brief Print a formated string to the console.
- */
-#define CGSC_Printf(fmt, ...) \
-Com_Printf(0, fmt, __VA_ARGS__);
-
+#ifdef CGSC_4
+	#define CGSC_Print(fmt) Com_Printf(0, fmt);
+#elif CGSC_3
+	#define CGSC_Print(fmt) Com_Printf(fmt);
 #endif
 
-#ifdef CGSC_3
-
-/**
- * @brief Print a string to the console.
- */
-#define CGSC_Print(fmt) \
-Com_Printf(fmt);
-
 /**
  * @brief Print a formated string to the console.
  */
-#define CGSC_Printf(fmt, ...) \
-Com_Printf(fmt, __VA_ARGS__);
-
+#ifdef CGSC_4
+	#define CGSC_Printf(fmt, ...) Com_Printf(0, fmt, __VA_ARGS__);
+#elif CGSC_3
+	#define CGSC_Printf(fmt, ...) Com_Printf(fmt, __VA_ARGS__);
 #endif
 
 /**
  * @brief Create a formated string,
  * The buffer variable is named "cgsc_va".
+ * @todo - Remove
  */
 #define CGSC_va(fmt, ...) 							    \
 char cgsc_va[1024];									    \

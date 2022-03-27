@@ -14,6 +14,10 @@
 	#endif
 #endif
 
+/**
+ * @brief
+ * Adds the definition for plugin exports.
+ */
 #define Plugin(type, definition) \
 type definition;				 \
 type Plugin_##definition
@@ -88,6 +92,6 @@ typedef struct
 	VariableValue **items;
 } VariableValueArray;
 
-#include "cgsc_param.h"
-#include "cgsc_utils.h"
-#include "cgsc_variable.h"
+#include "extension/cgsc_param.h"
+#include "extension/cgsc_utils.h"
+#include "extension/cgsc_variable.h"
