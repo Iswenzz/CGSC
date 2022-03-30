@@ -5,7 +5,11 @@
  * @brief Print a string to the console.
  */
 #ifdef CGSC_4
-	#define CGSC_Print(fmt) Com_Printf(0, fmt);
+	#ifdef PLUGIN
+		#define CGSC_Print(fmt) Com_Printf(fmt);
+	#else
+		#define CGSC_Print(fmt) Com_Printf(0, fmt);
+	#endif
 #elif CGSC_3
 	#define CGSC_Print(fmt) Com_Printf(fmt);
 #endif
@@ -14,7 +18,11 @@
  * @brief Print a formated string to the console.
  */
 #ifdef CGSC_4
-	#define CGSC_Printf(fmt, ...) Com_Printf(0, fmt, __VA_ARGS__);
+	#ifdef PLUGIN
+		#define CGSC_Print(fmt) Com_Printf(fmt, __VA_ARGS__);
+	#else
+		#define CGSC_Print(fmt) Com_Printf(0, fmt, __VA_ARGS__);
+	#endif
 #elif CGSC_3
 	#define CGSC_Printf(fmt, ...) Com_Printf(fmt, __VA_ARGS__);
 #endif

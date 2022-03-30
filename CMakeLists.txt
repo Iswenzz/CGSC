@@ -27,11 +27,13 @@ add_library(CGSC)
 add_subdirectory(api)
 add_subdirectory(asm)
 add_subdirectory(extension)
-set_target_properties(CGSC PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib)
-target_compile_definitions(CGSC PUBLIC "COD4X18UPDATE")
-target_include_directories(CGSC PUBLIC . .. ../../plugins)
+
+target_link_libraries(CGSC PUBLIC CGSC.Version)
+target_compile_definitions(CGSC PUBLIC COD4X18UPDATE)
+target_include_directories(CGSC PUBLIC . .. ../version ../../plugins)
 target_sources(CGSC PRIVATE cgsc.h)
-get_target_property(SOURCES CGSC SOURCES)
+
+set_target_properties(CGSC PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
 
 # Pack

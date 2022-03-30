@@ -29,6 +29,7 @@
 %endmacro
 
 ; CGSC
+pexport Sys_GetCommonVersionString
 pexport Scr_GetFunc
 pexport Scr_FreeArray
 pexport Scr_GetArray

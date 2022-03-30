@@ -5,8 +5,10 @@
 	#include "pinc.h"
 #endif
 
-#ifndef SCR_ENTREF_DEFINED
-	#define SCR_ENTREF_DEFINED
+#ifdef COD4X
+	#define Com_Printf Com_Printf
+#elif defined(PLUGIN)
+	#define Com_Printf Plugin_Printf
 #endif
 
 typedef struct

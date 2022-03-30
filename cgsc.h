@@ -92,6 +92,11 @@ typedef struct
 	VariableValue **items;
 } VariableValueArray;
 
+/**
+ * @brief Returns server version as string.
+ */
+Plugin(const char*, Sys_GetCommonVersionString());
+
 #include "extension/cgsc_param.h"
 #include "extension/cgsc_utils.h"
 #include "extension/cgsc_variable.h"
