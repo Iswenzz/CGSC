@@ -1,5 +1,5 @@
 #include "cgsc.h"
-#ifdef CGSC_3
+#if CGSC_EQ(3)
 
 struct scrVmGlob_t
 {

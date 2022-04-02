@@ -1,5 +1,5 @@
 #include "cgsc.h"
-#ifdef CGSC_4
+#if CGSC_EQ(4)
 
 void Scr_AddFunc(const char *codePosValue)
 {

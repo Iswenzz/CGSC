@@ -2,7 +2,7 @@
 #include "cgsc.h"
 
 /**
- * @todo
+ * @todo - Experimental feature.
  *
  * @brief This variable is used to keep track of param count for a single call,
  * and can only be used in non-thread safe environment.
@@ -81,6 +81,11 @@ Plugin(void, Scr_CallFunction(void (*function)(void), ...));
  * @param ... - GSC alloc macros can be written here only for convenience.
  */
 Plugin(void, Scr_CallMethod(void (*function)(scr_entref_t), scr_entref_t ent, ...));
+
+/**
+ * @brief Get the GSC thread return value.
+ */
+Plugin(int, Scr_GetThreadReturn());
 
 /**
  * @brief GScr test function.

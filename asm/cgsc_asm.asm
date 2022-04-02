@@ -1,4 +1,4 @@
-;Imports
+; Imports
     extern Sys_Milliseconds
     extern Scr_IsInOpcodeMemory
     extern AddRefToObject
@@ -9,12 +9,12 @@
     extern gScrVmGlob
     extern gScrVmPub
 
-;Exports
+; Exports
     global Scr_ExecThreadResult
 
 SECTION .text
 
-;Scr_ExecThreadResult(int, unsigned int)
+; Scr_ExecThreadResult(int, unsigned int)
 Scr_ExecThreadResult:
 	push ebp
 	mov ebp, esp

@@ -1,5 +1,5 @@
+; Plugin exports
 %macro pexport 1
-
 	SECTION .text
 		%ifdef Win32
 			EXPORT Plugin_%1
@@ -10,11 +10,10 @@
 	SECTION .rodata
 		extern %1
 		p%1 dd %1
-
 %endmacro
 
+; Rename function
 %macro ralias 2
-
 	SECTION .text
 		%ifdef Win32
 			EXPORT %1
@@ -25,25 +24,25 @@
 	SECTION .rodata
 		extern %2
 		p%2 dd %2
-
 %endmacro
 
 ; CGSC
-pexport Sys_GetCommonVersionString
-pexport Scr_GetFunc
-pexport Scr_FreeArray
-pexport Scr_GetArray
+pexport Scr_AllocReturnResult
 pexport Scr_AllocVariable
+pexport Scr_AddFunc
+pexport Scr_AddVariable
+pexport Scr_CallFunction
+pexport Scr_CallMethod
+pexport Scr_DebugVariable
+pexport Scr_ExecThreadResult
+pexport Scr_FreeArray
+pexport Scr_GetFlagsFromGSCArray
+pexport Scr_GetThreadReturn
+pexport Scr_GetFunc
+pexport Scr_GetObjectType
+pexport Scr_GetArray
+pexport Scr_GetTop
+pexport Sys_GetCommonVersionString
 pexport Scr_SelectParamOrDefault
 pexport Scr_SelectParam
 pexport Scr_SetParamGeneric
-pexport Scr_AddFunc
-pexport Scr_AddVariable
-pexport Scr_DebugVariable
-pexport Scr_CallFunction
-pexport Scr_CallMethod
-pexport Scr_GetObjectType
-pexport Scr_GetTop
-pexport Scr_ExecThreadResult
-pexport Scr_AllocReturnResult
-pexport GetFlagsFromGSCArray

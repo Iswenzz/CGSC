@@ -1,5 +1,4 @@
 #include "cgsc_param.h"
-#include <scr_vm_functions.h>
 
 void Scr_CallFunction(void (*function)(void), ...)
 {
@@ -38,7 +37,7 @@ qboolean Scr_SetParamGeneric(unsigned int paramnum, void *var, int type)
 				funcParam->type = VAR_STRING;
 				funcParam->u.stringValue = Scr_AllocString(*(const char **)var);
 				break;
-			#ifdef CGSC_4
+			#if CGSC(4)
 			case VAR_VECTOR:
 				funcParam->type = VAR_VECTOR;
 				funcParam->u.vectorValue = Scr_AllocVector(*(const float **)var);
@@ -63,9 +62,21 @@ qboolean Scr_SetParamGeneric(unsigned int paramnum, void *var, int type)
 	}
 }
 
+int Scr_GetThreadReturn()
+{
+	int value;
+	GetRegisterValue(&value, "edx");
+
+	#if CGSC(4)
+		return *(int *)value;
+	#elif CGSC(3)
+		return value;
+	#endif
+}
+
 void GScr_Test(scr_entref_t entref)
 {
-	#ifdef CGSC_3
+	#if CGSC_EQ(3)
 	void (*iprintlnbold)(void) = (void (*)(void))0x80c2c14;
 	#endif
 
