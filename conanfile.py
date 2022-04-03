@@ -6,12 +6,17 @@ class CGSC(ConanFile):
 	license = "LICENCE"
 	url = "https://github.com/Iswenzz/CGSC"
 	description = "Call of Duty 4X source extension that adds new features for creating plugins not offered in the original source."
-	settings = "os", "arch", "compiler", "build_type"
+
 	generators = "cmake"
 	exports_sources = "LICENSE", "README.md", "CMakeLists.txt", "cgsc.h"
 
+	settings = "os", "arch", "compiler", "build_type"
+	options = {"enable_testing": [True, False]}
+	default_options  = {"enable_testing": False}
+
 	def build_requirements(self):
-		self.build_requires("greatest/1.5.0", force_host_context=True)
+		if self.options.enable_testing:
+			self.build_requires("greatest/1.5.0", force_host_context=True)
 
 	def export_plugin_api(self):
 		self.copy("pinc.h", src="../../plugins", dst="cod4x/plugins")

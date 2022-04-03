@@ -42,7 +42,7 @@ pexport Scr_GetFunc
 pexport Scr_GetObjectType
 pexport Scr_GetArray
 pexport Scr_GetTop
-pexport Sys_GetCommonVersionString
+pexport Sys_GetCommonVersion
 pexport Scr_SelectParamOrDefault
 pexport Scr_SelectParam
 pexport Scr_SetParamGeneric

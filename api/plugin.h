@@ -5,10 +5,9 @@
 	#include <pinc.h>
 #endif
 
-#ifdef COD4X
-	#define Com_Printf Com_Printf
-#elif defined(PLUGIN)
+#ifdef PLUGIN
 	#define Com_Printf Plugin_Printf
+	#define Scr_Error Plugin_Scr_Error
 #endif
 
 typedef struct
