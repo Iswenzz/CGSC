@@ -13,14 +13,14 @@ set(CPACK_GENERATOR 7Z)
 include(CPack)
 
 # Conan
-# include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-# conan_basic_setup()
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
 
 # Tests
-# include(CTest)
-# add_executable(CGSC.Tests)
-# target_link_libraries(CGSC.Tests PUBLIC ${CONAN_LIBS} CGSC)
-# add_test(NAME Tests COMMAND CGSC.Tests)
+include(CTest)
+add_executable(CGSC.Tests)
+target_link_libraries(CGSC.Tests PUBLIC ${CONAN_LIBS} CGSC)
+add_test(NAME Tests COMMAND CGSC.Tests)
 
 # Build
 add_library(CGSC)

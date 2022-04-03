@@ -19,6 +19,15 @@ register int _register asm(reg);    \
 *var = _register;
 
 /**
+ * @brief Format a string.
+ *
+ * @param format - The string to format.
+ * @param ... - The format arguments.
+ * @return char* - The formatted string.
+ */
+char *fmt(char *format, ...);
+
+/**
  * @brief Check if a flag is set in the GSC array flag variable.
  *
  * @param var - GSC array flag variable.

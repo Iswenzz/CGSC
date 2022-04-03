@@ -72,7 +72,7 @@ VariableValue *Scr_SelectParam(unsigned int paramnum)
 	VariableValue *var;
 	if (paramnum >= IGScrVmPub.outparamcount)
 	{
-		Scr_Error(va("parameter %d does not exist\n", paramnum + 1));
+		Scr_Error(fmt("parameter %d does not exist\n", paramnum + 1));
 		return NULL;
 	}
 	var = &IGScrVmPub.top[-paramnum];

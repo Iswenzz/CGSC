@@ -10,6 +10,9 @@ class CGSC(ConanFile):
 	generators = "cmake"
 	exports_sources = "LICENSE", "README.md", "CMakeLists.txt", "cgsc.h"
 
+	def build_requirements(self):
+		self.build_requires("greatest/1.5.0", force_host_context=True)
+
 	def export_plugin_api(self):
 		self.copy("pinc.h", src="../../plugins", dst="cod4x/plugins")
 		self.copy("declarations.h", src="../../plugins", dst="cod4x/plugins")

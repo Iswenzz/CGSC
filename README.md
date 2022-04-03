@@ -11,7 +11,6 @@ This Call of Duty 4X source extension adds new utilities for use in the creation
 ## Documentation
 * [API](https://github.com/Iswenzz/CGSC/blob/master/docs/api.md)
 * [Extensions](https://github.com/Iswenzz/CGSC/blob/master/docs/extensions.md)
-* [Macros](https://github.com/Iswenzz/CGSC/blob/master/docs/macros.md)
 
 ## Instructions
 In order to use this extension, just download the archived file down below, and extract it to the cod4x server's ``src/CGSC`` directory, then copy the makefile snippet below and paste it before the default rule.
@@ -44,13 +43,13 @@ _Pre-Requisites:_
 _Build Command:_
 
     mkdir build && cd build
-    conan install .. --build --profile ../.conan/windows.conf
-    cmake .. -G "Visual Studio 16 2019" -A Win32 -T CLangCL
+    conan install .. --build --profile ../.conan/linux.conf
+    cmake ..
     cmake --build .
 
 ## Building (Windows)
 _Pre-Requisites:_
-1. Windows [MinGW-W64 GCC-7.3.0](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/7.3.0/threads-win32/dwarf/i686-7.3.0-release-win32-dwarf-rt_v5-rev0.7z)
+1. Windows [MinGW-W64 8.1.0 i686 Win32 dwarf](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/8.1.0/threads-win32/dwarf/i686-8.1.0-release-win32-dwarf-rt_v6-rev0.7z)
 2. [NASM](https://www.nasm.us/)
 3. [CMake](https://cmake.org/) and [Conan](https://conan.io/).
 
@@ -58,7 +57,7 @@ _Build Command:_
 
     mkdir build && cd build
     conan install .. --build --profile ../.conan/windows.conf
-    cmake .. -G "Visual Studio 16 2019" -A Win32 -T CLangCL
+    cmake .. -G "MinGW Makefiles"
     cmake --build .
 
 ## Conan Package
