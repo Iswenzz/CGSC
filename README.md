@@ -8,97 +8,13 @@ This Call of Duty 4X source extension adds new utilities for use in the creation
 
 ``Note: Depending on the version of Call of Duty 4X that you're running, some features of CGSC may not be available.``
 
-## Functions
-
-#### ``Scr_FreeArray(VariableValueArray *array)``
-Free the value obtained by Scr_GetArray.
-
-Usage Example:
-```c
-Scr_FreeArray(array);
-```
-<hr>
-
-#### ``Scr_GetArray(uin32_t paramnum)``
-Returns a GSC array based on the passed index value, which represents the GSC parameter number in which this array will be passed.
-
-Usage Example:
-```c
-VariableValueArray *array = Scr_GetArray(0);
-Scr_FreeArray(array);
-```
-<hr>
-
-#### ``Scr_AddVariable(VariableValue *var)``
-Returns a generic variable to GSC.
-
-Usage Example:
-```c
-VariableValueArray *array = Scr_GetArray(0);
-Scr_AddVariable(array->items[0]);
-Scr_FreeArray(array);
-```
-<hr>
-
-#### ``Scr_ExecThreadResult(int callbackHook, unsigned int numArgs)``
-Start a thread with the specified GSC functions and arguments count, and wait for the thread to finish.
-
-Usage Example:
-```c
-const uint32_t threadId = Plugin_Scr_GetFunc(0);
-const short tid = Plugin_Scr_ExecThreadResult(threadId, 0);
-```
-<hr>
-
-#### ``Scr_AllocReturnResult()``
-Copy the GSC thread return value, free the value when its not used anymore.
-
-Usage Example:
-```c
-const uint32_t threadId = Plugin_Scr_GetFunc(0);
-const short tid = Plugin_Scr_ExecThreadResult(threadId, 0);
-VariableValue *var = Plugin_Scr_AllocReturnResult();
-free(var);
-```
-<hr>
-
-#### ``Scr_CallFunction(void (*function)(void), ...)``
-Call a function with the specified function pointer. The arguments of the GSC function can be assigned with the type macros provided in the header file.
-
-Usage Example:
-```c
-const char *str = "Test string";
-Scr_CallFunction(iprintlnbold, STRING(&str));
-```
-<hr>
-
-#### ``Scr_CallMethod(void (*function)(scr_entref_t), scr_entref_t ent, ...)``
-Call a method on an entity with the specified function pointer. The arguments of the GSC function can be assigned with the type macros provided in the header file.
-
-Usage Example:
-```c
-float vec[3];
-vec[0] = 0;
-vec[1] = 180;
-vec[2] = 0;
-Scr_CallMethod(setPlayerAngles, VECTOR(&vec));
-```
-<hr>
-
-#### ``GetFlagsFromGSCArray(VariableValueArray *array)``
-Get type flags from a GSC array.
-
-Usage Example:
-```c
-VariableValueArray *array = Scr_GetArray(0);
-uint32_t flags = GetFlagsFromGSCArray(array);
-qboolean a = HasFlag(flags, FLAG_FLOAT);
-qboolean b = IsFlag(flags, FLAG_STRING);
-Scr_FreeArray(array);
-```
+## Documentation
+* [API](https://github.com/Iswenzz/CGSC/blob/master/docs/api.md)
+* [Extensions](https://github.com/Iswenzz/CGSC/blob/master/docs/extensions.md)
+* [Macros](https://github.com/Iswenzz/CGSC/blob/master/docs/macros.md)
 
 ## Instructions
-In order to use this extension, just download the archived file down below, and extract it to the cod4x server's ``/src/CGSC`` directory, then copy the makefile snippet below and paste it before the default rule.
+In order to use this extension, just download the archived file down below, and extract it to the cod4x server's ``src/CGSC`` directory, then copy the makefile snippet below and paste it before the default rule.
 Then simply build the cod4x source with ``make``.
 
 ### **[Download](https://github.com/Iswenzz/CGSC/releases)**

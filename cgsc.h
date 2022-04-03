@@ -107,5 +107,5 @@ typedef struct
 #include "api/sys/compatibility.h"
 #include "api/utils/utils.h"
 
-#include "extension/cgsc_param.h"
-#include "extension/cgsc_variable.h"
+#include "extensions/cgsc_param.h"
+#include "extensions/cgsc_variable.h"

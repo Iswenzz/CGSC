@@ -1,3 +1,5 @@
+add_subdirectory(versions)
+
 target_sources(CGSC PRIVATE
 	cgsc_param.c
 	cgsc_param.h
