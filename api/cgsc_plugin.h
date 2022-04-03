@@ -2,7 +2,7 @@
 #define PLUGIN
 
 #ifndef PLUGIN_INCLUDES
-	#include "pinc.h"
+	#include <pinc.h>
 #endif
 
 #ifdef COD4X

@@ -103,7 +103,7 @@ Then simply build the cod4x source with ``make``.
 
 ### **[Download](https://github.com/Iswenzz/CGSC/releases)**
 
-### **Snippet to add to the cod4x source's makefile:**
+### **Snippet to add to the cod4x source's makefile before the first target:**
 ```makefile
 ##################################
 # CGSC
@@ -119,28 +119,38 @@ $(OBJ_DIR)/%.o: $(CGSC_DIR)/asm/%.asm
 ```
 
 ## Building (Linux)
-Debian/Ubuntu 32-bit:
-
-	sudo apt install nasm paxctl build-essential
-
-Debian/Ubuntu 64-bit:
+_Pre-Requisites:_
 
 	sudo dpkg --add-architecture i386
 	sudo apt-get update
 	sudo apt-get install nasm:i386 build-essential gcc-multilib g++-multilib
 
-openSUSE 32-bit:
+_Build Command:_
 
-	sudo zypper install nasm gcc-32bit gcc-c++-32bit
-
-Arch Linux 32-bit:
-
-	yaourt -S nasm paxctl gcc-multilib make
+    mkdir build && cd build
+    conan install .. --build --profile ../.conan/windows.conf
+    cmake .. -G "Visual Studio 16 2019" -A Win32 -T CLangCL
+    cmake --build .
 
 ## Building (Windows)
 _Pre-Requisites:_
 1. Windows [MinGW-W64 GCC-7.3.0](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/7.3.0/threads-win32/dwarf/i686-7.3.0-release-win32-dwarf-rt_v5-rev0.7z)
 2. [NASM](https://www.nasm.us/)
+3. [CMake](https://cmake.org/) and [Conan](https://conan.io/).
+
+_Build Command:_
+
+    mkdir build && cd build
+    conan install .. --build --profile ../.conan/windows.conf
+    cmake .. -G "Visual Studio 16 2019" -A Win32 -T CLangCL
+    cmake --build .
+
+## Conan Package
+If you wanna make your own CGSC package.
+
+_Build Command:_
+
+	conan create . --profile .conan/windows.conf
 
 ## Contributors:
 ***Note:*** If you would like to contribute to this repository, feel free to send a pull request, and I will review your code. Also feel free to post about any problems that may arise in the issues section of the repository.

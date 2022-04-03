@@ -1,0 +1,18 @@
+--- CMakeLists.txt	2022-04-03 00:16:53.651452000 +0200
++++ diff.txt	2022-04-03 10:19:37.597716400 +0200
+@@ -25,14 +25,10 @@
+ # Build
+ add_library(CGSC)
+ add_subdirectory(api)
+-add_subdirectory(asm)
+-add_subdirectory(extension)
+ 
+-target_compile_definitions(CGSC PUBLIC COD4X18UPDATE)
+-target_include_directories(CGSC PUBLIC . .. ../version ../../plugins)
++target_include_directories(CGSC PUBLIC . cod4x/plugins)
+ target_sources(CGSC PRIVATE cgsc.h)
+ 
+-set_target_properties(CGSC PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib)
+ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
+ 
+ # Pack

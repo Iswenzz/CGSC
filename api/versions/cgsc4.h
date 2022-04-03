@@ -1,4 +1,5 @@
 #pragma once
+#include "cgsc.h"
 
 extern struct scrVarGlob_t gScrVarGlob;
 extern unsigned int Scr_AllocString(const char *s);

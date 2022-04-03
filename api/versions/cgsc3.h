@@ -1,4 +1,5 @@
 #pragma once
+#include "cgsc.h"
 
 #define IGScrVmPub scrVmPub
 #define IGScrVarGlob scrVarGlob
