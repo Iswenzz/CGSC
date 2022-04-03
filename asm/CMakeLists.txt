@@ -1,3 +1,3 @@
 target_sources(CGSC PRIVATE
-   cgsc_asm.asm
+   cgsc_function.asm
    cgsc_export.asm)

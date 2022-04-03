@@ -3,14 +3,19 @@
 
 char *fmt(char *format, ...)
 {
-	va_list argptr;
-	char string[32000];
+	va_list	argptr;
+	static char string[2][32000]; // In case va is called by nested functions
+	static int index = 0;
+	char *buf;
+
+	buf = string[index & 1];
+	index++;
 
 	va_start(argptr, format);
-	vsnprintf(string, sizeof(string), format, argptr);
+	vsnprintf(buf, sizeof(*string), format, argptr);
 	va_end(argptr);
 
-	return string;
+	return buf;
 }
 
 qboolean HasFlag(int var, int flag)

@@ -1,9 +1,9 @@
 #pragma once
 
 #ifdef COD4X18UPDATE
-	#include "api/cgsc_cod4x.h"
+	#include "api/cod4x.h"
 #else
-	#include "api/cgsc_plugin.h"
+	#include "api/plugin.h"
 #endif
 
 #ifdef PLUGIN_HANDLER_VERSION_MAJOR
@@ -107,5 +107,5 @@ typedef struct
 #include "api/sys/compatibility.h"
 #include "api/utils/utils.h"
 
-#include "extensions/cgsc_param.h"
-#include "extensions/cgsc_variable.h"
+#include "extensions/functions.h"
+#include "extensions/variables.h"

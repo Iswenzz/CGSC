@@ -1,4 +1,4 @@
-#include "cgsc_param.h"
+#include "functions.h"
 
 void Scr_CallFunction(void (*function)(void), ...)
 {

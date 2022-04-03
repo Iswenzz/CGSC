@@ -3,6 +3,10 @@
 
 TEST test_fmt()
 {
+	ASSERT_STR_EQ(fmt("test"), "test");
+	ASSERT_STR_EQ(fmt("test %d", 1), "test 1");
+	ASSERT_STR_EQ(fmt("%s %d", "test", 2), "test 2");
+
 	PASS();
 }
 
