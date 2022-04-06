@@ -96,3 +96,10 @@ Plugin(uint32_t, Scr_GetFlagsFromGSCArray(VariableValueArray *array));
  * @param var - The GSC variable to debug.
  */
 Plugin(void, Scr_DebugVariable(VariableValue *var));
+
+/**
+ * @brief Get the pointer object type.
+ *
+ * @param int - The type id.
+ */
+Plugin(unsigned int, Scr_GetObjectType(unsigned int id));

@@ -8,7 +8,23 @@
 #ifdef PLUGIN
 	#define Com_Printf Plugin_Printf
 	#define Scr_Error Plugin_Scr_Error
+	#define Scr_AddUndefined Plugin_Scr_AddUndefined
+	#define Sys_GetCommonVersion Plugin_Sys_GetCommonVersion
 #endif
+
+#define CHECK_PARAMS(count, message)	\
+if (Plugin_Scr_GetNumParam() != count)	\
+{										\
+	Plugin_Scr_Error(message);			\
+	return;								\
+}
+
+#define CHECK_UNSUPPORTED(condition) 															\
+if (CGSC_UnsupportedMessage(condition, "CGSC: This feature is unsupported in this version."))	\
+{																								\
+	Scr_AddUndefined();																			\
+	return;																						\
+}
 
 typedef struct
 {

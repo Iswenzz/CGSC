@@ -27,3 +27,10 @@ qboolean CGSC_Unsupported(qboolean versionCondition);
  * @return qboolean
  */
 qboolean CGSC_UnsupportedMessage(qboolean versionCondition, char *format, ...);
+
+/**
+ * @brief Check if CGSC supports indexed string.
+ *
+ * @return qboolean
+ */
+qboolean CGSC_SupportIndexedString();

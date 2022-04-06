@@ -19,3 +19,8 @@ qboolean CGSC_UnsupportedMessage(qboolean versionCondition, char *format, ...)
 	va_end(argptr);
 	return qtrue;
 }
+
+qboolean CGSC_SupportIndexedString()
+{
+	return Sys_GetCommonVersion() >= 20.0f;
+}
