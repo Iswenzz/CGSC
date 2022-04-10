@@ -27,6 +27,8 @@
 %endmacro
 
 ; CGSC
+ralias Plugin_Scr_GetFunction, Scr_GetFunc
+
 pexport Scr_AllocReturnResult
 pexport Scr_AllocVariable
 pexport Scr_AddFunc
@@ -37,7 +39,6 @@ pexport Scr_DebugVariable
 pexport Scr_ExecThreadResult
 pexport Scr_FreeArray
 pexport Scr_GetThreadReturn
-pexport Scr_GetFunc
 pexport Scr_GetObjectType
 pexport Scr_GetArray
 pexport Scr_GetArrayFlags

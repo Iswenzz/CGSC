@@ -23,6 +23,9 @@ Then simply build the cod4x source with ``make``.
 ##################################
 # CGSC
 CGSC_DIR=$(SRC_DIR)/CGSC
+WIN_LLIBS:=${WIN_LLIBS} CGSC
+LINUX_LLIBS:=${LINUX_LLIBS} CGSC
+BSD_LLIBS:=${BSD_LLIBS} CGSC
 
 CGSC_ASM_SOURCES=$(wildcard $(CGSC_DIR)/asm/*.asm)
 CGSC_ASM_OBJ=$(patsubst $(CGSC_DIR)/asm/%.asm,$(OBJ_DIR)/%.o,$(CGSC_ASM_SOURCES))

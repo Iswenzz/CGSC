@@ -93,9 +93,9 @@ enum $0E0E04F36A22A28F2C0A7A22DC12DAE9
 };
 
 /**
- * @brief Get GSC func id from specified param num.
+ * @brief Get GSC function id from specified param num.
  *
  * @param paramnum - GSC param index.
- * @return int - The GSC func id.
+ * @return int - The GSC function id.
  */
-int Plugin_Scr_GetFunc(unsigned int paramnum);
+int Plugin_Scr_GetFunction(unsigned int paramnum);

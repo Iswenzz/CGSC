@@ -17,6 +17,14 @@ Scr_FreeArray(array);
 ```
 <hr>
 
+#### ``Scr_GetFunction(uin32_t paramnum)``
+Returns a GSC function id based on the passed index value.
+
+```c
+const int threadId = Scr_GetFunction(0);
+```
+<hr>
+
 #### ``Scr_AddVariable(VariableValue *var)``
 Returns a generic variable to GSC.
 
@@ -31,7 +39,7 @@ Scr_FreeArray(array);
 Returns a GSC thread return value.
 
 ```c
-const uint32_t threadId = Scr_GetFunc(0);
+const uint32_t threadId = Plugin_Scr_GetFunction(0);
 const short tid = Scr_ExecThread(threadId, 1);
 
 int value = Scr_GetThreadReturn();
@@ -44,7 +52,7 @@ Plugin_Scr_FreeThread(tid);
 Start a thread with the specified GSC functions and arguments count, and wait for the thread to finish.
 
 ```c
-const uint32_t threadId = Plugin_Scr_GetFunc(0);
+const uint32_t threadId = Plugin_Scr_GetFunction(0);
 const short tid = Plugin_Scr_ExecThreadResult(threadId, 0);
 ```
 <hr>
@@ -53,7 +61,7 @@ const short tid = Plugin_Scr_ExecThreadResult(threadId, 0);
 Copy the GSC thread return value, free the value when its not used anymore.
 
 ```c
-const uint32_t threadId = Plugin_Scr_GetFunc(0);
+const uint32_t threadId = Plugin_Scr_GetFunction(0);
 const short tid = Plugin_Scr_ExecThreadResult(threadId, 0);
 VariableValue *var = Plugin_Scr_AllocReturnResult();
 free(var);
