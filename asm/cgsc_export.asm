@@ -36,11 +36,11 @@ pexport Scr_CallMethod
 pexport Scr_DebugVariable
 pexport Scr_ExecThreadResult
 pexport Scr_FreeArray
-pexport Scr_GetFlagsFromGSCArray
 pexport Scr_GetThreadReturn
 pexport Scr_GetFunc
 pexport Scr_GetObjectType
 pexport Scr_GetArray
+pexport Scr_GetArrayFlags
 pexport Scr_GetTop
 pexport Sys_GetCommonVersion
 pexport Scr_SelectParamOrDefault

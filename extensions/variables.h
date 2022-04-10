@@ -88,7 +88,7 @@ Plugin(void, Scr_AddVariable(VariableValue *var));
  * @param array - The GSC array.
  * @return uint32_t - Flags value.
  */
-Plugin(uint32_t, Scr_GetFlagsFromGSCArray(VariableValueArray *array));
+Plugin(uint32_t, Scr_GetArrayFlags(VariableValueArray *array));
 
 /**
  * @brief Print GSC variable informations.

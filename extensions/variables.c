@@ -157,7 +157,7 @@ void Scr_AddVariable(VariableValue *var)
 	}
 }
 
-uint32_t Scr_GetFlagsFromGSCArray(VariableValueArray *array)
+uint32_t Scr_GetArrayFlags(VariableValueArray *array)
 {
 	uint32_t flags = 0;
 	for (int i = 0; i < array->length; i++)
