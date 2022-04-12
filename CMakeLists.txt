@@ -1,10 +1,18 @@
 cmake_minimum_required(VERSION 3.16.0)
-project(CGSC VERSION 1.1.0 LANGUAGES C ASM_NASM)
+project(CGSC VERSION 1.1.0 LANGUAGES C)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_FLAGS "-m32 -Wall -msse2 -mfpmath=sse -fno-omit-frame-pointer -fno-pie -O1")
-set(CMAKE_ASM_NASM_FLAGS "-f win -dWin32 --prefix _")
+
+# NASM
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+	set(CMAKE_ASM_NASM_FLAGS "-dWin32 --prefix _")
+	set(CMAKE_ASM_NASM_OBJECT_FORMAT "win32")
+else()
+	set(CMAKE_ASM_NASM_OBJECT_FORMAT "elf32")
+endif()
+enable_language(ASM_NASM)
 
 # CPack
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
