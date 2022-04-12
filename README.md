@@ -46,7 +46,7 @@ _Pre-Requisites:_
 _Build Command:_
 
     mkdir build && cd build
-    conan install .. --build --profile ../.conan/linux.conf
+    conan install .. --build missing --profile ../.conan/linux.conf
     cmake ..
     cmake --build .
 
@@ -59,7 +59,7 @@ _Pre-Requisites:_
 _Build Command:_
 
     mkdir build && cd build
-    conan install .. --build --profile ../.conan/windows.conf
+    conan install .. --build missing --profile ../.conan/windows.conf
     cmake .. -G "MinGW Makefiles"
     cmake --build .
 
