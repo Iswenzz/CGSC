@@ -46,4 +46,4 @@ class CGSC(ConanFile):
 		self.copy("*.so", dst="bin", keep_path=False)
 
 	def package_info(self):
-		self.cpp_info.libs = ["CGSC" if self.settings.os == "Windows" else "libCGSC"]
+		self.cpp_info.libs = ["CGSC"]
