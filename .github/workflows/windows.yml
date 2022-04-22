@@ -18,9 +18,18 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v2
+      
+    - name: CoD4x
+      run: |
+        cd ../
+        ls
+        curl -o CoD4x_Server-20.1.zip https://codeload.github.com/callofduty4x/CoD4x_Server/zip/refs/tags/20.1
+        7z x CoD4x_Server-20.1.zip
+        move CGSC CoD4x_Server-20.1/src/CGSC
 
     - name: Build
       run: |
+        cd ../CoD4x_Server-20.1/src/CGSC
         mkdir build && cd build
         conan install .. --build missing --profile ../.conan/windows.conf -o enable_testing=True
         cmake .. -G "MinGW Makefiles" -DENABLE_TESTING=True
