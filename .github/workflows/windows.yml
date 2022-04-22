@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
+    - name: Conan
+      uses: turtlebrowser/get-conan@main
+
     - name: NASM
       uses: ilammy/setup-nasm@v1
 
