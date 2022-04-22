@@ -10,42 +10,53 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: MinGW 8.1.0
-      run: |
-        $Uri = "https://downloads.sourceforge.net/mingw-w64/i686-8.1.0-release-posix-dwarf-rt_v6-rev0.7z"
-        $filename = "mingw32.7z"
-        cd C:/
-        Start-BitsTransfer -Source $Uri -Destination $filename
-        7z x $filename
-
     - name: NASM
       uses: ilammy/setup-nasm@v1
 
     - name: Checkout
       uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-
-    - name: Pexports
-      run: |
-        Invoke-WebRequest "https://github.com/callofduty4x/CoD4x_Server/raw/master/tools/pexports-0.47-mingw32-bin.tar.xz" -OutFile "pexports.tar.xz"
-        7z x pexports.tar.xz
-        7z x pexports.tar
-
-    - name: CoD4x
-      run: |
-        cd ../
-        curl -o CoD4x_Server-17.7.2.tar.gz https://codeload.github.com/callofduty4x/CoD4x_Server/tar.gz/v17.7.2
-        7z x CoD4x_Server-17.7.2.tar.gz
-        7z x CoD4x_Server-17.7.2.tar
-        curl -o ./CoD4x_Server-17.7.2/makefile https://iswenzz.com:1337/github/CGSC/makefile
-        ls
-        move cgsc ./CoD4x_Server-17.7.2/src/cgsc
 
     - name: Build
       run: |
-        cd ../CoD4x_Server-17.7.2
-        $path = $env:Path
-        $env:Path = "C:\mingw32\bin;"
-        $env:Path += $path
-        mingw32-make
+        mkdir build && cd build
+        conan install .. --build missing --profile ../.conan/windows.conf -o enable_testing=True
+        cmake .. -G "MinGW Makefiles" -DENABLE_TESTING=True
+        cmake --build .
+
+    - name: Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifact
+        path: build
+
+  tests:
+    runs-on: windows-latest
+    needs: [build]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: OpenCppCoverage
+      shell: bash
+      run: |
+        choco install -y opencppcoverage
+        echo "C:\Program Files\OpenCppCoverage" >> $GITHUB_PATH
+
+    - name: Artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: build-artifact
+        path: build
+
+    - name: Tests
+      run: |
+        opencppcoverage --quiet --export_type=cobertura:opencppcoverageCoverage.xml --working_dir build --sources src -- build/bin/CGSC.Tests.exe
+    - name: CodeCov
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./opencppcoverageCoverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        verbose: true

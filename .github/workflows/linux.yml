@@ -12,8 +12,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
 
     - name: Dependencies
       run: |
@@ -21,17 +19,33 @@ jobs:
         sudo dpkg --add-architecture i386
         sudo apt-get install nasm:i386 paxctl:i386 libtommath-dev:i386
 
-    - name: CoD4x
-      run: |
-        cd ../
-        curl -o CoD4x_Server-17.7.2.tar.gz https://codeload.github.com/callofduty4x/CoD4x_Server/tar.gz/v17.7.2
-        7z x CoD4x_Server-17.7.2.tar.gz
-        7z x CoD4x_Server-17.7.2.tar
-        curl -o ./CoD4x_Server-17.7.2/makefile https://iswenzz.com:1337/github/CGSC/makefile
-        ls
-        mv cgsc ./CoD4x_Server-17.7.2/src/cgsc
-
     - name: Build
       run: |
-        cd ../CoD4x_Server-17.7.2
-        make
+        mkdir build && cd build
+        conan install .. --build missing --profile ../.conan/linux.conf -o enable_testing=True
+        cmake .. -DENABLE_TESTING=True
+        cmake --build .
+
+    - name: Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifact
+        path: build
+
+  tests:
+    runs-on: ubuntu-18.04
+    needs: [build]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: build-artifact
+        path: build
+
+    - name: Tests
+      working-directory: build
+      run: |
+        ctest -C Release
