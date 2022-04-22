@@ -1,7 +1,6 @@
 #include "cgsc.h"
-// This file fix undefined references for missing features.
+#if CGSC_EQ(3)
 
-#ifdef _CGSC_3
 struct scrVmGlob_t
 {
 	VariableValue eval_stack[2];
@@ -21,4 +20,21 @@ void RemoveRefToObject(unsigned int id) { }
 __attribute__((unused)) scrVmPub_t gScrVmPub = {0};
 __attribute__((unused)) struct scrVmGlob_t gScrVmGlob = {0};
 __attribute__((unused)) scrVarPub_t gScrVarPub;
+
+unsigned int Scr_GetObjectType(unsigned int id)
+{
+	assert((IGScrVarGlob[VARIABLELIST_PARENT_BEGIN + id].w.status & VAR_STAT_MASK) != VAR_STAT_FREE);
+	return VAR_TYPE((&IGScrVarGlob[id + VARIABLELIST_PARENT_BEGIN]));
+}
+
+int GetArraySize(int id)
+{
+	VariableValueInternal *entryValue;
+	assert(id != 0);
+
+	entryValue = &IGScrVarGlob[id + VARIABLELIST_PARENT_BEGIN];
+	assert(VAR_TYPE(entryValue) == VAR_ARRAY);
+	return entryValue->u.o.u.size;
+}
+
 #endif

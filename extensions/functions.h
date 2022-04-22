@@ -2,7 +2,7 @@
 #include "cgsc.h"
 
 /**
- * @todo
+ * @todo - Experimental feature.
  *
  * @brief This variable is used to keep track of param count for a single call,
  * and can only be used in non-thread safe environment.
@@ -57,7 +57,7 @@ __attribute__((used)) static int __callArgNumber = 0;
  * @param type - The type of the generic variable.
  * @return qboolean - Boolean result.
  */
-qboolean Scr_SetParamGeneric(unsigned int paramnum, void *var, int type);
+Plugin(qboolean, Scr_SetParamGeneric(unsigned int paramnum, void *var, int type));
 
 /**
  * @todo
@@ -68,7 +68,7 @@ qboolean Scr_SetParamGeneric(unsigned int paramnum, void *var, int type);
  * @param function - The GSC function pointer.
  * @param ... - GSC alloc macros can be written here only for convenience.
  */
-void Scr_CallFunction(void (*function)(void), ...);
+Plugin(void, Scr_CallFunction(void (*function)(void), ...));
 
 /**
  * @todo
@@ -80,7 +80,12 @@ void Scr_CallFunction(void (*function)(void), ...);
  * @param ent - The GSC entref.
  * @param ... - GSC alloc macros can be written here only for convenience.
  */
-void Scr_CallMethod(void (*function)(scr_entref_t), scr_entref_t ent, ...);
+Plugin(void, Scr_CallMethod(void (*function)(scr_entref_t), scr_entref_t ent, ...));
+
+/**
+ * @brief Get the GSC thread return value.
+ */
+Plugin(int, Scr_GetThreadReturn());
 
 /**
  * @brief GScr test function.

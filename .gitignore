@@ -1,7 +1,3 @@
-*.dll
-*.so
-*.o
-*.a
-.ignore/
 .vscode/
-docs/
+build/
+build_linux/
