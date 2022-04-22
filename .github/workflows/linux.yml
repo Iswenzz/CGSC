@@ -12,6 +12,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      
+    - name: Conan
+      uses: turtlebrowser/get-conan@main
 
     - name: Dependencies
       run: |
@@ -19,12 +22,25 @@ jobs:
         sudo dpkg --add-architecture i386
         sudo apt-get install nasm:i386 paxctl:i386 libtommath-dev:i386
 
+    - name: CoD4x
+      run: |
+        cd ../
+        curl -o CoD4x_Server-20.1.zip https://codeload.github.com/callofduty4x/CoD4x_Server/zip/refs/tags/20.1
+        7z x CoD4x_Server-20.1.zip
+        cp -r CGSC CoD4x_Server-20.1/src/CGSC
+
     - name: Build
+      working-directory: ../CoD4x_Server-20.1/src/CGSC
       run: |
         mkdir build && cd build
         conan install .. --build missing --profile ../.conan/linux.conf -o enable_testing=True
-        cmake .. -DENABLE_TESTING=True
+        cmake .. -DENABLE_TESTING=True -DCONAN_DISABLE_CHECK_COMPILER=True
         cmake --build .
+        
+    - name: Artifact Copy
+      working-directory: ../CoD4x_Server-20.1/src/CGSC
+      run: |
+        cp -r build ../../../CGSC
 
     - name: Artifact
       uses: actions/upload-artifact@v2
@@ -44,8 +60,14 @@ jobs:
       with:
         name: build-artifact
         path: build
+        
+    - name: Artifact Setup
+      run: |
+        mkdir -p ../CoD4x_Server-20.1/src/CGSC
+        cp -r build ../CoD4x_Server-20.1/src/CGSC
 
     - name: Tests
-      working-directory: build
+      working-directory: ../CoD4x_Server-20.1/src/CGSC/build
       run: |
+        chmod +x bin/CGSC.Tests
         ctest -C Release

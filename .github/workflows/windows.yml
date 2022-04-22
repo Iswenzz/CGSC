@@ -15,6 +15,11 @@ jobs:
 
     - name: NASM
       uses: ilammy/setup-nasm@v1
+      
+    - name: MinGW
+      uses: egor-tensin/setup-mingw@v2
+      with:
+        platform: x86
 
     - name: Checkout
       uses: actions/checkout@v2
@@ -22,18 +27,22 @@ jobs:
     - name: CoD4x
       run: |
         cd ../
-        ls
         curl -o CoD4x_Server-20.1.zip https://codeload.github.com/callofduty4x/CoD4x_Server/zip/refs/tags/20.1
         7z x CoD4x_Server-20.1.zip
-        move CGSC CoD4x_Server-20.1/src/CGSC
+        cp -r CGSC CoD4x_Server-20.1/src/CGSC
 
     - name: Build
+      working-directory: ../CoD4x_Server-20.1/src/CGSC
       run: |
-        cd ../CoD4x_Server-20.1/src/CGSC
         mkdir build && cd build
         conan install .. --build missing --profile ../.conan/windows.conf -o enable_testing=True
-        cmake .. -G "MinGW Makefiles" -DENABLE_TESTING=True
+        cmake .. -G "MinGW Makefiles" -DENABLE_TESTING=True -DCONAN_DISABLE_CHECK_COMPILER=True
         cmake --build .
+        
+    - name: Artifact Copy
+      working-directory: ../CoD4x_Server-20.1/src/CGSC
+      run: |
+        cp -r build ../../../CGSC
 
     - name: Artifact
       uses: actions/upload-artifact@v2
@@ -59,6 +68,11 @@ jobs:
       with:
         name: build-artifact
         path: build
+        
+    - name: Artifact Setup
+      run: |
+        mkdir -p ../CoD4x_Server-20.1/src/CGSC
+        cp -r build ../CoD4x_Server-20.1/src/CGSC
 
     - name: Tests
       run: |
