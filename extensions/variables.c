@@ -1,15 +1,12 @@
 #include "variables.h"
 #include <assert.h>
 
-void Scr_FreeArray(VariableValueArray *array)
+void Scr_FreeArray(VariableValueArray* array)
 {
-	for (int i = 0; i < array->length; i++)
-		free(array->items[i]);
 	free(array->items);
-	free(array);
 }
 
-VariableValueArray *Scr_GetArray(unsigned int paramnum)
+VariableValueArray Scr_GetArray(unsigned int paramnum)
 {
 	int parentId = Scr_GetObject(paramnum);
 	assert(parentId != 0);
@@ -23,9 +20,9 @@ VariableValueArray *Scr_GetArray(unsigned int paramnum)
 	int index = length - 1;
 	unsigned int nextSibling;
 
-	VariableValueArray *array = (VariableValueArray *)malloc(sizeof(VariableValueArray));
-	array->length = length;
-	array->items = (VariableValue **)malloc(length * sizeof(VariableValue *));
+	VariableValueArray array = { 0 };
+	array.length = length;
+	array.items = (VariableValue *)malloc(length * sizeof(VariableValue));
 	id = IGScrVarGlob[parentId + VARIABLELIST_PARENT_BEGIN].nextSibling;
 	if (id)
 	{
@@ -35,9 +32,8 @@ VariableValueArray *Scr_GetArray(unsigned int paramnum)
 			assert((entryValue->w.status & VAR_STAT_MASK) != VAR_STAT_FREE);
 			assert(!IsObject(entryValue));
 
-			array->items[index] = (VariableValue *)malloc(sizeof(VariableValue));
-			array->items[index]->type = entryValue->w.type & VAR_MASK;
-			array->items[index]->u = entryValue->u.u;
+			array.items[index].type = entryValue->w.type & VAR_MASK;
+			array.items[index].u = entryValue->u.u;
 
 			nextSibling = IGScrVarGlob[id + VARIABLELIST_CHILD_BEGIN].nextSibling;
 			if (!nextSibling)
@@ -51,74 +47,53 @@ VariableValueArray *Scr_GetArray(unsigned int paramnum)
 	return array;
 }
 
-VariableValue *Scr_AllocReturnResult()
+VariableValue Scr_ReturnResult()
 {
 	VariableValue *returnRef = Scr_GetTop(-1);
-	VariableValue *var = Scr_AllocVariable(returnRef);
+	VariableValue var = *returnRef;
 	returnRef->type = 0; // Clean unused returnRef
-	return var;
-}
-
-VariableValue *Scr_AllocVariable(VariableValue *varRef)
-{
-	VariableValue *var = (VariableValue *)malloc(sizeof(VariableValue));
-	var->type = varRef->type;
-	var->u = varRef->u;
 	return var;
 }
 
 VariableValue *Scr_SelectParam(unsigned int paramnum)
 {
-	VariableValue *var;
 	if (paramnum >= IGScrVmPub.outparamcount)
 	{
 		Scr_Error(fmt("parameter %d does not exist\n", paramnum + 1));
 		return NULL;
 	}
-	var = &IGScrVmPub.top[-paramnum];
-	return var;
+	return Scr_GetTop(paramnum);
 }
 
 VariableValue *Scr_GetTop(unsigned int paramnum)
 {
-	VariableValue *var;
-	var = &IGScrVmPub.top[-paramnum];
-	return var;
+	return &IGScrVmPub.top[-paramnum];
 }
 
 VariableValue *Scr_SelectParamOrDefault(unsigned int paramnum)
 {
 	// Alloc param if undefined
-	VariableValue *var;
 	if (paramnum >= IGScrVmPub.outparamcount)
 	{
 		IGScrVmPub.top++;
 		IGScrVmPub.outparamcount++;
 	}
-	var = &IGScrVmPub.top[-paramnum];
-	return var;
+	return Scr_GetTop(paramnum);
 }
 
-void Scr_DebugVariable(VariableValue *var)
+void Scr_AddVariable(VariableValue var)
 {
-	CGSC_Printf("type: %s\nintValue: %d\nfloatValue:%f\ncodePosValue:%d\npointerValue:%d\nentityOffset:%d\n",
-		var_typename[var->type], var->u.intValue, var->u.floatValue,
-		(int)var->u.codePosValue, var->u.pointerValue, var->u.entityOffset);
-}
-
-void Scr_AddVariable(VariableValue *var)
-{
-	switch (var->type)
+	switch (var.type)
 	{
 		#if CGSC(4)
 		case VAR_POINTER:
-			Scr_AddObject(var->u.pointerValue);
+			Scr_AddObject(var.u.pointerValue);
 			break;
 		case VAR_FUNCTION:
-			Scr_AddFunc(var->u.codePosValue);
+			Scr_AddFunc(var.u.codePosValue);
 			break;
 		case VAR_ISTRING:
-			Scr_AddIString(SL_ConvertToString(var->u.stringValue));
+			Scr_AddIString(SL_ConvertToString(var.u.stringValue));
 			break;
 		#endif
 
@@ -126,29 +101,29 @@ void Scr_AddVariable(VariableValue *var)
 		case VAR_POINTER:
 		case VAR_FUNCTION:
 		case VAR_ISTRING:
-			CGSC_Printf("CGSC: Unsupported type %s.\n", var_typename[var->type]);
+			CGSC_Printf("CGSC: Unsupported type %s.\n", var_typename[var.type]);
 			Scr_AddUndefined();
 			break;
 		#endif
 
 		case VAR_FLOAT:
-			Scr_AddFloat(var->u.floatValue);
+			Scr_AddFloat(var.u.floatValue);
 			break;
 		case VAR_INTEGER:
-			Scr_AddInt(var->u.intValue);
+			Scr_AddInt(var.u.intValue);
 			break;
 		case VAR_STRING:
-			Scr_AddString(SL_ConvertToString(var->u.stringValue));
+			Scr_AddString(SL_ConvertToString(var.u.stringValue));
 			break;
 		case VAR_VECTOR:
 		#if CGSC(4)
-			Scr_AddVector(var->u.vectorValue);
+			Scr_AddVector(var.u.vectorValue);
 		#elif CGSC(3)
-			Scr_AddVector((vec_t *)var->u.vectorValue);
+			Scr_AddVector((vec_t *)var.u.vectorValue);
 		#endif
 			break;
 		case VAR_ENTITY:
-			Scr_AddEntity(&g_entities[157 * var->u.entityOffset]);
+			Scr_AddEntity(&g_entities[157 * var.u.entityOffset]);
 			break;
 		case VAR_UNDEFINED:
 		default:
@@ -157,12 +132,12 @@ void Scr_AddVariable(VariableValue *var)
 	}
 }
 
-uint32_t Scr_GetArrayFlags(VariableValueArray *array)
+uint32_t Scr_GetArrayFlags(VariableValueArray array)
 {
 	uint32_t flags = 0;
-	for (int i = 0; i < array->length; i++)
+	for (int i = 0; i < array.length; i++)
 	{
-		switch (array->items[i]->type)
+		switch (array.items[i].type)
 		{
 			case VAR_UNDEFINED: 		flags |= FLAG_UNDEFINED; 		 break;
 			case VAR_POINTER: 			flags |= FLAG_POINTER; 			 break;

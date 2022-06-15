@@ -2,28 +2,19 @@
 #include "cgsc.h"
 
 /**
- * @brief Free a VariableValueArray and its values.
+ * @brief Free the variables of VariableValueArray.
  *
  * @param array - The VariableValueArray to free.
  */
-Plugin(void, Scr_FreeArray(VariableValueArray *array));
+Plugin(void, Scr_FreeArray(VariableValueArray* array));
 
 /**
  * @brief Get a GSC array from specified param number.
  *
  * @param paramnum - GSC param number.
- * @return VariableValueArray* - The GSC array.
+ * @return VariableValueArray - The GSC array.
  */
-Plugin(VariableValueArray*, Scr_GetArray(unsigned int paramnum));
-
-/**
- * @brief Alloc a VariableValue* and copy the variable info from specified parameter.
- * Call free() when the value is not used anymore.
- *
- * @param varRef - The variable to copy.
- * @return VariableValue* - A copy of the variable.
- */
-Plugin(VariableValue*, Scr_AllocVariable(VariableValue *varRef));
+Plugin(VariableValueArray, Scr_GetArray(unsigned int paramnum));
 
 /**
  * @brief Get a GSC variable reference from the specified param number.
@@ -51,12 +42,11 @@ Plugin(VariableValue*, Scr_SelectParam(unsigned int paramnum));
 Plugin(VariableValue*, Scr_GetTop(unsigned int paramnum));
 
 /**
- * @brief Alloc a copy of the last GSC return variable.
- * Call free() when the value is not used anymore.
+ * @brief Get a copy of the last GSC return variable.
  *
- * @return VariableValue* - The allocated variable.
+ * @return VariableValue - The copied variable.
  */
-Plugin(VariableValue*, Scr_AllocReturnResult());
+Plugin(VariableValue, Scr_ReturnResult());
 
 /**
  * @brief Call a GSC function and keep the GSC return value uncleared.
@@ -80,7 +70,7 @@ Plugin(void, Scr_AddFunc(const char *codePosValue));
  *
  * @param var - The GSC variable to return.
  */
-Plugin(void, Scr_AddVariable(VariableValue *var));
+Plugin(void, Scr_AddVariable(VariableValue var));
 
 /**
  * @brief Get the flags from GSC array object.
@@ -88,14 +78,7 @@ Plugin(void, Scr_AddVariable(VariableValue *var));
  * @param array - The GSC array.
  * @return uint32_t - Flags value.
  */
-Plugin(uint32_t, Scr_GetArrayFlags(VariableValueArray *array));
-
-/**
- * @brief Print GSC variable informations.
- *
- * @param var - The GSC variable to debug.
- */
-Plugin(void, Scr_DebugVariable(VariableValue *var));
+Plugin(uint32_t, Scr_GetArrayFlags(VariableValueArray array));
 
 /**
  * @brief Get the pointer object type.

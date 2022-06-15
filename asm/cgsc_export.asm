@@ -29,13 +29,11 @@
 ; CGSC
 ralias Plugin_Scr_GetFunction, Scr_GetFunc
 
-pexport Scr_AllocReturnResult
-pexport Scr_AllocVariable
+pexport Scr_ReturnResult
 pexport Scr_AddFunc
 pexport Scr_AddVariable
 pexport Scr_CallFunction
 pexport Scr_CallMethod
-pexport Scr_DebugVariable
 pexport Scr_ExecThreadResult
 pexport Scr_FreeArray
 pexport Scr_GetThreadReturn

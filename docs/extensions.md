@@ -4,7 +4,7 @@
 Free the value obtained by Scr_GetArray.
 
 ```c
-Scr_FreeArray(array);
+Scr_FreeArray(&array);
 ```
 <hr>
 
@@ -12,8 +12,8 @@ Scr_FreeArray(array);
 Returns a GSC array based on the passed index value, which represents the GSC parameter number in which this array will be passed.
 
 ```c
-VariableValueArray *array = Scr_GetArray(0);
-Scr_FreeArray(array);
+VariableValueArray array = Scr_GetArray(0);
+Scr_FreeArray(&array);
 ```
 <hr>
 
@@ -25,13 +25,13 @@ const int threadId = Scr_GetFunction(0);
 ```
 <hr>
 
-#### ``Scr_AddVariable(VariableValue *var)``
+#### ``Scr_AddVariable(VariableValue var)``
 Returns a generic variable to GSC.
 
 ```c
-VariableValueArray *array = Scr_GetArray(0);
-Scr_AddVariable(array->items[0]);
-Scr_FreeArray(array);
+VariableValueArray array = Scr_GetArray(0);
+Scr_AddVariable(array.items[0]);
+Scr_FreeArray(&array);
 ```
 <hr>
 
@@ -57,14 +57,13 @@ const short tid = Plugin_Scr_ExecThreadResult(threadId, 0);
 ```
 <hr>
 
-#### ``Scr_AllocReturnResult()``
-Copy the GSC thread return value, free the value when its not used anymore.
+#### ``Scr_ReturnResult()``
+Copy the GSC thread return value.
 
 ```c
 const uint32_t threadId = Plugin_Scr_GetFunction(0);
 const short tid = Plugin_Scr_ExecThreadResult(threadId, 0);
-VariableValue *var = Plugin_Scr_AllocReturnResult();
-free(var);
+VariableValue var = Plugin_Scr_ReturnResult();
 ```
 <hr>
 
@@ -89,13 +88,13 @@ Scr_CallMethod(setPlayerAngles, VECTOR(&vec));
 ```
 <hr>
 
-#### ``Scr_GetArrayFlags(VariableValueArray *array)``
+#### ``Scr_GetArrayFlags(VariableValueArray array)``
 Get type flags from a GSC array.
 
 ```c
-VariableValueArray *array = Scr_GetArray(0);
+VariableValueArray array = Scr_GetArray(0);
 uint32_t flags = Scr_GetArrayFlags(array);
 qboolean a = HasFlag(flags, FLAG_FLOAT);
 qboolean b = IsFlag(flags, FLAG_STRING);
-Scr_FreeArray(array);
+Scr_FreeArray(&array);
 ```

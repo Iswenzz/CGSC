@@ -101,7 +101,7 @@ struct scrStringDebugGlob_t
 typedef struct
 {
 	uint32_t length;
-	VariableValue **items;
+	VariableValue *items;
 } VariableValueArray;
 
 #include "api/sys/compatibility.h"
