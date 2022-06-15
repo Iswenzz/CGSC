@@ -34,6 +34,7 @@ pexport Scr_AddFunc
 pexport Scr_AddVariable
 pexport Scr_CallFunction
 pexport Scr_CallMethod
+pexport Scr_CreateArray
 pexport Scr_ExecThreadResult
 pexport Scr_FreeArray
 pexport Scr_GetThreadReturn

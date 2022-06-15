@@ -2,6 +2,14 @@
 #include "cgsc.h"
 
 /**
+ * @brief Create a new VariableValueArray with a fixed length.
+ * The array can be freed with Scr_FreeArray.
+ *
+ * @param length - The array length.
+ */
+Plugin(VariableValueArray, Scr_CreateArray(int length));
+
+/**
  * @brief Free the variables of VariableValueArray.
  *
  * @param array - The VariableValueArray to free.

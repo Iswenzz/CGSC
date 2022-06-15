@@ -1,6 +1,14 @@
 #include "variables.h"
 #include <assert.h>
 
+VariableValueArray Scr_CreateArray(int length)
+{
+	VariableValueArray array;
+	array.length = length;
+	array.items = (VariableValue *)malloc(length * sizeof(VariableValue));
+	return array;
+}
+
 void Scr_FreeArray(VariableValueArray* array)
 {
 	free(array->items);
@@ -20,9 +28,7 @@ VariableValueArray Scr_GetArray(unsigned int paramnum)
 	int index = length - 1;
 	unsigned int nextSibling;
 
-	VariableValueArray array = { 0 };
-	array.length = length;
-	array.items = (VariableValue *)malloc(length * sizeof(VariableValue));
+	VariableValueArray array = Scr_CreateArray(length);
 	id = IGScrVarGlob[parentId + VARIABLELIST_PARENT_BEGIN].nextSibling;
 	if (id)
 	{

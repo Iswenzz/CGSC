@@ -1,5 +1,15 @@
 # Extensions
 
+#### ``Scr_AllocArray(int length)``
+Create a new GSC array with a fixed size.
+The array can be freed with Scr_FreeArray.
+
+```c
+VariableValueArray array = Scr_AllocArray(5);
+Scr_FreeArray(&array);
+```
+<hr>
+
 #### ``Scr_FreeArray(VariableValueArray *array)``
 Free the value obtained by Scr_GetArray.
 
