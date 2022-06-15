@@ -1,5 +1,4 @@
 #include "variables.h"
-#include <assert.h>
 
 VariableValueArray Scr_CreateArray(int length)
 {
@@ -11,32 +10,34 @@ VariableValueArray Scr_CreateArray(int length)
 
 void Scr_FreeArray(VariableValueArray* array)
 {
-	free(array->items);
+	if (array && array->items)
+		free(array->items);
 }
 
 VariableValueArray Scr_GetArray(unsigned int paramnum)
 {
+	VariableValueArray array = { 0 };
 	int parentId = Scr_GetObject(paramnum);
-	assert(parentId != 0);
-	assert(Scr_GetObjectType(parentId) == VAR_ARRAY);
+
+	if (Scr_GetObjectType(parentId) != VAR_ARRAY)
+		return array;
 
 	int length = GetArraySize(parentId);
-	assert(length > 0);
+	int index = length - 1;
+
+	if (!length)
+		return array;
 
 	VariableValueInternal *entryValue;
-	unsigned int id;
-	int index = length - 1;
+	array = Scr_CreateArray(length);
+	unsigned int id = IGScrVarGlob[parentId + VARIABLELIST_PARENT_BEGIN].nextSibling;
 	unsigned int nextSibling;
 
-	VariableValueArray array = Scr_CreateArray(length);
-	id = IGScrVarGlob[parentId + VARIABLELIST_PARENT_BEGIN].nextSibling;
 	if (id)
 	{
 		while (qtrue)
 		{
 			entryValue = &IGScrVarGlob[id + VARIABLELIST_CHILD_BEGIN];
-			assert((entryValue->w.status & VAR_STAT_MASK) != VAR_STAT_FREE);
-			assert(!IsObject(entryValue));
 
 			array.items[index].type = entryValue->w.type & VAR_MASK;
 			array.items[index].u = entryValue->u.u;
@@ -46,7 +47,6 @@ VariableValueArray Scr_GetArray(unsigned int paramnum)
 				break;
 
 			id = IGScrVarGlob[nextSibling + VARIABLELIST_CHILD_BEGIN].hash.id;
-			assert(id != 0);
 			index--;
 		}
 	}
