@@ -122,12 +122,16 @@ void Scr_AddVariable(VariableValue var)
 			Scr_AddString(SL_ConvertToString(var.u.stringValue));
 			break;
 		case VAR_VECTOR:
+		{
+			const float *vec = var.u.vectorValue;
+			vec3_t value = { vec[0], vec[1], vec[2] };
 		#if CGSC(4)
-			Scr_AddVector(var.u.vectorValue);
+			Scr_AddVector((float *)value);
 		#elif CGSC(3)
-			Scr_AddVector((vec_t *)var.u.vectorValue);
+			Scr_AddVector((vec_t*)value);
 		#endif
 			break;
+		}
 		case VAR_ENTITY:
 			Scr_AddEntity(&g_entities[157 * var.u.entityOffset]);
 			break;
