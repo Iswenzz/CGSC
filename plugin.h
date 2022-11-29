@@ -54,6 +54,65 @@ typedef struct
 	int type;
 } VariableValue;
 
+union ObjectInfo_u
+{
+  uint16_t size;
+  uint16_t entnum;
+  uint16_t nextEntId;
+  uint16_t self;
+};
+
+struct ObjectInfo
+{
+	uint16_t refCount;
+	union ObjectInfo_u u;
+};
+
+union VariableValueInternal_u
+{
+	uint16_t next;
+	union VariableUnion u;
+	struct ObjectInfo o;
+};
+
+union VariableValueInternal_w
+{
+	unsigned int status;
+	unsigned int type;
+	unsigned int name;
+	unsigned int classnum;
+	unsigned int notifyName;
+	unsigned int waitTime;
+	unsigned int parentLocalId;
+};
+
+union VariableValueInternal_v
+{
+	uint16_t next;
+	uint16_t index;
+};
+
+union Variable_u
+{
+	uint16_t prev;
+	uint16_t prevSibling;
+};
+
+struct Variable
+{
+	uint16_t id;
+	union Variable_u u;
+};
+
+typedef struct
+{
+	struct Variable hash;
+	union VariableValueInternal_u u;
+	union VariableValueInternal_w w;
+	union VariableValueInternal_v v;
+	uint16_t nextSibling;
+}VariableValueInternal;
+
 enum $0E0E04F36A22A28F2C0A7A22DC12DAE9
 {
 	VAR_UNDEFINED = 0x0,

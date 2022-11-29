@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16.0)
-project(CGSC VERSION 1.1.0 LANGUAGES C)
+project(CGSC VERSION 1.2.0 LANGUAGES C)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -33,18 +33,23 @@ if(ENABLE_TESTING)
 endif()
 
 # Build
-add_library(CGSC)
-add_subdirectory(asm)
-add_subdirectory(extensions)
-add_subdirectory(sys)
-add_subdirectory(utils)
-add_subdirectory(versions)
+if(PLUGIN)
+	add_library(CGSC INTERFACE CGSC/cgsc.h CGSC/plugin.h)
+	target_include_directories(CGSC INTERFACE . cod4x/plugins)
+else()
+	add_library(CGSC STATIC cgsc.h cod4x.h)
 
-target_compile_definitions(CGSC PUBLIC COD4X18UPDATE)
-target_include_directories(CGSC PUBLIC . .. ../version ../../plugins)
-target_sources(CGSC PRIVATE cgsc.h)
+	add_subdirectory(asm)
+	add_subdirectory(extensions)
+	add_subdirectory(sys)
+	add_subdirectory(utils)
+	add_subdirectory(versions)
 
-set_target_properties(CGSC PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib)
+	target_compile_definitions(CGSC PUBLIC COD4X18UPDATE)
+	target_include_directories(CGSC PUBLIC . .. ../version ../../plugins)
+	set_target_properties(CGSC PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib)
+endif()
+
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
 
 # Pack
