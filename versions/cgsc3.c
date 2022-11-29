@@ -1,4 +1,4 @@
-#include "cgsc.h"
+#include "cgsc3.h"
 #if CGSC_EQ(3)
 
 struct scrVmGlob_t

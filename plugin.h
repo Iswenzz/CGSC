@@ -26,12 +26,6 @@ if (CGSC_UnsupportedMessage(condition, "CGSC: This feature is unsupported in thi
 	return;																						\
 }
 
-typedef struct
-{
-	uint16_t entnum;
-	uint16_t classnum;
-} Plugin_Scr_entref_t;
-
 struct VariableStackBuffer
 {
 	const char *pos;

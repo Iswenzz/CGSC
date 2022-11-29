@@ -34,9 +34,11 @@ endif()
 
 # Build
 add_library(CGSC)
-add_subdirectory(api)
 add_subdirectory(asm)
 add_subdirectory(extensions)
+add_subdirectory(sys)
+add_subdirectory(utils)
+add_subdirectory(versions)
 
 target_compile_definitions(CGSC PUBLIC COD4X18UPDATE)
 target_include_directories(CGSC PUBLIC . .. ../version ../../plugins)

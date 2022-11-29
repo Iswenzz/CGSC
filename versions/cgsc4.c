@@ -1,4 +1,4 @@
-#include "cgsc.h"
+#include "cgsc4.h"
 #if CGSC_EQ(4)
 
 void Scr_AddFunc(const char *codePosValue)

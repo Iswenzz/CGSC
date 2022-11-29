@@ -13,8 +13,3 @@
 #endif
 
 #undef ASSERT
-
-struct __attribute__((aligned(64))) scrVarGlob_t
-{
-	VariableValueInternal *variableList;
-};
