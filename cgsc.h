@@ -23,11 +23,8 @@
 	#define COD4X(version) SYS_COMMONVERSION
 #endif
 
-/**
- * @brief
- * Adds the definition for plugin exports.
- */
-#define Plugin(type, definition) \
+/// @brief Adds the definition for cod4x server and plugin export.
+#define EXPORT(type, definition) \
 type definition;				 \
 type Plugin_##definition
 
@@ -110,7 +107,6 @@ typedef struct
 } VariableValueArray;
 
 #include "sys/compatibility.h"
-#include "utils/utils.h"
-
 #include "extensions/functions.h"
 #include "extensions/variables.h"
+#include "utils/utils.h"

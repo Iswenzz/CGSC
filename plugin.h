@@ -86,10 +86,7 @@ enum $0E0E04F36A22A28F2C0A7A22DC12DAE9
 	VAR_ENDON_LIST = 0x19
 };
 
-/**
- * @brief Get GSC function id from specified param num.
- *
- * @param paramnum - GSC param index.
- * @return int - The GSC function id.
- */
+/// @brief Get GSC function id from specified param num.
+/// @param paramnum - GSC param index.
+/// @return The GSC function id.
 int Plugin_Scr_GetFunction(unsigned int paramnum);

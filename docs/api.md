@@ -1,10 +1,10 @@
 # API
 
 ### ``Macros``
-Creating a plugin export function definition:
+Define a function for cod4x server and plugin export.
 
 ```c
-Plugin(float, Sys_GetCommonVersion());
+EXPORT(float, Sys_GetCommonVersion());
 ```
 <hr>
 

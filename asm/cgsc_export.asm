@@ -26,9 +26,10 @@
 		p%2 dd %2
 %endmacro
 
-; CGSC
+; Rename
 ralias Plugin_Scr_GetFunction, Scr_GetFunc
 
+; Export
 pexport Scr_ReturnResult
 pexport Scr_AddFunc
 pexport Scr_AddVariable
