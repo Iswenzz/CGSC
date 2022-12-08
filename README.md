@@ -24,9 +24,9 @@ Then simply build the cod4x source with ``make``.
 ##################################
 # CGSC
 CGSC_DIR=$(SRC_DIR)/CGSC
-WIN_LLIBS:=$(WIN_LLIBS) CGSC
-LINUX_LLIBS:=$(LINUX_LLIBS) CGSC
-BSD_LLIBS:=$(BSD_LLIBS) CGSC
+WIN_LLIBS:=$(WIN_LLIBS) CGSC uv_a iphlpapi psapi userenv ws2_32
+LINUX_LLIBS:=$(LINUX_LLIBS) CGSC uv_a dl pthread rt
+BSD_LLIBS:=$(BSD_LLIBS) CGSC uv_a dl pthread rt
 
 WIN_LFLAGS:=$(WIN_LFLAGS) -mconsole
 

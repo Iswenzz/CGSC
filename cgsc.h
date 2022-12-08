@@ -114,6 +114,7 @@ typedef struct
 } VariableValueArray;
 
 #include "sys/compatibility.h"
+#include "sys/async.h"
 #include "extensions/functions.h"
 #include "extensions/variables.h"
 #include "utils/utils.h"

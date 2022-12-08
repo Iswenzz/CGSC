@@ -6,10 +6,11 @@ class CGSC(ConanFile):
     version = "1.2.0"
     license = "LICENCE"
     url = "https://github.com/Iswenzz/CGSC"
-    description = "Call of Duty 4X source extension that adds new features for creating plugins not offered in the original source."
+    description = "Call of Duty 4X source extension that adds new utilities to extend the server and the creation of new plugins."
 
     generators = "cmake"
     exports_sources = "LICENSE", "README.md", "CMakeLists.txt", ".conan/*"
+    requires = ["libuv/1.44.2"]
 
     settings = "os", "arch", "compiler", "build_type"
     options = {"enable_testing": [True, False]}
