@@ -45,21 +45,21 @@ else()
 	add_subdirectory(utils)
 	add_subdirectory(versions)
 
+	target_link_libraries(CGSC PUBLIC ${CONAN_LIBS})
 	target_compile_definitions(CGSC PUBLIC COD4X18UPDATE)
 	target_include_directories(CGSC PUBLIC . .. ../version ../../plugins)
 	set_target_properties(CGSC PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib)
+
+	set(STATIC_DEPENDENCIES
+		${CONAN_LIB_DIRS_LIBUV}/libuv_a.a)
+
+	foreach(dependency ${STATIC_DEPENDENCIES})
+		add_custom_command(TARGET CGSC POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy ${dependency} ../../../lib)
+	endforeach()
 endif()
 
-target_link_libraries(CGSC PUBLIC ${CONAN_LIBS})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
-
-set(STATIC_DEPENDENCIES
-	${CONAN_LIB_DIRS_LIBUV}/libuv_a.a)
-
-foreach(dependency ${STATIC_DEPENDENCIES})
-	add_custom_command(TARGET CGSC POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy ${dependency} ../../../lib)
-endforeach()
 
 # Pack
 install(TARGETS CGSC LIBRARY DESTINATION lib)

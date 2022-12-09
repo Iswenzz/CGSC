@@ -1,16 +1,17 @@
 #pragma once
 #include <uv.h>
 
-/// @brief Shutdown all async operations.
+/// @brief Shutdown all async operations, this should be called when the server shutdown.
 void AsyncShutdown();
 
-/// @brief Make an async call.
+/// @brief Make an async call with the provided callbacks and data.
 /// @param data - The data to pass.
 /// @param callback - The async callback.
 /// @param callbackDone - The callback when the async operation is completed.
-void AsyncCall(void *data, uv_work_cb callback, uv_after_work_cb callbackDone);
+/// @return The worker pointer.
+uv_work_t *AsyncCall(void *data, uv_work_cb callback, uv_after_work_cb callbackDone);
 
-/// @brief Default after worker callback.
+/// @brief Default worker completion callback, this default callback calls AsyncFree.
 /// @param req - The worker request.
 /// @param status - The request status.
 void AsyncNull(uv_work_t* req, int status);
