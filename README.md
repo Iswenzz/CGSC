@@ -15,7 +15,7 @@ This Call of Duty 4X source extension adds new utilities to extend the server an
 
 ## Instructions
 In order to use this extension, just download the archived file down below, and extract it to the cod4x server's ``src/CGSC`` directory, then copy the makefile snippet below and paste it before the default rule.
-Then simply build the cod4x source with ``make``.
+Then simply build the library with the build instructions and recompile the cod4x source with ``make``.
 
 ### **[Download](https://github.com/Iswenzz/CGSC/releases)**
 
