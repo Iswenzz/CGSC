@@ -57,6 +57,10 @@ pexport Sys_GetCommonVersion
 pexport Scr_SelectParamOrDefault
 pexport Scr_SelectParam
 pexport Scr_SetParamGeneric
+pexport AsyncShutdown
+pexport AsyncCall
+pexport AsyncNull
+pexport AsyncFree
 
 ; CGSC export
 cgsc CGSC_Unsupported
