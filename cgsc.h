@@ -2,6 +2,9 @@
 
 #ifdef _WIN32
 	#define NOGDI
+	#include <winsock2.h>
+	#include <mswsock.h>
+	#include <windows.h>
 #endif
 
 #ifdef COD4X18UPDATE
