@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef _WIN32
+	#define NOGDI
+#endif
+
 #ifdef COD4X18UPDATE
 	#include "cod4x.h"
 #else

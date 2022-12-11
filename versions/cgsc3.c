@@ -1,4 +1,6 @@
 #include "cgsc3.h"
+#include <assert.h>
+
 #if CGSC_EQ(3)
 
 struct scrVmGlob_t
