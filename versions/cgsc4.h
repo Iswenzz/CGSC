@@ -1,5 +1,5 @@
 #pragma once
-#include "cgsc.h"
+#include "../cgsc.h"
 
 #if CGSC_EQ(4)
 
