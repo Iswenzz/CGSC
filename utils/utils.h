@@ -1,5 +1,5 @@
 #pragma once
-#include "cgsc.h"
+#include "../cgsc.h"
 
 /// @brief Print a formated string to the console.
 #if CGSC(4)

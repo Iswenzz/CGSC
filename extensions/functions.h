@@ -1,5 +1,5 @@
 #pragma once
-#include "cgsc.h"
+#include "../cgsc.h"
 
 /// @brief This variable is used to keep track of param count for a single call,
 /// and can only be used in non-thread safe environment.

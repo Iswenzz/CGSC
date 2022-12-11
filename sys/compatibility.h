@@ -1,5 +1,5 @@
 #pragma once
-#include "cgsc.h"
+#include "../cgsc.h"
 
 /// @brief Returns server version.
 EXPORT(float, Sys_GetCommonVersion());

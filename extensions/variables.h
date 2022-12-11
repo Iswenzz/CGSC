@@ -1,5 +1,5 @@
 #pragma once
-#include "cgsc.h"
+#include "../cgsc.h"
 
 /// @brief Create a new VariableValueArray with a fixed length.
 /// The array can be freed with Scr_FreeArray.The array can be freed with Scr_FreeArray.
