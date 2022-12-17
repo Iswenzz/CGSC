@@ -1,5 +1,6 @@
 #include "compatibility.h"
 #include <stdarg.h>
+#include <stdio.h>
 
 float CGSC_Version()
 {
