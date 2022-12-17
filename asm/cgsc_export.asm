@@ -12,15 +12,6 @@
 		p%1 dd %1
 %endmacro
 
-; CGSC exports
-%macro cgsc 1
-	SECTION .rodata
-		%ifdef Win32
-			EXPORT %1
-		%endif
-		extern %1
-%endmacro
-
 ; Rename function
 %macro ralias 2
 	SECTION .text
@@ -60,9 +51,7 @@ pexport AsyncShutdown
 pexport AsyncCall
 pexport AsyncNull
 pexport AsyncFree
-
-; CGSC export
-cgsc CGSC_Version
-cgsc CGSC_Unsupported
-cgsc CGSC_UnsupportedMessage
-cgsc CGSC_SupportIndexedString
+pexport CGSC_Version
+pexport CGSC_Unsupported
+pexport CGSC_UnsupportedMessage
+pexport CGSC_SupportIndexedString
