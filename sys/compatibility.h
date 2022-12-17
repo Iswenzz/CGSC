@@ -1,8 +1,11 @@
 #pragma once
 #include "../cgsc.h"
 
-/// @brief Returns server version.
+/// @brief Get server version.
 EXPORT(float, Sys_GetCommonVersion());
+
+/// @brief Get CGSC version.
+EXPORT(float, CGSC_Version());
 
 /// @brief Check if CGSC version is unsupported, throws a GSC error if true.
 /// @param versionCondition - The version condition returned by macros such as CGSC(ver) or CGSC_EQ(ver) etc...

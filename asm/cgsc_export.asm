@@ -19,7 +19,6 @@
 			EXPORT %1
 		%endif
 		extern %1
-		p%1 dd %1
 %endmacro
 
 ; Rename function
@@ -63,6 +62,7 @@ pexport AsyncNull
 pexport AsyncFree
 
 ; CGSC export
+cgsc CGSC_Version
 cgsc CGSC_Unsupported
 cgsc CGSC_UnsupportedMessage
 cgsc CGSC_SupportIndexedString

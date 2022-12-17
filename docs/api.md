@@ -18,6 +18,11 @@ Checking CGSC plugin handler version:
 #if CGSC_EQ(3)
 #endif
 ```
+
+```c
+CHECK_UNSUPPORTED(CGSC_EQ(3));
+```
+
 ```c
 // major version, minor version
 if (CGSCH >= 4 && CGSCL >= 0)
@@ -35,6 +40,35 @@ Renaming a function to export:
 
 ```assembly
 ralias Com_Printf CGSC_Printf
+```
+
+Exporting a function with the CGSC prefix:
+```assembly
+cgsc CGSC_Version
+```
+<hr>
+
+#### ``CGSC_Version()``
+Get the CGSC version.
+
+```c
+if (CGSC_Version() >= 3.0)
+```
+<hr>
+
+#### ``CGSC_Unsupported(<condition>)``
+Check for unsupported version.
+
+```c
+if (CGSC_Unsupported(version == 3.0))
+```
+<hr>
+
+#### ``CGSC_UnsupportedMessage(<condition>, <message>)``
+Check for unsupported version.
+
+```c
+if (CGSC_Unsupported(version == 3.0, "Unsupported version"))
 ```
 <hr>
 
