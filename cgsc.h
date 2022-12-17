@@ -35,13 +35,6 @@
 type definition;				 \
 type Plugin_##definition
 
-#define CHECK_UNSUPPORTED(condition) 															\
-if (CGSC_UnsupportedMessage(condition, "CGSC: This feature is unsupported in this version."))	\
-{																								\
-	Scr_AddUndefined();																			\
-	return;																						\
-}
-
 #define CLASS_NUM_COUNT sizeof(gScrClassMap) / sizeof(gScrClassMap[0])
 #define DEBUG_REFCOUNT_SIZE 65536
 #define MAX_ARRAYINDEX 0x800000

@@ -19,6 +19,13 @@ if (Plugin_Scr_GetNumParam() != count)	\
 	return;								\
 }
 
+#define CHECK_UNSUPPORTED(condition) 															\
+if (Plugin_CGSC_UnsupportedMessage(condition, "CGSC: This feature is unsupported in this version."))	\
+{																								\
+	Plugin_Scr_AddUndefined();																			\
+	return;																						\
+}
+
 struct VariableStackBuffer
 {
 	const char *pos;
