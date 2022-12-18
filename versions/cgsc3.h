@@ -1,5 +1,7 @@
 #pragma once
-#include "cgsc.h"
+#include "../cgsc.h"
+
+#if CGSC_EQ(3)
 
 #define IGScrVmPub scrVmPub
 #define IGScrVarGlob scrVarGlob
@@ -7,6 +9,7 @@
 extern char* SL_ConvertToString(unsigned int index);
 extern char* var_typename[];
 
+#ifdef COD4X
 enum $0E0E04F36A22A28F2C0A7A22DC12DAE9
 {
 	VAR_UNDEFINED = 0x0,
@@ -38,3 +41,6 @@ enum $0E0E04F36A22A28F2C0A7A22DC12DAE9
 	VAR_THREAD_LIST = 0x18,
 	VAR_ENDON_LIST = 0x19
 };
+#endif
+
+#endif

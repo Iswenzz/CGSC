@@ -20,17 +20,11 @@ if (Plugin_Scr_GetNumParam() != count)	\
 }
 
 #define CHECK_UNSUPPORTED(condition) 															\
-if (CGSC_UnsupportedMessage(condition, "CGSC: This feature is unsupported in this version."))	\
+if (Plugin_CGSC_UnsupportedMessage(condition, "CGSC: This feature is unsupported in this version."))	\
 {																								\
-	Scr_AddUndefined();																			\
+	Plugin_Scr_AddUndefined();																			\
 	return;																						\
 }
-
-typedef struct
-{
-	uint16_t entnum;
-	uint16_t classnum;
-} Plugin_Scr_entref_t;
 
 struct VariableStackBuffer
 {
@@ -59,6 +53,65 @@ typedef struct
 	union VariableUnion u;
 	int type;
 } VariableValue;
+
+union ObjectInfo_u
+{
+  uint16_t size;
+  uint16_t entnum;
+  uint16_t nextEntId;
+  uint16_t self;
+};
+
+struct ObjectInfo
+{
+	uint16_t refCount;
+	union ObjectInfo_u u;
+};
+
+union VariableValueInternal_u
+{
+	uint16_t next;
+	union VariableUnion u;
+	struct ObjectInfo o;
+};
+
+union VariableValueInternal_w
+{
+	unsigned int status;
+	unsigned int type;
+	unsigned int name;
+	unsigned int classnum;
+	unsigned int notifyName;
+	unsigned int waitTime;
+	unsigned int parentLocalId;
+};
+
+union VariableValueInternal_v
+{
+	uint16_t next;
+	uint16_t index;
+};
+
+union Variable_u
+{
+	uint16_t prev;
+	uint16_t prevSibling;
+};
+
+struct Variable
+{
+	uint16_t id;
+	union Variable_u u;
+};
+
+typedef struct
+{
+	struct Variable hash;
+	union VariableValueInternal_u u;
+	union VariableValueInternal_w w;
+	union VariableValueInternal_v v;
+	uint16_t nextSibling;
+}VariableValueInternal;
 
 enum $0E0E04F36A22A28F2C0A7A22DC12DAE9
 {
@@ -92,10 +145,7 @@ enum $0E0E04F36A22A28F2C0A7A22DC12DAE9
 	VAR_ENDON_LIST = 0x19
 };
 
-/**
- * @brief Get GSC function id from specified param num.
- *
- * @param paramnum - GSC param index.
- * @return int - The GSC function id.
- */
+/// @brief Get GSC function id from specified param num.
+/// @param paramnum - GSC param index.
+/// @return The GSC function id.
 int Plugin_Scr_GetFunction(unsigned int paramnum);

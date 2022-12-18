@@ -14,7 +14,7 @@
 
 SECTION .text
 
-; Scr_ExecThreadResult(int, unsigned int)
+; Scr_ExecThreadResult(int threadId, unsigned int argsCount)
 Scr_ExecThreadResult:
 	push ebp
 	mov ebp, esp

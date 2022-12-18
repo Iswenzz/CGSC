@@ -1,9 +1,16 @@
 #pragma once
 
+#ifdef _WIN32
+	#define NOGDI
+	#include <winsock2.h>
+	#include <mswsock.h>
+	#include <windows.h>
+#endif
+
 #ifdef COD4X18UPDATE
-	#include "api/cod4x.h"
+	#include "cod4x.h"
 #else
-	#include "api/plugin.h"
+	#include "plugin.h"
 #endif
 
 #ifdef PLUGIN_HANDLER_VERSION_MAJOR
@@ -13,9 +20,9 @@
 	#define CGSC_EQ(version) CGSCH == version
 
 	#if PLUGIN_HANDLER_VERSION_MAJOR >= 4
-		#include "api/versions/cgsc4.h"
+		#include "versions/cgsc4.h"
 	#elif PLUGIN_HANDLER_VERSION_MAJOR >= 3
-		#include "api/versions/cgsc3.h"
+		#include "versions/cgsc3.h"
 	#endif
 #endif
 
@@ -23,11 +30,8 @@
 	#define COD4X(version) SYS_COMMONVERSION
 #endif
 
-/**
- * @brief
- * Adds the definition for plugin exports.
- */
-#define Plugin(type, definition) \
+/// @brief Adds the definition for cod4x server and plugin export.
+#define EXPORT(type, definition) \
 type definition;				 \
 type Plugin_##definition
 
@@ -98,14 +102,19 @@ struct scrStringDebugGlob_t
     int ignoreLeaks;
 };
 
+struct __attribute__((aligned (64))) scrVarGlob_t
+{
+	VariableValueInternal* variableList;
+};
+
 typedef struct
 {
 	uint32_t length;
 	VariableValue *items;
 } VariableValueArray;
 
-#include "api/sys/compatibility.h"
-#include "api/utils/utils.h"
-
+#include "sys/compatibility.h"
+#include "sys/async.h"
 #include "extensions/functions.h"
 #include "extensions/variables.h"
+#include "utils/utils.h"

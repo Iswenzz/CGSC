@@ -5,7 +5,7 @@
 [![CodeFactor](https://img.shields.io/codefactor/grade/github/Iswenzz/CGSC?label=codefactor&logo=codefactor)](https://www.codefactor.io/repository/github/iswenzz/CGSC)
 [![License](https://img.shields.io/github/license/Iswenzz/CGSC?color=blue&logo=gitbook&logoColor=white)](https://github.com/Iswenzz/CGSC/blob/master/LICENSE)
 
-This Call of Duty 4X source extension adds new utilities for use in the creation of new plugins. Such things include new functions to get data types that the original source doesn't offer and adds the ability to call functions defined in GSC from the C files. To use this extension you must add the CGSC files included in the release section to the `/src/CGSC` folder, and then compile the CoD4X server source. More detailed instructions can be found towards the bottom of this document.
+This Call of Duty 4X source extension adds new utilities to extend the server and the creation of new plugins. Such things include new functions to get data types that the original source doesn't offer, the ability to call functions defined in GSC from the C files and async workers for expensive operations on the server. To use this extension you must add the CGSC files included in the release section to the `/src/CGSC` folder, and then compile the CoD4X server source. More detailed instructions can be found towards the bottom of this document.
 
 ``Note: Depending on the version of Call of Duty 4X that you're running, some features of CGSC may not be available.``
 
@@ -15,7 +15,7 @@ This Call of Duty 4X source extension adds new utilities for use in the creation
 
 ## Instructions
 In order to use this extension, just download the archived file down below, and extract it to the cod4x server's ``src/CGSC`` directory, then copy the makefile snippet below and paste it before the default rule.
-Then simply build the cod4x source with ``make``.
+Then simply build the library with the build instructions and recompile the cod4x source with ``make``.
 
 ### **[Download](https://github.com/Iswenzz/CGSC/releases)**
 
@@ -24,9 +24,9 @@ Then simply build the cod4x source with ``make``.
 ##################################
 # CGSC
 CGSC_DIR=$(SRC_DIR)/CGSC
-WIN_LLIBS:=$(WIN_LLIBS) CGSC
-LINUX_LLIBS:=$(LINUX_LLIBS) CGSC
-BSD_LLIBS:=$(BSD_LLIBS) CGSC
+WIN_LLIBS:=$(WIN_LLIBS) CGSC uv_a iphlpapi psapi userenv ws2_32
+LINUX_LLIBS:=$(LINUX_LLIBS) CGSC uv_a dl pthread rt
+BSD_LLIBS:=$(BSD_LLIBS) CGSC uv_a dl pthread rt
 
 WIN_LFLAGS:=$(WIN_LFLAGS) -mconsole
 

@@ -1,5 +1,4 @@
 add_subdirectory(__test__)
-add_subdirectory(versions)
 
 target_sources(CGSC PRIVATE
 	functions.c

@@ -26,9 +26,10 @@
 		p%2 dd %2
 %endmacro
 
-; CGSC
+; Rename
 ralias Plugin_Scr_GetFunction, Scr_GetFunc
 
+; Plugin export
 pexport Scr_ReturnResult
 pexport Scr_AddFunc
 pexport Scr_AddVariable
@@ -46,3 +47,11 @@ pexport Sys_GetCommonVersion
 pexport Scr_SelectParamOrDefault
 pexport Scr_SelectParam
 pexport Scr_SetParamGeneric
+pexport AsyncShutdown
+pexport AsyncCall
+pexport AsyncNull
+pexport AsyncFree
+pexport CGSC_Version
+pexport CGSC_Unsupported
+pexport CGSC_UnsupportedMessage
+pexport CGSC_SupportIndexedString
