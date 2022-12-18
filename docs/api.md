@@ -41,11 +41,6 @@ Renaming a function to export:
 ```assembly
 ralias Com_Printf CGSC_Printf
 ```
-
-Exporting a function with the CGSC prefix:
-```assembly
-cgsc CGSC_Version
-```
 <hr>
 
 #### ``CGSC_Version()``
