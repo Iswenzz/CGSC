@@ -8,23 +8,72 @@ typedef enum
 	ASYNC_PENDING,
 	ASYNC_SUCCESSFUL,
 	ASYNC_FAILURE,
+	ASYNC_CANCEL
 } async_status;
 
-/// @brief Shutdown all async operations, this should be called when the server shutdown.
+typedef struct async_worker_s
+{
+	async_status status;
+	uv_work_t* req;
+	uv_loop_t* loop;
+	uv_thread_t thread;
+	qboolean running;
+	void* data;
+	struct async_worker_s* next;
+} async_worker;
+
+typedef struct
+{
+	async_worker* workers;
+} async_handler;
+
+extern async_handler asyncHandler;
+
+/// @brief Initialize the async handler.
+EXPORT(void, AsyncInit());
+
+/// @brief Create an async loop.
+/// @return
+EXPORT(uv_loop_t*, AsyncLoopCreate());
+
+/// @brief Run the async loop.
+/// @param loop - The loop.
+/// @return
+EXPORT(int, AsyncLoopRun(uv_loop_t* loop));
+
+/// @brief Stop the async loop.
+/// @param loop - The loop.
+EXPORT(void, AsyncLoopStop(uv_loop_t* loop));
+
+/// @brief Free and stop the async loop.
+/// @param loop - The loop.
+EXPORT(void, AsyncLoopFree(uv_loop_t* loop));
+
+/// @brief Create a new async worker.
+/// @param data - The data.
+/// @param callback - The async loop.
+/// @param afterCallback - The after callback.
+/// @param loop - The async loop (NULL = default loop).
+/// @return
+EXPORT(async_worker*, AsyncWorker(void* data, uv_work_cb callback, uv_after_work_cb afterCallback, uv_loop_t *loop));
+
+/// @brief Get the worker data.
+/// @param req - The worker.
+/// @return
+EXPORT(void*, AsyncWorkerData(uv_work_t* req));
+
+/// @brief Set the worker status and stop running.
+/// @param req - The worker.
+/// @param status - The worker done status.
+EXPORT(void, AsyncWorkerDone(uv_work_t* req, async_status status));
+
+/// @brief Cancel a worker.
+/// @param req - The worker.
+EXPORT(void, AsyncWorkerCancel(async_worker* worker));
+
+/// @brief Free a worker.
+/// @param req - The worker.
+EXPORT(void, AsyncWorkerFree(async_worker* worker));
+
+/// @brief Shutdown the async handler by canceling any pending requests and waiting for all threads to complete.
 EXPORT(void, AsyncShutdown());
-
-/// @brief Make an async call with the provided callbacks and data.
-/// @param data - The data to pass.
-/// @param callback - The async callback.
-/// @param callbackDone - The callback when the async operation is completed.
-/// @return The worker pointer.
-EXPORT(uv_work_t *, AsyncCall(void *data, uv_work_cb callback, uv_after_work_cb callbackDone));
-
-/// @brief Default worker completion callback, this default callback calls AsyncFree.
-/// @param req - The worker request.
-/// @param status - The request status.
-EXPORT(void, AsyncNull(uv_work_t* req, int status));
-
-/// @brief Free a worker request.
-/// @param req - The worker request.
-EXPORT(void, AsyncFree(uv_work_t* req));
