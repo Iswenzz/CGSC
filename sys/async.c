@@ -45,7 +45,7 @@ async_worker* AsyncWorker(async_handler* handler, void* data, uv_work_cb callbac
 	worker->status = ASYNC_PENDING;
 	worker->req = req;
 	worker->loop = handler->loop;
-	worker->thread = NULL;
+	worker->thread = 0;
 	worker->data = data;
 	worker->running = qtrue;
 	worker->next = handler->workers->next;
