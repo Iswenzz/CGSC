@@ -1,12 +1,11 @@
 #include "async.h"
 
-async_handler asyncHandler = { 0 };
-
-void AsyncInit()
+async_handler* AsyncInit()
 {
-	if (asyncHandler.workers) return;
-	asyncHandler.workers = (async_worker*)malloc(sizeof(async_worker));
-	asyncHandler.workers->next = NULL;
+	async_handler* handler = (async_handler*)malloc(sizeof(async_handler));
+	handler->workers = (async_worker*)calloc(1, sizeof(async_worker));
+	handler->loop = uv_default_loop();
+	return handler;
 }
 
 uv_loop_t* AsyncLoopCreate()
@@ -23,30 +22,35 @@ int AsyncLoopRun(uv_loop_t* loop)
 
 void AsyncLoopStop(uv_loop_t* loop)
 {
-	if (!loop || !uv_loop_alive(loop)) return;
+	if (!loop || !uv_loop_alive(loop))
+		return;
+
 	uv_stop(loop);
 }
 
 void AsyncLoopFree(uv_loop_t* loop)
 {
 	if (!loop) return;
-	free(loop);
+	AsyncLoopStop(loop);
+	uv_loop_close(loop);
 }
 
-async_worker* AsyncWorker(void* data, uv_work_cb callback, uv_after_work_cb afterCallback, uv_loop_t *loop)
+async_worker* AsyncWorker(async_handler* handler, void* data, uv_work_cb callback, uv_after_work_cb afterCallback)
 {
+	if (!handler) return NULL;
+
 	uv_work_t* req = (uv_work_t*)malloc(sizeof(uv_work_t));
 	async_worker* worker = (async_worker*)malloc(sizeof(async_worker));
 
 	worker->status = ASYNC_PENDING;
 	worker->req = req;
-	worker->loop = loop ? loop : uv_default_loop();
+	worker->loop = handler->loop;
 	worker->thread = NULL;
 	worker->data = data;
 	worker->running = qtrue;
-	worker->next = asyncHandler.workers->next;
+	worker->next = handler->workers->next;
 
-	asyncHandler.workers->next = worker;
+	handler->workers->next = worker;
 	req->data = worker;
 
 	uv_queue_work(worker->loop, req, callback, afterCallback);
@@ -78,17 +82,20 @@ void AsyncWorkerFree(async_worker* worker)
 {
 	if (!worker)
 		return;
-	if (worker->data)
-		free(worker->data);
 	if (worker->req)
+	{
 		free(worker->req);
+		worker->req = NULL;
+	}
 }
 
-void AsyncShutdown()
+void AsyncShutdown(async_handler* handler)
 {
-	if (!asyncHandler.workers) return;
+	if (!handler) return;
 
-	async_worker* worker = asyncHandler.workers->next;
+	Com_Printf(CON_CHANNEL_SYSTEM, "[CGSC] Shutting down all async tasks...\n");
+
+	async_worker* worker = handler->workers->next;
 	while (worker)
 	{
 		AsyncLoopStop(worker->loop);
@@ -96,18 +103,18 @@ void AsyncShutdown()
 		worker = worker->next;
 	}
 
-	worker = asyncHandler.workers->next;
+	worker = handler->workers->next;
 	while (worker)
 	{
 		while (worker->running)
 			uv_sleep(50);
 
-		AsyncWorkerFree(worker);
-
 		async_worker* prev = worker;
 		worker = worker->next;
 		free(prev);
 	}
-	free(asyncHandler.workers);
-	asyncHandler.workers = NULL;
+	if (handler->workers)
+		free(handler->workers);
+	free(handler);
+	handler = NULL;
 }

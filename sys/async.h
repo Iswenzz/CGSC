@@ -25,12 +25,11 @@ typedef struct async_worker_s
 typedef struct
 {
 	async_worker* workers;
+	uv_loop_t* loop;
 } async_handler;
 
-extern async_handler asyncHandler;
-
 /// @brief Initialize the async handler.
-EXPORT(void, AsyncInit());
+EXPORT(async_handler*, AsyncInit());
 
 /// @brief Create an async loop.
 /// @return
@@ -50,12 +49,12 @@ EXPORT(void, AsyncLoopStop(uv_loop_t* loop));
 EXPORT(void, AsyncLoopFree(uv_loop_t* loop));
 
 /// @brief Create a new async worker.
+/// @param handler - The async handler.
 /// @param data - The data.
 /// @param callback - The async loop.
 /// @param afterCallback - The after callback.
-/// @param loop - The async loop (NULL = default loop).
 /// @return
-EXPORT(async_worker*, AsyncWorker(void* data, uv_work_cb callback, uv_after_work_cb afterCallback, uv_loop_t *loop));
+EXPORT(async_worker*, AsyncWorker(async_handler* handler, void* data, uv_work_cb callback, uv_after_work_cb afterCallback));
 
 /// @brief Get the worker data.
 /// @param req - The worker.
@@ -76,4 +75,5 @@ EXPORT(void, AsyncWorkerCancel(async_worker* worker));
 EXPORT(void, AsyncWorkerFree(async_worker* worker));
 
 /// @brief Shutdown the async handler by canceling any pending requests and waiting for all threads to complete.
-EXPORT(void, AsyncShutdown());
+/// @param handler - The async handler.
+EXPORT(void, AsyncShutdown(async_handler* handler));
