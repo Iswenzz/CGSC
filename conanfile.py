@@ -3,7 +3,7 @@ from conans import ConanFile, CMake
 
 class CGSC(ConanFile):
     name = "CGSC"
-    version = "1.2.0"
+    version = "1.2.1"
     license = "LICENCE"
     url = "https://github.com/Iswenzz/CGSC"
     description = "Call of Duty 4X source extension that adds new utilities to extend the server and the creation of new plugins."
