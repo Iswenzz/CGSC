@@ -11,6 +11,7 @@ This Call of Duty 4X source extension adds new utilities to extend the server an
 
 ## Documentation
 * [API](https://github.com/Iswenzz/CGSC/blob/master/docs/api.md)
+* [Async](https://github.com/Iswenzz/CGSC/blob/master/docs/async.md)
 * [Extensions](https://github.com/Iswenzz/CGSC/blob/master/docs/extensions.md)
 
 ## Instructions
