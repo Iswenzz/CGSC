@@ -41,9 +41,13 @@ EXPORT(VariableValue, Scr_ReturnResult());
 /// @return short - The GSC thread id to be freed with Scr_FreeThread(<short>).
 EXPORT(short, Scr_ExecThreadResult(int callbackHook, unsigned int numArgs));
 
-/// @brief Return a GSC Function from specified codeposvalue. This function is untested.
+/// @brief Return a GSC Function from specified codeposvalue.
 /// @param codePosValue - The code pos value.
 EXPORT(void, Scr_AddFunc(const char *codePosValue));
+
+/// @brief Return a GSC array from the pointer value.
+/// @param pointerValue - The pointer value.
+EXPORT(void, Scr_AddPointerArray(unsigned int pointerValue));
 
 /// @brief Return a GSC variable.
 /// @param var - The GSC variable to return.

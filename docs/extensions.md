@@ -45,6 +45,15 @@ Scr_FreeArray(&array);
 ```
 <hr>
 
+#### ``Scr_AddPointerArray(VariableValue var)``
+Returns a GSC pointer to array.
+
+```c
+VariableValue* array = Scr_SelectParam(0);
+Scr_AddPointerArray(array);
+```
+<hr>
+
 #### ``Scr_GetThreadReturn()``
 Returns a GSC thread return value.
 

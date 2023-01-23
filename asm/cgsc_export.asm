@@ -32,6 +32,7 @@ ralias Plugin_Scr_GetFunction, Scr_GetFunc
 ; Plugin export
 pexport Scr_ReturnResult
 pexport Scr_AddFunc
+pexport Scr_AddPointerArray
 pexport Scr_AddVariable
 pexport Scr_CallFunction
 pexport Scr_CallMethod
