@@ -62,7 +62,10 @@ void Scr_AddPointerArray(unsigned int pointerValue)
 	int index = length - 1;
 
 	if (!length)
+	{
+		Scr_MakeArray();
 		return;
+	}
 
 	VariableValueInternal *entries = (VariableValueInternal *)malloc(length * sizeof(VariableValueInternal));
 	unsigned int id = IGScrVarGlob[pointerValue + VARIABLELIST_PARENT_BEGIN].nextSibling;
