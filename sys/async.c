@@ -93,8 +93,6 @@ void AsyncShutdown(async_handler* handler)
 {
 	if (!handler) return;
 
-	Com_Printf(CON_CHANNEL_SYSTEM, "[CGSC] Shutting down all async tasks...\n");
-
 	async_worker* worker = handler->workers->next;
 	while (worker)
 	{
