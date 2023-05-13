@@ -12,9 +12,11 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      
+
     - name: Conan
       uses: turtlebrowser/get-conan@main
+      with:
+        version: 1.59.0
 
     - name: Dependencies
       run: |
@@ -36,7 +38,7 @@ jobs:
         conan install .. --build missing --profile ../.conan/linux.conf -o enable_testing=True
         cmake .. -DENABLE_TESTING=True -DCONAN_DISABLE_CHECK_COMPILER=True
         cmake --build .
-        
+
     - name: Artifact Copy
       working-directory: ../CoD4x_Server-20.1/src/CGSC
       run: |
@@ -60,7 +62,7 @@ jobs:
       with:
         name: build-artifact
         path: build
-        
+
     - name: Artifact Setup
       run: |
         mkdir -p ../CoD4x_Server-20.1/src/CGSC
