@@ -67,7 +67,7 @@ _Build Command:_
     cmake .. -G "MinGW Makefiles"
     cmake --build .
 
-## Conan Package
+## Package
 If you wanna make your own CGSC package.
 
 _Build Command:_
