@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef _WIN32
 	#define NOGDI
 	#include <winsock2.h>
@@ -28,6 +32,12 @@
 
 #ifdef SYS_COMMONVERSION
 	#define COD4X(version) SYS_COMMONVERSION
+#endif
+
+#ifdef __cplusplus
+	#define CPP_EXTERN extern "C++"
+#else
+	#define CPP_EXTERN
 #endif
 
 /// @brief Adds the definition for cod4x server and plugin export.
@@ -118,3 +128,7 @@ typedef struct
 #include "extensions/functions.h"
 #include "extensions/variables.h"
 #include "utils/utils.h"
+
+#ifdef __cplusplus
+}
+#endif

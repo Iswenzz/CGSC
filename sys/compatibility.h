@@ -2,7 +2,7 @@
 #include "../cgsc.h"
 
 /// @brief Get server version.
-EXPORT(float, Sys_GetCommonVersion());
+EXPORT(CPP_EXTERN float, Sys_GetCommonVersion());
 
 /// @brief Get CGSC version.
 EXPORT(float, CGSC_Version());
