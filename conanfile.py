@@ -3,14 +3,14 @@ from conans import ConanFile, CMake
 
 class CGSC(ConanFile):
     name = "CGSC"
-    version = "1.2.2"
+    version = "1.2.3"
     license = "LICENCE"
     url = "https://github.com/Iswenzz/CGSC"
     description = "Call of Duty 4X source extension that adds new utilities to extend the server and the creation of new plugins."
 
     generators = "cmake"
     exports_sources = "LICENSE", "README.md", "CMakeLists.txt", ".conan/*"
-    requires = ["libuv/1.44.2"]
+    requires = ["libuv/1.46.0"]
 
     settings = "os", "arch", "compiler", "build_type"
     options = {"enable_testing": [True, False], "plugin": [True, False]}

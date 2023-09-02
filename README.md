@@ -25,9 +25,9 @@ Then simply build the library with the build instructions and recompile the cod4
 ##################################
 # CGSC
 CGSC_DIR=$(SRC_DIR)/CGSC
-WIN_LLIBS:=$(WIN_LLIBS) CGSC uv_a iphlpapi psapi userenv ws2_32
-LINUX_LLIBS:=$(LINUX_LLIBS) CGSC uv_a dl pthread rt
-BSD_LLIBS:=$(BSD_LLIBS) CGSC uv_a dl pthread rt
+WIN_LLIBS:=$(WIN_LLIBS) CGSC uv iphlpapi psapi userenv ws2_32
+LINUX_LLIBS:=$(LINUX_LLIBS) CGSC uv dl pthread rt
+BSD_LLIBS:=$(BSD_LLIBS) CGSC uv dl pthread rt
 
 WIN_LFLAGS:=$(WIN_LFLAGS) -mconsole
 
@@ -49,6 +49,7 @@ _Pre-Requisites:_
 
 _Build Command:_
 
+	conan create . --build missing --profile .conan/linux.conf
     mkdir build && cd build
     conan install .. --build missing --profile ../.conan/linux.conf
     cmake ..
@@ -62,17 +63,11 @@ _Pre-Requisites:_
 
 _Build Command:_
 
+	conan create . --build missing --profile .conan/windows.conf
     mkdir build && cd build
     conan install .. --build missing --profile ../.conan/windows.conf
     cmake .. -G "MinGW Makefiles"
     cmake --build .
-
-## Package
-If you wanna make your own CGSC package.
-
-_Build Command:_
-
-	conan create . --profile .conan/windows.conf
 
 ## Contributors:
 ***Note:*** If you would like to contribute to this repository, feel free to send a pull request, and I will review your code. Also feel free to post about any problems that may arise in the issues section of the repository.

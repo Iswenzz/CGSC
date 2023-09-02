@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16.0)
-project(CGSC VERSION 1.2.2 LANGUAGES C)
+project(CGSC VERSION 1.2.3 LANGUAGES C)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -51,7 +51,7 @@ else()
 	set_target_properties(CGSC PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib)
 
 	set(STATIC_DEPENDENCIES
-		${CONAN_LIB_DIRS_LIBUV}/libuv_a.a)
+		${CONAN_LIB_DIRS_LIBUV}/libuv.a)
 
 	foreach(dependency ${STATIC_DEPENDENCIES})
 		add_custom_command(TARGET CGSC POST_BUILD
