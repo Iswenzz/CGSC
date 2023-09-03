@@ -1,0 +1,18 @@
+{
+	"name": "cgsc",
+	"version": "1.2.3",
+	"description": "Call of Duty 4X source extension that adds new utilities to extend the server and the creation of new plugins.",
+  	"homepage": "https://github.com/Iswenzz/CGSC",
+	"features": {
+		"tests": {
+			"description": "Build tests",
+			"dependencies": ["greatest"]
+		}
+	},
+	"dependencies": ["libuv"],
+	"overrides": [
+        { "name": "libuv", "version": "1.46.0" },
+        { "name": "greatest", "version": "1.5.0" }
+    ],
+	"builtin-baseline": "4a600e9fea71bd7872080cbb716797e04d30e6d3"
+}

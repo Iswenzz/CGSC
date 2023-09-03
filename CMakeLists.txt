@@ -20,23 +20,21 @@ set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 set(CPACK_GENERATOR 7Z)
 include(CPack)
 
-# Conan
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+# Dependencies
+find_package(libuv REQUIRED)
 
 # Tests
-if(ENABLE_TESTING)
+if(BUILD_TESTING)
 	include(CTest)
 	add_executable(CGSC.Tests)
-	target_link_libraries(CGSC.Tests PUBLIC ${CONAN_LIBS} CGSC)
+	find_path(GREATEST_INCLUDE_DIRS "greatest.h")
+	target_link_libraries(CGSC.Tests PUBLIC CGSC libuv::uv_a)
+    target_include_directories(CGSC.Tests PRIVATE ${GREATEST_INCLUDE_DIRS})
 	add_test(NAME Tests COMMAND CGSC.Tests)
 endif()
 
 # Build
-if(PLUGIN)
-	add_library(CGSC INTERFACE CGSC/cgsc.h CGSC/plugin.h)
-	target_include_directories(CGSC INTERFACE . cod4x/plugins)
-else()
+if(COD4X)
 	add_library(CGSC STATIC cgsc.h cod4x.h)
 
 	add_subdirectory(asm)
@@ -45,18 +43,23 @@ else()
 	add_subdirectory(utils)
 	add_subdirectory(versions)
 
-	target_link_libraries(CGSC PUBLIC ${CONAN_LIBS})
+	target_link_libraries(CGSC PUBLIC libuv::uv_a)
 	target_compile_definitions(CGSC PUBLIC COD4X18UPDATE)
 	target_include_directories(CGSC PUBLIC . .. ../version ../../plugins)
 	set_target_properties(CGSC PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib)
 
+	get_target_property(LIBUV_LIBRARY libuv::uv_a LOCATION)
+
 	set(STATIC_DEPENDENCIES
-		${CONAN_LIB_DIRS_LIBUV}/libuv.a)
+		${LIBUV_LIBRARY})
 
 	foreach(dependency ${STATIC_DEPENDENCIES})
 		add_custom_command(TARGET CGSC POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy ${dependency} ../../../lib)
 	endforeach()
+else()
+	add_library(CGSC INTERFACE CGSC/cgsc.h CGSC/plugin.h)
+	target_include_directories(CGSC INTERFACE . cod4x/plugins)
 endif()
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})

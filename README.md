@@ -49,24 +49,20 @@ _Pre-Requisites:_
 
 _Build Command:_
 
-	conan create . --build missing --profile .conan/linux.conf
     mkdir build && cd build
-    conan install .. --build missing --profile ../.conan/linux.conf
-    cmake ..
+    cmake .. -DCMAKE_TOOLCHAIN_FILE=.vcpkg/linux.cmake -DCOD4X=True
     cmake --build .
 
 ## Building (Windows)
 _Pre-Requisites:_
 1. Windows [MinGW-W64 8.1.0 i686 Win32 dwarf](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/8.1.0/threads-win32/dwarf/i686-8.1.0-release-win32-dwarf-rt_v6-rev0.7z)
 2. [NASM](https://www.nasm.us/)
-3. [CMake](https://cmake.org/) and [Conan](https://conan.io/).
+3. [CMake](https://cmake.org/) and [vcpkg](https://vcpkg.io/en/).
 
 _Build Command:_
 
-	conan create . --build missing --profile .conan/windows.conf
     mkdir build && cd build
-    conan install .. --build missing --profile ../.conan/windows.conf
-    cmake .. -G "MinGW Makefiles"
+    cmake .. -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=.vcpkg/windows.cmake -DCOD4X=True
     cmake --build .
 
 ## Contributors:
