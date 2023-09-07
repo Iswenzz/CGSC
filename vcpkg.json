@@ -13,6 +13,5 @@
 	"overrides": [
         { "name": "libuv", "version": "1.46.0" },
         { "name": "greatest", "version": "1.5.0" }
-    ],
-	"builtin-baseline": "4a600e9fea71bd7872080cbb716797e04d30e6d3"
+    ]
 }
