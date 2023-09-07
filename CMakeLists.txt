@@ -21,7 +21,7 @@ set(CPACK_GENERATOR 7Z)
 include(CPack)
 
 # Dependencies
-find_package(libuv REQUIRED)
+find_package(libuv CONFIG REQUIRED)
 
 # Tests
 if(BUILD_TESTING)
@@ -58,8 +58,7 @@ if(COD4X)
 			COMMAND ${CMAKE_COMMAND} -E copy ${dependency} ../../../lib)
 	endforeach()
 else()
-	add_library(CGSC INTERFACE CGSC/cgsc.h CGSC/plugin.h)
-	target_include_directories(CGSC INTERFACE . cod4x/plugins)
+	add_library(CGSC INTERFACE cgsc.h)
 endif()
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
