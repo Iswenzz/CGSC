@@ -1,5 +1,5 @@
 file(TO_CMAKE_PATH $ENV{VCPKG_ROOT} VCPKG_ROOT)
-set(VCPKG_TARGET_TRIPLET x86-linux)
+set(VCPKG_TARGET_TRIPLET x86-linux-static)
 
 option(BUILD_TESTING "Build tests" OFF)
 if(BUILD_TESTING)
