@@ -25,7 +25,7 @@ Then simply build the library with the build instructions and recompile the cod4
 ##################################
 # CGSC
 CGSC_DIR=$(SRC_DIR)/CGSC
-WIN_LLIBS:=$(WIN_LLIBS) CGSC uv iphlpapi psapi userenv ws2_32
+WIN_LLIBS:=$(WIN_LLIBS) CGSC uv iphlpapi psapi userenv ws2_32 ole32 uuid dbghelp
 LINUX_LLIBS:=$(LINUX_LLIBS) CGSC uv dl pthread rt
 BSD_LLIBS:=$(BSD_LLIBS) CGSC uv dl pthread rt
 
