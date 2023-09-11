@@ -3,7 +3,7 @@ project(CGSC VERSION 1.2.3 LANGUAGES C)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_C_FLAGS "-m32 -Wall -msse2 -mfpmath=sse -fno-omit-frame-pointer -fno-pie -O1")
+set(CMAKE_C_FLAGS "-m32 -Wall -msse2 -mfpmath=sse -Wno-packed-not-aligned -fno-omit-frame-pointer -fno-pie -O1")
 
 # NASM
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
