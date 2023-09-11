@@ -55,7 +55,7 @@ _Build Command:_
 
 ## Building (Windows)
 _Pre-Requisites:_
-1. Windows [MinGW-W64 8.1.0 i686 Win32 dwarf](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/8.1.0/threads-win32/dwarf/i686-8.1.0-release-win32-dwarf-rt_v6-rev0.7z)
+1. Windows [MinGW i686-8.1.0-win32-dwarf-msvcrt](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/8.1.0/threads-win32/dwarf/i686-8.1.0-release-win32-dwarf-rt_v6-rev0.7z)
 2. [NASM](https://www.nasm.us/)
 3. [CMake](https://cmake.org/) and [vcpkg](https://vcpkg.io/en/).
 
