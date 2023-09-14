@@ -6,7 +6,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_FLAGS "-m32 -Wall -msse2 -mfpmath=sse -Wno-packed-not-aligned -fno-omit-frame-pointer -fno-pie -O1")
 
 # NASM
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+if(WIN32)
 	set(CMAKE_ASM_NASM_FLAGS "-dWin32 --prefix _")
 	set(CMAKE_ASM_NASM_OBJECT_FORMAT "win32")
 else()
