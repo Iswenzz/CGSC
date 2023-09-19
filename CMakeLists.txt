@@ -54,6 +54,7 @@ if(COD4X)
 	target_link_libraries(CGSC.COD4X PUBLIC libuv::uv_a)
 	target_compile_definitions(CGSC.COD4X PUBLIC COD4X18UPDATE)
 	target_include_directories(CGSC.COD4X PUBLIC . .. ../version ../../plugins)
+	set_target_properties(CGSC.COD4X PROPERTIES OUTPUT_NAME CGSC)
 	set_target_properties(CGSC.COD4X PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib)
 
 	get_target_property(LIBUV_LIBRARY libuv::uv_a LOCATION)
