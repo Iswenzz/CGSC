@@ -13,10 +13,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Conan
-      uses: turtlebrowser/get-conan@main
+    - name: Vcpkg
+      uses: lukka/run-vcpkg@v11
       with:
-        version: 1.59.0
+        vcpkgGitCommitId: 4a600e9fea71bd7872080cbb716797e04d30e6d3
 
     - name: Dependencies
       run: |
@@ -35,8 +35,7 @@ jobs:
       working-directory: ../CoD4x_Server-20.1/src/CGSC
       run: |
         mkdir build && cd build
-        conan install .. --build missing --profile ../.conan/linux.conf -o enable_testing=True
-        cmake .. -DENABLE_TESTING=True -DCONAN_DISABLE_CHECK_COMPILER=True
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=".vcpkg/linux.cmake" -DBUILD_TESTING=True -DCOD4X=True
         cmake --build .
 
     - name: Artifact Copy
@@ -72,4 +71,4 @@ jobs:
       working-directory: ../CoD4x_Server-20.1/src/CGSC/build
       run: |
         chmod +x bin/CGSC.Tests
-        ctest -C Release
+        ctest

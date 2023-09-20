@@ -10,10 +10,13 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: Conan
-      uses: turtlebrowser/get-conan@main
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Vcpkg
+      uses: lukka/run-vcpkg@v11
       with:
-        version: 1.59.0
+        vcpkgGitCommitId: 4a600e9fea71bd7872080cbb716797e04d30e6d3
 
     - name: NASM
       uses: ilammy/setup-nasm@v1
@@ -22,9 +25,6 @@ jobs:
       uses: egor-tensin/setup-mingw@v2
       with:
         platform: x86
-
-    - name: Checkout
-      uses: actions/checkout@v2
 
     - name: CoD4x
       run: |
@@ -37,8 +37,7 @@ jobs:
       working-directory: ../CoD4x_Server-20.1/src/CGSC
       run: |
         mkdir build && cd build
-        conan install .. --build missing --profile ../.conan/windows.conf -o enable_testing=True
-        cmake .. -G "MinGW Makefiles" -DENABLE_TESTING=True -DCONAN_DISABLE_CHECK_COMPILER=True
+        cmake .. -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=".vcpkg/windows.cmake" -DBUILD_TESTING=True -DCOD4X=True
         cmake --build .
 
     - name: Artifact Copy
@@ -78,7 +77,8 @@ jobs:
 
     - name: Tests
       run: |
-        opencppcoverage --quiet --export_type=cobertura:opencppcoverageCoverage.xml --working_dir build --sources src -- build/bin/CGSC.Tests.exe
+        opencppcoverage --quiet --export_type=cobertura:opencppcoverageCoverage.xml --working_dir build --sources src -- build/CGSC.Tests.exe
+
     - name: CodeCov
       uses: codecov/codecov-action@v2
       with:
