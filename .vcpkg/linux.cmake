@@ -1,4 +1,4 @@
-file(TO_CMAKE_PATH $ENV{VCPKG_ROOT} VCPKG_ROOT)
+include(.vcpkg/cmake/env.cmake)
 set(VCPKG_TARGET_TRIPLET x86-linux-static)
 
 option(BUILD_TESTING "Build tests" OFF)
