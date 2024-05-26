@@ -1,5 +1,5 @@
 #pragma once
-#include "cgsc.h"
+#include "CGSC/cgsc.h"
 
 // clang-format off
 #if CGSC_EQ(3)
