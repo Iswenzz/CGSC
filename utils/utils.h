@@ -1,5 +1,5 @@
 #pragma once
-#include "../cgsc.h"
+#include "cgsc.h"
 
 /// @brief Print a formated string to the console.
 #if CGSC(4)
@@ -13,9 +13,9 @@
 #endif
 
 /// @brief Get a register value.
-#define GetRegisterValue(var, reg)  \
-register int _register asm(reg);    \
-*var = _register;
+#define GetRegisterValue(var, reg)   \
+	register int _register asm(reg); \
+	*var = _register;
 
 /// @brief Format a string.
 /// @param format - The string to format.

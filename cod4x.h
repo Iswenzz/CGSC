@@ -5,16 +5,16 @@
 	#include <plugin_declarations.h>
 #endif
 
-#define CHECK_UNSUPPORTED(condition) 															\
-if (CGSC_UnsupportedMessage(condition, "CGSC: This feature is unsupported in this version."))	\
-{																								\
-	Scr_AddUndefined();																			\
-	return;																						\
-}
+#define CHECK_UNSUPPORTED(condition)                                                              \
+	if (CGSC_UnsupportedMessage(condition, "CGSC: This feature is unsupported in this version.")) \
+	{                                                                                             \
+		Scr_AddUndefined();                                                                       \
+		return;                                                                                   \
+	}
 
-#include <version.h>
+#include <q_shared.h>
 #include <scr_vm.h>
 #include <scr_vm_functions.h>
-#include <q_shared.h>
+#include <version.h>
 
 #undef ASSERT

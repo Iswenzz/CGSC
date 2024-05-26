@@ -1,7 +1,8 @@
 #pragma once
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #ifdef _WIN32
@@ -42,8 +43,8 @@ extern "C" {
 
 /// @brief Adds the definition for cod4x server and plugin export.
 #define EXPORT(type, definition) \
-type definition;				 \
-type Plugin_##definition
+	type definition;             \
+	type Plugin_##definition
 
 #define CLASS_NUM_COUNT sizeof(gScrClassMap) / sizeof(gScrClassMap[0])
 #define DEBUG_REFCOUNT_SIZE 65536
@@ -73,6 +74,7 @@ type Plugin_##definition
 #define IsObject(var) ((var->w.type & VAR_MASK) >= VAR_THREAD)
 #define IsObjectVal(var) ((var->type & VAR_MASK) >= VAR_THREAD)
 
+// clang-format off
 enum GSCTypeFlag
 {
 	FLAG_UNDEFINED = 1,
@@ -107,12 +109,12 @@ enum GSCTypeFlag
 
 struct scrStringDebugGlob_t
 {
-    volatile int refCount[DEBUG_REFCOUNT_SIZE];
-    volatile int totalRefCount;
-    int ignoreLeaks;
+	volatile int refCount[DEBUG_REFCOUNT_SIZE];
+	volatile int totalRefCount;
+	int ignoreLeaks;
 };
 
-struct __attribute__((aligned (64))) scrVarGlob_t
+struct __attribute__((aligned(64))) scrVarGlob_t
 {
 	VariableValueInternal* variableList;
 };
@@ -120,13 +122,14 @@ struct __attribute__((aligned (64))) scrVarGlob_t
 typedef struct
 {
 	uint32_t length;
-	VariableValue *items;
+	VariableValue* items;
 } VariableValueArray;
+// clang-format on
 
-#include "sys/compatibility.h"
-#include "sys/async.h"
 #include "extensions/functions.h"
 #include "extensions/variables.h"
+#include "sys/async.h"
+#include "sys/compatibility.h"
 #include "utils/utils.h"
 
 #ifdef __cplusplus

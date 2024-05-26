@@ -14,6 +14,10 @@ else()
 endif()
 enable_language(ASM_NASM)
 
+# CMake
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(ClangTools)
+
 # CPack
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

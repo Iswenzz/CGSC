@@ -12,19 +12,19 @@
 	#define Sys_GetCommonVersion Plugin_Sys_GetCommonVersion
 #endif
 
-#define CHECK_PARAMS(count, message)	\
-if (Plugin_Scr_GetNumParam() != count)	\
-{										\
-	Plugin_Scr_Error(message);			\
-	return;								\
-}
+#define CHECK_PARAMS(count, message)       \
+	if (Plugin_Scr_GetNumParam() != count) \
+	{                                      \
+		Plugin_Scr_Error(message);         \
+		return;                            \
+	}
 
-#define CHECK_UNSUPPORTED(condition) 															\
-if (Plugin_CGSC_UnsupportedMessage(condition, "CGSC: This feature is unsupported in this version."))	\
-{																								\
-	Plugin_Scr_AddUndefined();																			\
-	return;																						\
-}
+#define CHECK_UNSUPPORTED(condition)                                                                     \
+	if (Plugin_CGSC_UnsupportedMessage(condition, "CGSC: This feature is unsupported in this version.")) \
+	{                                                                                                    \
+		Plugin_Scr_AddUndefined();                                                                       \
+		return;                                                                                          \
+	}
 
 struct VariableStackBuffer
 {
@@ -56,10 +56,10 @@ typedef struct
 
 union ObjectInfo_u
 {
-  uint16_t size;
-  uint16_t entnum;
-  uint16_t nextEntId;
-  uint16_t self;
+	uint16_t size;
+	uint16_t entnum;
+	uint16_t nextEntId;
+	uint16_t self;
 };
 
 struct ObjectInfo
@@ -111,7 +111,7 @@ typedef struct
 	union VariableValueInternal_w w;
 	union VariableValueInternal_v v;
 	uint16_t nextSibling;
-}VariableValueInternal;
+} VariableValueInternal;
 
 enum $0E0E04F36A22A28F2C0A7A22DC12DAE9
 {

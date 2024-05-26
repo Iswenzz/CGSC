@@ -30,14 +30,16 @@ void AsyncLoopStop(uv_loop_t* loop)
 
 void AsyncLoopFree(uv_loop_t* loop)
 {
-	if (!loop) return;
+	if (!loop)
+		return;
 	AsyncLoopStop(loop);
 	uv_loop_close(loop);
 }
 
 async_worker* AsyncWorker(async_handler* handler, void* data, uv_work_cb callback, uv_after_work_cb afterCallback)
 {
-	if (!handler) return NULL;
+	if (!handler)
+		return NULL;
 
 	uv_work_t* req = (uv_work_t*)malloc(sizeof(uv_work_t));
 	async_worker* worker = (async_worker*)malloc(sizeof(async_worker));
@@ -91,7 +93,8 @@ void AsyncWorkerFree(async_worker* worker)
 
 void AsyncShutdown(async_handler* handler)
 {
-	if (!handler) return;
+	if (!handler)
+		return;
 
 	async_worker* worker = handler->workers->next;
 	while (worker)

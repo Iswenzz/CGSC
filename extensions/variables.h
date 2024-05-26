@@ -1,5 +1,5 @@
 #pragma once
-#include "../cgsc.h"
+#include "cgsc.h"
 
 /// @brief Create a new VariableValueArray with a fixed length.
 /// The array can be freed with Scr_FreeArray.The array can be freed with Scr_FreeArray.
@@ -43,7 +43,7 @@ EXPORT(short, Scr_ExecThreadResult(int callbackHook, unsigned int numArgs));
 
 /// @brief Return a GSC Function from specified codeposvalue.
 /// @param codePosValue - The code pos value.
-EXPORT(void, Scr_AddFunc(const char *codePosValue));
+EXPORT(void, Scr_AddFunc(const char* codePosValue));
 
 /// @brief Return a GSC array from the pointer value.
 /// @param pointerValue - The pointer value.

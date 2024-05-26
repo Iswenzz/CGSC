@@ -1,4 +1,5 @@
 #include "utils/utils.h"
+
 #include <greatest.h>
 
 TEST test_fmt()
@@ -12,5 +13,5 @@ TEST test_fmt()
 
 SUITE(Suite_utils)
 {
-    RUN_TEST(test_fmt);
+	RUN_TEST(test_fmt);
 }

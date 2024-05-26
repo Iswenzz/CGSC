@@ -1,9 +1,10 @@
 #include "utils.h"
+
 #include <stdarg.h>
 
 char *fmt(char *format, ...)
 {
-	va_list	argptr;
+	va_list argptr;
 	static char string[2][32000]; // In case va is called by nested functions
 	static int index = 0;
 	char *buf;
