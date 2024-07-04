@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16.0)
+cmake_minimum_required(VERSION 3.27)
 project(CGSC VERSION 1.2.3 LANGUAGES C)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_C_STANDARD 11)
