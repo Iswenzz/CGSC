@@ -22,9 +22,9 @@ jobs:
       uses: ilammy/setup-nasm@v1
 
     - name: MinGW
-      uses: egor-tensin/setup-mingw@v2
+      uses: msys2/setup-msys2@v2
       with:
-        platform: x86
+        msystem: MINGW32
 
     - name: CoD4x
       run: |
@@ -37,10 +37,10 @@ jobs:
       working-directory: ../CoD4x_Server-20.1/src/CGSC
       run: |
         mkdir build && cd build
-        cmake .. -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=".vcpkg/windows.cmake" -DBUILD_TESTING=True -DCOD4X=True
+        cmake .. --preset windows -DBUILD_TESTING=True -DCOD4X=True
         cmake --build .
 
-    - name: Artifact Copy
+    - name: Copy
       working-directory: ../CoD4x_Server-20.1/src/CGSC
       run: |
         cp -r build ../../../CGSC

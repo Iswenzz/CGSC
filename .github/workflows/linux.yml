@@ -20,9 +20,9 @@ jobs:
 
     - name: Dependencies
       run: |
-        sudo apt-get install g++-multilib gcc-multilib
         sudo dpkg --add-architecture i386
-        sudo apt-get install nasm:i386 paxctl:i386 libtommath-dev:i386
+        sudo apt-get update
+        sudo apt-get install nasm:i386 make gcc-multilib g++-multilib git
 
     - name: CoD4x
       run: |
@@ -35,10 +35,10 @@ jobs:
       working-directory: ../CoD4x_Server-20.1/src/CGSC
       run: |
         mkdir build && cd build
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=".vcpkg/linux.cmake" -DBUILD_TESTING=True -DCOD4X=True
+        cmake .. --preset linux -DBUILD_TESTING=True -DCOD4X=True
         cmake --build .
 
-    - name: Artifact Copy
+    - name: Copy
       working-directory: ../CoD4x_Server-20.1/src/CGSC
       run: |
         cp -r build ../../../CGSC
