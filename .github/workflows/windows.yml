@@ -22,9 +22,10 @@ jobs:
       uses: ilammy/setup-nasm@v1
 
     - name: MinGW
-      uses: msys2/setup-msys2@v2
+      uses: egor-tensin/setup-mingw@v2
       with:
-        msystem: MINGW32
+        platform: x86
+        version: 12.2.0
 
     - name: CoD4x
       run: |
