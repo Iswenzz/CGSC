@@ -70,5 +70,4 @@ jobs:
     - name: Tests
       working-directory: ../CoD4x_Server-20.1/src/CGSC/build
       run: |
-        chmod +x bin/CGSC.Tests
         ctest -C Release
