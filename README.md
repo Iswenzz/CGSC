@@ -1,6 +1,6 @@
 # CGSC
 
-[![Checks](https://img.shields.io/github/checks-status/Iswenzz/CGSC/master?logo=github)](https://github.com/Iswenzz/CGSC/actions)
+[![Checks](https://img.shields.io/github/check-runs/Iswenzz/CGSC/master?logo=github)](https://github.com/Iswenzz/CGSC/actions)
 [![CodeFactor](https://img.shields.io/codefactor/grade/github/Iswenzz/CGSC?label=codefactor&logo=codefactor)](https://www.codefactor.io/repository/github/iswenzz/CGSC)
 [![License](https://img.shields.io/github/license/Iswenzz/CGSC?color=blue&logo=gitbook&logoColor=white)](https://github.com/Iswenzz/CGSC/blob/master/LICENSE)
 
