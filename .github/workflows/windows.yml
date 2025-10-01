@@ -77,15 +77,6 @@ jobs:
         cp -r build ../CoD4x_Server-20.1/src/CGSC
 
     - name: Tests
+      working-directory: ../CoD4x_Server-20.1/src/CGSC/build
       run: |
-        opencppcoverage --quiet --export_type=cobertura:opencppcoverageCoverage.xml --working_dir build --sources src -- build/CGSC.Tests.exe
-
-    - name: CodeCov
-      uses: codecov/codecov-action@v2
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        files: ./opencppcoverageCoverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: true
-        verbose: true
+        ctest -C Release
