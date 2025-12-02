@@ -16,7 +16,7 @@ jobs:
     - name: Vcpkg
       uses: lukka/run-vcpkg@v11
       with:
-        vcpkgGitCommitId: 4a600e9fea71bd7872080cbb716797e04d30e6d3
+        vcpkgGitCommitId: bd136dad4da8059ba93f71412f52b2ec7c09d377
 
     - name: NASM
       uses: ilammy/setup-nasm@v1
@@ -59,12 +59,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: OpenCppCoverage
-      shell: bash
-      run: |
-        choco install -y opencppcoverage
-        echo "C:\Program Files\OpenCppCoverage" >> $GITHUB_PATH
-
     - name: Artifact
       uses: actions/download-artifact@v4
       with:
@@ -77,15 +71,6 @@ jobs:
         cp -r build ../CoD4x_Server-20.1/src/CGSC
 
     - name: Tests
+      working-directory: ../CoD4x_Server-20.1/src/CGSC/build
       run: |
-        opencppcoverage --quiet --export_type=cobertura:opencppcoverageCoverage.xml --working_dir build --sources src -- build/CGSC.Tests.exe
-
-    - name: CodeCov
-      uses: codecov/codecov-action@v2
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        files: ./opencppcoverageCoverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: true
-        verbose: true
+        ctest -C Release
