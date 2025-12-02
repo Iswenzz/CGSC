@@ -30,18 +30,12 @@ __attribute__((unused)) scrVmPub_t gScrVmPub = { 0 };
 __attribute__((unused)) struct scrVmGlob_t gScrVmGlob = { 0 };
 __attribute__((unused)) scrVarPub_t gScrVarPub;
 
-/// @brief Get the object type.
-/// @param id - The object id.
-/// @return
 unsigned int Scr_GetObjectType(unsigned int id)
 {
 	assert((IGScrVarGlob[VARIABLELIST_PARENT_BEGIN + id].w.status & VAR_STAT_MASK) != VAR_STAT_FREE);
 	return VAR_TYPE((&IGScrVarGlob[id + VARIABLELIST_PARENT_BEGIN]));
 }
 
-/// @brief Get the array size.
-/// @param id - The array id.
-/// @return
 int GetArraySize(int id)
 {
 	VariableValueInternal *entryValue;

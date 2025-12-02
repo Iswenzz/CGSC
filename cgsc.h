@@ -41,7 +41,6 @@ extern "C"
 	#define CPP_EXTERN
 #endif
 
-/// @brief Adds the definition for cod4x server and plugin export.
 #define EXPORT(type, definition) \
 	type definition;             \
 	type Plugin_##definition
@@ -74,7 +73,7 @@ extern "C"
 #define IsObject(var) ((var->w.type & VAR_MASK) >= VAR_THREAD)
 #define IsObjectVal(var) ((var->type & VAR_MASK) >= VAR_THREAD)
 
-// clang-format off
+	// clang-format off
 enum GSCTypeFlag
 {
 	FLAG_UNDEFINED = 1,
@@ -124,7 +123,7 @@ typedef struct
 	uint32_t length;
 	VariableValue* items;
 } VariableValueArray;
-// clang-format on
+	// clang-format on
 
 #include "extensions/functions.h"
 #include "extensions/variables.h"
